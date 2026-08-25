@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contact LUXORA — Luxury fashion, premium products and exceptional customer support.">
+
+    <title>Contact Us | LUXORA</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Tailwind CSS (Play CDN — for production, run `npm install -D tailwindcss` and build with tailwind.config.js) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ink: '#111111',
+                        dark: '#181818',
+                        gold: { DEFAULT: '#c9a227', dark: '#a98518' },
+                        cream: '#f8f7f4',
+                        muted: '#777777',
+                        line: '#e7e4de',
+                        soft: '#f3f2ef',
+                    },
+                    fontFamily: {
+                        heading: ['"Playfair Display"', 'serif'],
+                        body: ['"DM Sans"', 'sans-serif'],
+                    },
+                    maxWidth: { boxed: '1240px' },
+                }
+            }
+        }
+    </script>
+
+    <!-- Small custom layer: only for JS-driven state classes Tailwind utilities can't express -->
+    <style type="text/tailwindcss">
+        @layer utilities {
+            #navbar.active { @apply flex; }
+            .form-message { @apply hidden mt-4 px-4 py-3 border border-transparent text-[11px] leading-relaxed; }
+            .form-message.success { @apply block border-[#cbd9c4] bg-[#f1f6ee] text-[#506447]; }
+            .form-message.error { @apply block border-[#e0c5c5] bg-[#fbf1f1] text-[#8a4e4e]; }
+            .form-group input.error, .form-group select.error, .form-group textarea.error { @apply border-[#b85c5c]; }
+            .form-group input.success, .form-group select.success, .form-group textarea.success { @apply border-[#78936c]; }
+        }
+    </style>
+</head>
+
+<body class="font-body text-[#333] antialiased">
+
+<!-- ================= HEADER ================= -->
+<header class="header sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-line">
+    <div class="max-w-boxed mx-auto px-5 flex items-center justify-between h-20">
+        <a href="index.html" class="logo font-heading text-2xl font-semibold text-ink">
+            LUXORA<span class="text-gold">.</span>
+        </a>
+        <nav class="navbar hidden md:flex items-center gap-8 text-sm font-medium tracking-wide" id="navbar">
+            <a href="index.html" class="text-[#333] hover:text-gold transition">Home</a>
+            <a href="shop.html" class="text-[#333] hover:text-gold transition">Shop</a>
+            <a href="about.html" class="text-[#333] hover:text-gold transition">About</a>
+            <a href="contact.html" class="active text-ink border-b-2 border-gold pb-1">Contact</a>
+        </nav>
+        <div class="nav-actions flex items-center gap-5">
+            <a href="shop.html" class="nav-icon text-lg hover:text-gold transition" aria-label="Search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </a>
+            <a href="cart.html" class="nav-icon relative text-lg hover:text-gold transition" aria-label="Shopping Cart">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span class="cart-count absolute -top-2 -right-2 bg-gold text-white text-[10px] leading-none rounded-full w-4 h-4 flex items-center justify-center">0</span>
+            </a>
+            <a href="#" class="nav-icon user-icon text-lg hover:text-gold transition" aria-label="Account">
+                <i class="fa-regular fa-user"></i>
+            </a>
+            <button class="menu-toggle md:hidden text-xl" type="button" aria-label="Open navigation" aria-expanded="false">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</header>
+
+
+<!-- ================= CONTACT HERO ================= -->
+<section class="contact-hero relative overflow-hidden flex items-center min-h-[520px] bg-[linear-gradient(90deg,rgba(15,15,15,0.86),rgba(15,15,15,0.58),rgba(15,15,15,0.35)),url('images/hero/home-hero.jpg')] bg-cover bg-center">
+    <div class="max-w-boxed mx-auto px-5 w-full">
+        <div class="max-w-[750px] text-white">
+            <div class="flex items-center gap-2.5 mb-8 text-[10px] tracking-[2px] uppercase">
+                <a href="index.html" class="text-white/60 hover:text-white transition">Home</a>
+                <span class="text-white/60">/</span>
+                <span class="text-white/90">Contact</span>
+            </div>
+            <span class="block mb-4 text-gold text-[10px] font-bold tracking-[4px] uppercase">GET IN TOUCH</span>
+            <h1 class="font-heading text-[clamp(58px,7vw,88px)] font-semibold leading-[0.98] tracking-[-2px]">Let's Talk</h1>
+            <p class="max-w-[560px] mt-7 text-white/80 text-sm leading-[1.85]">
+                Have a question about our products, your order,
+                or something else? Our team is here to help.
+            </p>
+        </div>
+    </div>
+</section>
+
+
+<!-- ================= CONTACT SECTION ================= -->
+<section class="contact-section bg-white py-24">
+    <div class="max-w-boxed mx-auto px-5">
+        <div class="grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] gap-16 lg:gap-[90px] items-start">
+
+            <!-- CONTACT INFO -->
+            <div class="max-w-[520px]">
+                <span class="block mb-4 text-gold-dark text-[10px] font-bold tracking-[3px] uppercase">CONTACT LUXORA</span>
+                <h2 class="mb-6 text-ink font-heading text-[clamp(43px,5vw,62px)] font-semibold leading-[1.02] tracking-[-1px]">
+                    We're Here<br><em class="text-gold-dark font-medium not-italic">To Help.</em>
+                </h2>
+                <p class="max-w-[470px] mb-10 text-[#6e6e6e] text-sm leading-[1.9]">
+                    Whether you need help choosing the perfect
+                    product or have a question about an existing
+                    order, we'd love to hear from you.
+                </p>
+
+                <div class="contact-item group flex items-start gap-4 py-6 border-t border-[#e5e2da]">
+                    <div class="w-12 h-12 flex-none grid place-items-center border border-gold/60 text-gold-dark text-base transition-colors duration-300 group-hover:bg-gold-dark group-hover:text-white">
+                        <i class="fa-regular fa-envelope"></i>
+                    </div>
+                    <div class="pt-0.5">
+                        <span class="block mb-1.5 text-[#999] text-[8px] font-bold tracking-[2px] uppercase">EMAIL</span>
+                        <a href="mailto:hello@luxora.com" class="text-[#222] text-[13px] hover:text-gold-dark transition">hello@luxora.com</a>
+                    </div>
+                </div>
+
+                <div class="contact-item group flex items-start gap-4 py-6 border-t border-[#e5e2da]">
+                    <div class="w-12 h-12 flex-none grid place-items-center border border-gold/60 text-gold-dark text-base transition-colors duration-300 group-hover:bg-gold-dark group-hover:text-white">
+                        <i class="fa-solid fa-phone"></i>
+                    </div>
+                    <div class="pt-0.5">
+                        <span class="block mb-1.5 text-[#999] text-[8px] font-bold tracking-[2px] uppercase">PHONE</span>
+                        <a href="tel:+1234567890" class="text-[#222] text-[13px] hover:text-gold-dark transition">+1 (234) 567-890</a>
+                    </div>
+                </div>
+
+                <div class="contact-item group flex items-start gap-4 py-6 border-t border-[#e5e2da]">
+                    <div class="w-12 h-12 flex-none grid place-items-center border border-gold/60 text-gold-dark text-base transition-colors duration-300 group-hover:bg-gold-dark group-hover:text-white">
+                        <i class="fa-solid fa-location-dot"></i>
+                    </div>
+                    <div class="pt-0.5">
+                        <span class="block mb-1.5 text-[#999] text-[8px] font-bold tracking-[2px] uppercase">STUDIO</span>
+                        <p class="text-[#555] text-[13px] leading-[1.7]">25 Madison Avenue,<br>New York, NY 10010</p>
+                    </div>
+                </div>
+
+                <div class="contact-item group flex items-start gap-4 py-6 border-t border-b border-[#e5e2da]">
+                    <div class="w-12 h-12 flex-none grid place-items-center border border-gold/60 text-gold-dark text-base transition-colors duration-300 group-hover:bg-gold-dark group-hover:text-white">
+                        <i class="fa-regular fa-clock"></i>
+                    </div>
+                    <div class="pt-0.5">
+                        <span class="block mb-1.5 text-[#999] text-[8px] font-bold tracking-[2px] uppercase">SUPPORT HOURS</span>
+                        <p class="text-[#555] text-[13px] leading-[1.7]">Monday – Friday<br>9:00 AM – 6:00 PM</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-6 mt-9">
+                    <span class="text-[#999] text-[8px] font-bold tracking-[2px]">FOLLOW US</span>
+                    <div class="flex items-center gap-2">
+                        <a href="#" aria-label="Instagram" class="w-9 h-9 grid place-items-center border border-line text-[#333] text-xs hover:bg-ink hover:border-ink hover:text-white hover:-translate-y-1 transition-all"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" aria-label="Facebook" class="w-9 h-9 grid place-items-center border border-line text-[#333] text-xs hover:bg-ink hover:border-ink hover:text-white hover:-translate-y-1 transition-all"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Pinterest" class="w-9 h-9 grid place-items-center border border-line text-[#333] text-xs hover:bg-ink hover:border-ink hover:text-white hover:-translate-y-1 transition-all"><i class="fa-brands fa-pinterest-p"></i></a>
+                        <a href="#" aria-label="TikTok" class="w-9 h-9 grid place-items-center border border-line text-[#333] text-xs hover:bg-ink hover:border-ink hover:text-white hover:-translate-y-1 transition-all"><i class="fa-brands fa-tiktok"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTACT FORM -->
+            <div class="p-8 sm:p-12 border border-[#e3e0d8] bg-[#f8f6f1]">
+                <div class="mb-8">
+                    <span class="block mb-3 text-gold-dark text-[9px] font-bold tracking-[3px] uppercase">SEND A MESSAGE</span>
+                    <h3 class="text-ink font-heading text-[34px] font-semibold">How Can We Help?</h3>
+                </div>
+
+                <form id="contactForm" class="contact-form w-full" novalidate>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="form-group flex flex-col mb-5">
+                            <label for="firstName" class="mb-2 text-[#555] text-[9px] font-bold tracking-[1.5px] uppercase">First Name</label>
+                            <input type="text" id="firstName" name="firstName" placeholder="Your first name" autocomplete="given-name" required
+                                   class="h-[52px] px-4 border border-line outline-none bg-white text-[#222] text-[13px] focus:border-gold-dark focus:shadow-[0_0_0_3px_rgba(168,132,66,0.08)] transition">
+                        </div>
+                        <div class="form-group flex flex-col mb-5">
+                            <label for="lastName" class="mb-2 text-[#555] text-[9px] font-bold tracking-[1.5px] uppercase">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" placeholder="Your last name" autocomplete="family-name" required
+                                   class="h-[52px] px-4 border border-line outline-none bg-white text-[#222] text-[13px] focus:border-gold-dark focus:shadow-[0_0_0_3px_rgba(168,132,66,0.08)] transition">
+                        </div>
+                    </div>
+
+                    <div class="form-group flex flex-col mb-5">
+                        <label for="email" class="mb-2 text-[#555] text-[9px] font-bold tracking-[1.5px] uppercase">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required
+                               class="h-[52px] px-4 border border-line outline-none bg-white text-[#222] text-[13px] focus:border-gold-dark focus:shadow-[0_0_0_3px_rgba(168,132,66,0.08)] transition">
+                    </div>
+
+                    <div class="form-group flex flex-col mb-5">
+                        <label for="subject" class="mb-2 text-[#555] text-[9px] font-bold tracking-[1.5px] uppercase">Subject</label>
+                        <select id="subject" name="subject" required
+                                class="h-[52px] px-4 border border-line outline-none bg-white text-[#222] text-[13px] cursor-pointer focus:border-gold-dark focus:shadow-[0_0_0_3px_rgba(168,132,66,0.08)] transition">
+                            <option value="" selected disabled>Select a subject</option>
+                            <option value="order">Order Support</option>
+                            <option value="product">Product Question</option>
+                            <option value="shipping">Shipping & Delivery</option>
+                            <option value="return">Returns & Exchanges</option>
+                            <option value="general">General Inquiry</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group flex flex-col mb-5">
+                        <label for="message" class="mb-2 text-[#555] text-[9px] font-bold tracking-[1.5px] uppercase">Message</label>
+                        <textarea id="message" name="message" rows="6" placeholder="Tell us how we can help..." required
+                                  class="min-h-[145px] px-4 py-4 border border-line outline-none bg-white text-[#222] text-[13px] leading-[1.7] resize-y focus:border-gold-dark focus:shadow-[0_0_0_3px_rgba(168,132,66,0.08)] transition"></textarea>
+                    </div>
+
+                    <button type="submit" class="contact-submit group w-full min-h-[55px] flex items-center justify-center gap-3.5 mt-1 border border-ink bg-ink text-white text-[9px] font-bold tracking-[2px] hover:bg-gold-dark hover:border-gold-dark hover:-translate-y-0.5 transition-all">
+                        <span>SEND MESSAGE</span>
+                        <i class="fa-solid fa-arrow-right text-[10px] transition-transform duration-300 group-hover:translate-x-1"></i>
+                    </button>
+
+                    <div id="formMessage" class="form-message" role="status" aria-live="polite"></div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ================= FAQ / SUPPORT ================= -->
+<section class="contact-support bg-soft py-24">
+    <div class="max-w-boxed mx-auto px-5">
+        <div class="max-w-[650px] mx-auto mb-14 text-center">
+            <span class="block mb-4 text-gold-dark text-[10px] font-bold tracking-[3px] uppercase">NEED QUICK HELP?</span>
+            <h2 class="text-ink font-heading text-[clamp(42px,5vw,60px)] font-semibold leading-[1.05]">We've Got Answers.</h2>
+            <p class="max-w-[500px] mx-auto mt-4 text-muted text-[13px] leading-[1.8]">
+                Find quick answers to some of our most
+                frequently asked questions.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+            <a href="shop.html" class="support-card group relative min-h-[190px] grid grid-cols-[auto_1fr_auto] gap-4 items-center p-7 border border-line bg-white text-ink overflow-hidden hover:border-gold/60 hover:-translate-y-1.5 hover:shadow-[0_18px_40px_rgba(0,0,0,0.07)] transition-all">
+                <span class="absolute top-0 left-0 h-[3px] w-0 bg-gold-dark transition-all duration-500 group-hover:w-full"></span>
+                <div class="w-[52px] h-[52px] grid place-items-center border border-gold/50 text-gold-dark text-base transition-colors duration-300 group-hover:bg-gold-dark group-hover:text-white">
+                    <i class="fa-solid fa-box-open"></i>
+                </div>
+                <div>
+                    <h3 class="mb-1.5 text-[#222] font-heading text-xl font-semibold">Order & Shipping</h3>
+                    <p class="text-muted text-[11px] leading-[1.7]">Learn about delivery times, tracking and order updates.</p>
+                </div>
+                <i class="fa-solid fa-arrow-right text-[#999] text-[11px] transition-all duration-300 group-hover:text-gold-dark group-hover:translate-x-1"></i>
+            </a>
+
+            <a href="shop.html" class="support-card group relative min-h-[190px] grid grid-cols-[auto_1fr_auto] gap-4 items-center p-7 border border-line bg-white text-ink overflow-hidden hover:border-gold/60 hover:-translate-y-1.5 hover:shadow-[0_18px_40px_rgba(0,0,0,0.07)] transition-all">
+                <span class="absolute top-0 left-0 h-[3px] w-0 bg-gold-dark transition-all duration-500 group-hover:w-full"></span>
+                <div class="w-[52px] h-[52px] grid place-items-center border border-gold/50 text-gold-dark text-base transition-colors duration-300 group-hover:bg-gold-dark group-hover:text-white">
+                    <i class="fa-solid fa-rotate-left"></i>
+                </div>
+                <div>
+                    <h3 class="mb-1.5 text-[#222] font-heading text-xl font-semibold">Returns & Exchanges</h3>
+                    <p class="text-muted text-[11px] leading-[1.7]">Need to make a return? Find out how it works.</p>
+                </div>
+                <i class="fa-solid fa-arrow-right text-[#999] text-[11px] transition-all duration-300 group-hover:text-gold-dark group-hover:translate-x-1"></i>
+            </a>
+
+            <a href="shop.html" class="support-card group relative min-h-[190px] grid grid-cols-[auto_1fr_auto] gap-4 items-center p-7 border border-line bg-white text-ink overflow-hidden hover:border-gold/60 hover:-translate-y-1.5 hover:shadow-[0_18px_40px_rgba(0,0,0,0.07)] transition-all">
+                <span class="absolute top-0 left-0 h-[3px] w-0 bg-gold-dark transition-all duration-500 group-hover:w-full"></span>
+                <div class="w-[52px] h-[52px] grid place-items-center border border-gold/50 text-gold-dark text-base transition-colors duration-300 group-hover:bg-gold-dark group-hover:text-white">
+                    <i class="fa-regular fa-circle-question"></i>
+                </div>
+                <div>
+                    <h3 class="mb-1.5 text-[#222] font-heading text-xl font-semibold">Product Information</h3>
+                    <p class="text-muted text-[11px] leading-[1.7]">Get help choosing the right product for you.</p>
+                </div>
+                <i class="fa-solid fa-arrow-right text-[#999] text-[11px] transition-all duration-300 group-hover:text-gold-dark group-hover:translate-x-1"></i>
+            </a>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ================= NEWSLETTER ================= -->
+<section class="newsletter bg-ink py-16">
+    <div class="max-w-boxed mx-auto px-5 flex flex-col lg:flex-row items-center justify-between gap-8 text-center lg:text-left">
+        <div class="max-w-[430px]">
+            <span class="block mb-3 text-gold text-[10px] font-bold tracking-[3px] uppercase">LUXORA JOURNAL</span>
+            <h2 class="text-white font-heading text-[32px] font-semibold leading-tight">Stay in the Know.</h2>
+            <p class="mt-3 text-white/60 text-sm leading-relaxed">
+                Sign up for exclusive launches, private offers and curated inspiration.
+            </p>
+        </div>
+
+        <form class="newsletter-form flex flex-col sm:flex-row gap-3 w-full max-w-[420px]">
+            <input type="email" class="email-input flex-1 h-[52px] px-4 border border-white/20 bg-transparent text-white text-sm placeholder-white/40 outline-none focus:border-gold transition" placeholder="Your email address" aria-label="Email address" required>
+            <button type="submit" class="btn btn-gold h-[52px] px-7 bg-gold text-ink text-[11px] font-bold tracking-[1.5px] uppercase hover:bg-gold-dark hover:text-white transition">SUBSCRIBE</button>
+        </form>
+    </div>
+    <p class="max-w-boxed mx-auto px-5 mt-5 text-white/30 text-[11px] text-center lg:text-left">
+        By subscribing, you agree to receive emails from LUXORA.
+    </p>
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer bg-dark pt-16">
+    <div class="max-w-boxed mx-auto px-5 footer-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-12">
+        <div class="footer-brand">
+            <a href="index.html" class="logo font-heading text-2xl font-semibold text-white">LUXORA<span class="text-gold">.</span></a>
+            <p class="text-white/50 text-sm mt-4 mb-6 leading-relaxed">Timeless design. Exceptional quality. A modern expression of luxury.</p>
+        </div>
+        <div class="footer-column flex flex-col gap-3">
+            <h3 class="text-white font-heading text-lg mb-2">Shop</h3>
+            <a href="shop.html" class="text-white/50 text-sm hover:text-gold transition">New Arrivals</a>
+            <a href="shop.html" class="text-white/50 text-sm hover:text-gold transition">Best Sellers</a>
+            <a href="shop.html" class="text-white/50 text-sm hover:text-gold transition">Collections</a>
+            <a href="shop.html" class="text-white/50 text-sm hover:text-gold transition">Sale</a>
+        </div>
+        <div class="footer-column flex flex-col gap-3">
+            <h3 class="text-white font-heading text-lg mb-2">Company</h3>
+            <a href="about.html" class="text-white/50 text-sm hover:text-gold transition">About</a>
+            <a href="contact.html" class="text-white/50 text-sm hover:text-gold transition">Contact</a>
+            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Privacy Policy</a>
+            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Terms</a>
+        </div>
+        <div class="footer-column flex flex-col gap-3">
+            <h3 class="text-white font-heading text-lg mb-2">Support</h3>
+            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Shipping</a>
+            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Returns</a>
+            <a href="#" class="text-white/50 text-sm hover:text-gold transition">FAQ</a>
+            <a href="contact.html" class="text-white/50 text-sm hover:text-gold transition">Help Center</a>
+        </div>
+    </div>
+    <div class="footer-bottom border-t border-white/10 py-6">
+        <div class="max-w-boxed mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p class="text-white/40 text-xs">© <span class="current-year">2026</span> LUXORA. All rights reserved.</p>
+            <div class="flex gap-4 text-white/40 text-xl">
+                <i class="fa-brands fa-cc-visa"></i>
+                <i class="fa-brands fa-cc-mastercard"></i>
+                <i class="fa-brands fa-cc-amex"></i>
+                <i class="fa-brands fa-cc-paypal"></i>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="js/contact.js"></script>
+</body>
+</html>

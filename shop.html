@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="LUXORA premium online shop — discover curated fashion, accessories and lifestyle products." name="description"/>
+<title>Shop | LUXORA Premium Store</title>
+
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet"/>
+
+<!-- Tailwind CSS (Play CDN — for production, run `npm install -D tailwindcss` and build with tailwind.config.js) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    ink: '#111111',
+                    dark: '#181818',
+                    gold: { DEFAULT: '#c9a227', dark: '#a98518' },
+                    cream: '#f8f7f4',
+                    muted: '#777777',
+                    line: '#e7e4de',
+                    soft: '#f3f2ef',
+                },
+                fontFamily: {
+                    heading: ['"Playfair Display"', 'serif'],
+                    body: ['"DM Sans"', 'sans-serif'],
+                },
+                maxWidth: { boxed: '1240px' },
+            }
+        }
+    }
+</script>
+<style type="text/tailwindcss">
+    @layer utilities {
+        #navbar.active { @apply flex; }
+        #searchOverlay { @apply fixed inset-0 z-[100] bg-black/95 flex items-center justify-center opacity-0 invisible transition-all duration-300; }
+        #searchOverlay.active { @apply opacity-100 visible; }
+        .wishlist-btn.active { @apply bg-ink text-white scale-105; }
+        .wishlist-btn.active i { @apply text-white; }
+        .page.active, .page:hover { @apply border-ink bg-ink text-white; }
+        .size-options button.active, .size-options button:hover { @apply border-ink bg-ink text-white; }
+        #filterSidebar.active { @apply fixed inset-y-0 left-0 z-[4000] w-[300px] overflow-y-auto bg-white p-6 shadow-2xl; }
+        body.no-scroll { @apply overflow-hidden; }
+        #toast { @apply fixed bottom-6 right-6 z-[200] bg-ink text-white px-5 py-4 rounded flex items-center gap-3 opacity-0 translate-y-4 pointer-events-none transition-all duration-300 min-w-[250px]; }
+        #toast.show { @apply opacity-100 translate-y-0; }
+        .shop-product-card.hidden { display: none; }
+        .filter-overlay { display: none; @apply fixed inset-0 z-[3999] bg-black/50; }
+        .filter-overlay.active { @apply block; }
+    }
+</style>
+</head>
+<body class="font-body text-[#333] antialiased">
+
+<!-- ================= HEADER ================= -->
+<header class="header sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-line">
+    <div class="max-w-boxed mx-auto px-5 flex items-center justify-between h-20">
+        <a class="logo font-heading text-2xl font-semibold text-ink" href="index.html">LUX<span class="text-gold">ORA</span></a>
+        <nav class="navbar hidden md:flex items-center gap-8 text-sm font-medium tracking-wide" id="navbar">
+            <a href="index.html" class="text-[#333] hover:text-gold transition">Home</a>
+            <a class="active text-ink border-b-2 border-gold pb-1" href="shop.html">Shop</a>
+            <a href="#collections" class="text-[#333] hover:text-gold transition">Collections</a>
+            <a href="#new" class="text-[#333] hover:text-gold transition">New Arrivals</a>
+            <a href="#sale" class="text-[#333] hover:text-gold transition">Sale</a>
+            <a href="contact.html" class="text-[#333] hover:text-gold transition">Contact</a>
+        </nav>
+        <div class="nav-actions flex items-center gap-5">
+            <button aria-label="Search" class="nav-icon search-btn text-lg hover:text-gold transition"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <button aria-label="Account" class="nav-icon user-icon text-lg hover:text-gold transition"><i class="fa-regular fa-user"></i></button>
+            <a aria-label="Shopping cart" class="nav-icon cart-icon relative text-lg hover:text-gold transition" href="cart.html">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span class="count cart-count absolute -top-2 -right-2 bg-gold text-white text-[10px] leading-none rounded-full w-4 h-4 flex items-center justify-center">0</span>
+            </a>
+            <button aria-label="Menu" class="menu-toggle md:hidden text-xl" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
+        </div>
+    </div>
+</header>
+
+<!-- ================= SEARCH OVERLAY ================= -->
+<div class="search-overlay" id="searchOverlay">
+    <button class="close-search absolute top-8 right-8 text-white text-2xl hover:text-gold transition" id="closeSearch"><i class="fa-solid fa-xmark"></i></button>
+    <div class="search-box w-full max-w-[600px] px-6 text-center">
+        <span class="block mb-6 text-white/60 text-sm tracking-wide">What are you looking for?</span>
+        <div class="search-input flex items-center border-b border-white/30 pb-3">
+            <input placeholder="Search products..." type="search" class="flex-1 bg-transparent text-white text-xl outline-none placeholder-white/40">
+            <button type="button" class="text-white text-xl hover:text-gold transition"><i class="fa-solid fa-search"></i></button>
+        </div>
+    </div>
+</div>
+
+<!-- ================= SHOP HERO ================= -->
+<section class="shop-hero relative overflow-hidden flex items-center min-h-[430px] bg-[radial-gradient(circle_at_85%_30%,rgba(201,162,39,0.14),transparent_32%),linear-gradient(135deg,#f6f4ef_0%,#eeece5_100%)]">
+    <div class="max-w-boxed mx-auto px-5 w-full relative z-10">
+        <div class="flex items-center gap-2.5 mb-11 text-muted text-[11px] font-semibold tracking-[0.8px] uppercase">
+            <a href="index.html" class="hover:text-gold-dark transition">Home</a>
+            <i class="fa-solid fa-chevron-right text-gold-dark text-[8px]"></i>
+            <span>Shop</span>
+        </div>
+        <div class="max-w-[720px]">
+            <span class="inline-block mb-4 text-gold-dark text-[10px] font-bold tracking-[3px]">CURATED FOR YOU</span>
+            <h1 class="text-ink font-heading text-[clamp(55px,7vw,88px)] font-semibold leading-[0.98] tracking-[-2px]">
+                The LUXORA <span class="block text-gold-dark italic">Collection</span>
+            </h1>
+            <p class="max-w-[570px] mt-6 text-[#6e6e6e] text-sm leading-[1.8]">
+                Discover timeless essentials, refined accessories and modern luxury
+                designed for everyday living.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ================= SHOP CONTENT ================= -->
+<main class="shop-section bg-white pt-20 pb-28">
+    <div class="max-w-boxed mx-auto px-5">
+
+        <!-- SHOP TOP -->
+        <div class="shop-top flex items-center justify-between mb-9 pb-6 border-b border-[#e5e2da]">
+            <p class="result-count text-muted text-xs">Showing <strong class="text-ink font-bold">12</strong> products</p>
+            <div class="shop-tools flex items-center gap-5">
+                <button class="filter-toggle hidden items-center gap-2 h-[42px] px-5 border border-line bg-white text-ink text-[11px] font-bold" id="filterToggle">
+                    <i class="fa-solid fa-sliders"></i> Filters
+                </button>
+                <label class="sort-box flex items-center gap-3 text-muted text-[11px]">
+                    <span>Sort by</span>
+                    <select id="sortProducts" class="min-w-[165px] h-[42px] px-3.5 border border-line outline-none bg-white text-ink text-[11px] cursor-pointer">
+                        <option value="featured">Featured</option>
+                        <option value="newest">Newest</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="rating">Top Rated</option>
+                    </select>
+                </label>
+            </div>
+        </div>
+
+        <!-- SHOP LAYOUT -->
+        <div class="shop-layout grid grid-cols-1 lg:grid-cols-[230px_minmax(0,1fr)] gap-11 items-start">
+
+            <!-- FILTER SIDEBAR -->
+            <aside class="filter-sidebar lg:sticky lg:top-[100px]" id="filterSidebar">
+                <div class="filter-mobile-head hidden items-center justify-between mb-6">
+                    <h3 class="font-heading text-lg">Filters</h3>
+                    <button id="closeFilters" class="text-xl"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <div class="filter-group pb-7 mb-7 border-b border-[#e7e4dc]">
+                    <h3 class="mb-5 text-ink text-xs font-bold tracking-[1px] uppercase">Category</h3>
+                    <label class="check-item flex items-center gap-2.5 mb-3.5 text-[#666] text-xs cursor-pointer">
+                        <input checked class="category-filter w-[15px] h-[15px] accent-gold-dark cursor-pointer" type="checkbox" value="all">
+                        <span class="flex-1">All Products</span><small class="text-[#aaa] text-[10px]">12</small>
+                    </label>
+                    <label class="check-item flex items-center gap-2.5 mb-3.5 text-[#666] text-xs cursor-pointer">
+                        <input class="category-filter w-[15px] h-[15px] accent-gold-dark cursor-pointer" type="checkbox" value="men">
+                        <span class="flex-1">Men</span><small class="text-[#aaa] text-[10px]">3</small>
+                    </label>
+                    <label class="check-item flex items-center gap-2.5 mb-3.5 text-[#666] text-xs cursor-pointer">
+                        <input class="category-filter w-[15px] h-[15px] accent-gold-dark cursor-pointer" type="checkbox" value="women">
+                        <span class="flex-1">Women</span><small class="text-[#aaa] text-[10px]">3</small>
+                    </label>
+                    <label class="check-item flex items-center gap-2.5 mb-3.5 text-[#666] text-xs cursor-pointer">
+                        <input class="category-filter w-[15px] h-[15px] accent-gold-dark cursor-pointer" type="checkbox" value="accessories">
+                        <span class="flex-1">Accessories</span><small class="text-[#aaa] text-[10px]">3</small>
+                    </label>
+                    <label class="check-item flex items-center gap-2.5 text-[#666] text-xs cursor-pointer">
+                        <input class="category-filter w-[15px] h-[15px] accent-gold-dark cursor-pointer" type="checkbox" value="lifestyle">
+                        <span class="flex-1">Lifestyle</span><small class="text-[#aaa] text-[10px]">3</small>
+                    </label>
+                </div>
+
+                <div class="filter-group pb-7 mb-7 border-b border-[#e7e4dc]">
+                    <h3 class="mb-5 text-ink text-xs font-bold tracking-[1px] uppercase">Price Range</h3>
+                    <div class="price-inputs flex items-center gap-2 mb-4">
+                        <div class="relative flex-1">
+                            <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#999] text-[11px]">$</span>
+                            <input id="minPrice" placeholder="Min" type="number" value="0" class="w-full h-[38px] pl-[23px] pr-2 border border-line outline-none text-ink text-[11px] focus:border-gold-dark">
+                        </div>
+                        <span class="text-[#999]">—</span>
+                        <div class="relative flex-1">
+                            <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#999] text-[11px]">$</span>
+                            <input id="maxPrice" placeholder="Max" type="number" value="500" class="w-full h-[38px] pl-[23px] pr-2 border border-line outline-none text-ink text-[11px] focus:border-gold-dark">
+                        </div>
+                    </div>
+                    <button class="apply-price w-full h-10 border border-ink bg-ink text-white text-[10px] font-bold tracking-[0.7px] hover:bg-gold-dark hover:border-gold-dark transition" id="applyPrice">Apply Price</button>
+                </div>
+
+                <div class="filter-group pb-7 mb-7 border-b border-[#e7e4dc]">
+                    <h3 class="mb-5 text-ink text-xs font-bold tracking-[1px] uppercase">Size</h3>
+                    <div class="size-options flex flex-wrap gap-1.5">
+                        <button class="min-w-[38px] h-[34px] px-2 border border-line bg-white text-[#555] text-[10px] font-semibold transition-colors">XS</button>
+                        <button class="active min-w-[38px] h-[34px] px-2 border border-line bg-white text-[#555] text-[10px] font-semibold transition-colors">S</button>
+                        <button class="min-w-[38px] h-[34px] px-2 border border-line bg-white text-[#555] text-[10px] font-semibold transition-colors">M</button>
+                        <button class="min-w-[38px] h-[34px] px-2 border border-line bg-white text-[#555] text-[10px] font-semibold transition-colors">L</button>
+                        <button class="min-w-[38px] h-[34px] px-2 border border-line bg-white text-[#555] text-[10px] font-semibold transition-colors">XL</button>
+                    </div>
+                </div>
+
+                <div class="filter-group pb-7 mb-6">
+                    <h3 class="mb-5 text-ink text-xs font-bold tracking-[1px] uppercase">Customer Rating</h3>
+                    <label class="rating-filter flex items-center gap-2 mb-3 text-[#555] text-[11px] cursor-pointer">
+                        <input name="rating" type="radio" value="4" class="accent-gold-dark">
+                        <span class="text-gold-dark tracking-wide">★★★★☆</span><small class="text-[#888]">&amp; up</small>
+                    </label>
+                    <label class="rating-filter flex items-center gap-2 mb-3 text-[#555] text-[11px] cursor-pointer">
+                        <input name="rating" type="radio" value="3" class="accent-gold-dark">
+                        <span class="text-gold-dark tracking-wide">★★★☆☆</span><small class="text-[#888]">&amp; up</small>
+                    </label>
+                    <label class="rating-filter flex items-center gap-2 text-[#555] text-[11px] cursor-pointer">
+                        <input checked name="rating" type="radio" value="0" class="accent-gold-dark">
+                        <span class="text-gold-dark tracking-wide">All ratings</span>
+                    </label>
+                </div>
+
+                <button class="clear-filters w-full h-[42px] border border-line bg-transparent text-[#555] text-[10px] font-bold tracking-[0.8px] uppercase hover:border-ink hover:bg-ink hover:text-white transition" id="clearFilters">Clear All Filters</button>
+            </aside>
+
+            <!-- PRODUCT AREA -->
+            <div class="shop-products">
+                <div class="shop-product-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-10" id="shopProductGrid">
+
+                    <!-- Premium Silk Shirt -->
+                    <article class="shop-product-card group relative" data-category="men" data-date="12" data-price="129" data-rating="5">
+                        <div class="shop-product-image relative h-[390px] flex items-center justify-center overflow-hidden bg-[linear-gradient(145deg,#f3f0e9,#ddd8cd)]">
+                            <img alt="Premium Silk Shirt" class="product-photo w-full h-full object-cover" loading="lazy" src="images/products/07-silk-shirt.jpg"/>
+                            <button class="wishlist-btn absolute top-3 right-3 z-[4] w-9 h-9 grid place-items-center rounded-full bg-white/90 text-[#222] transition-all duration-300 hover:bg-ink hover:text-white hover:scale-105" aria-label="Add to wishlist">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <button class="quick-view absolute left-3 right-3 bottom-3 z-[3] h-[42px] bg-ink/90 text-white text-[10px] font-bold tracking-[1px] uppercase opacity-0 translate-y-2.5 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-gold-dark">Quick View</button>
+                        </div>
+                        <div class="product-info pt-4">
+                            <span class="product-category block mb-2 text-[#aaa] text-[8px] font-bold tracking-[1.3px]">MEN / CLOTHING</span>
+                            <h3 class="mb-2 text-ink font-heading text-[19px] font-semibold leading-[1.3]">Premium Silk Shirt</h3>
+                            <div class="rating mb-3 text-gold-dark text-[10px] tracking-[1px]">★★★★★<span class="ml-1 text-[#999] text-[9px] tracking-normal">(24)</span></div>
+                            <div class="product-bottom flex items-center justify-between gap-2.5">
+                                <strong class="text-ink text-[15px] font-bold">$129</strong>
+                                <button class="add-cart relative text-ink text-[9px] font-bold tracking-[0.8px] uppercase hover:text-gold-dark transition after:content-[''] after:block after:w-0 after:h-px after:mt-1 after:bg-gold-dark after:transition-all hover:after:w-full" data-image="images/products/07-silk-shirt.jpg" data-price="129" data-product="Premium Silk Shirt">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Luxury Leather Handbag -->
+                    <article class="shop-product-card group relative" data-category="women" data-date="11" data-price="189" data-rating="5">
+                        <div class="shop-product-image relative h-[390px] flex items-center justify-center overflow-hidden bg-[linear-gradient(145deg,#f3f0e9,#ddd8cd)]">
+                            <img alt="Luxury Leather Handbag" class="product-photo w-full h-full object-cover" loading="lazy" src="images/products/02-leather-handbag.jpg"/>
+                    <span class="product-badge sale absolute top-3.5 left-3.5 z-[3] px-2.5 py-1.5 bg-gold-dark text-white text-[8px] font-bold tracking-[1px]">-20%</span>
+                            <button class="wishlist-btn absolute top-3 right-3 z-[4] w-9 h-9 grid place-items-center rounded-full bg-white/90 text-[#222] transition-all duration-300 hover:bg-ink hover:text-white hover:scale-105" aria-label="Add to wishlist">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <button class="quick-view absolute left-3 right-3 bottom-3 z-[3] h-[42px] bg-ink/90 text-white text-[10px] font-bold tracking-[1px] uppercase opacity-0 translate-y-2.5 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-gold-dark">Quick View</button>
+                        </div>
+                        <div class="product-info pt-4">
+                            <span class="product-category block mb-2 text-[#aaa] text-[8px] font-bold tracking-[1.3px]">WOMEN / BAGS</span>
+                            <h3 class="mb-2 text-ink font-heading text-[19px] font-semibold leading-[1.3]">Luxury Leather Handbag</h3>
+                            <div class="rating mb-3 text-gold-dark text-[10px] tracking-[1px]">★★★★★<span class="ml-1 text-[#999] text-[9px] tracking-normal">(31)</span></div>
+                            <div class="product-bottom flex items-center justify-between gap-2.5">
+                                <strong class="text-ink text-[15px] font-bold">$189</strong>
+                                <button class="add-cart relative text-ink text-[9px] font-bold tracking-[0.8px] uppercase hover:text-gold-dark transition after:content-[''] after:block after:w-0 after:h-px after:mt-1 after:bg-gold-dark after:transition-all hover:after:w-full" data-image="images/products/02-leather-handbag.jpg" data-price="189" data-product="Luxury Leather Handbag">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- LUXORA Noir Perfume -->
+                    <article class="shop-product-card group relative" data-category="accessories" data-date="10" data-price="149" data-rating="4">
+                        <div class="shop-product-image relative h-[390px] flex items-center justify-center overflow-hidden bg-[linear-gradient(145deg,#f3f0e9,#ddd8cd)]">
+                            <img alt="LUXORA Noir Perfume" class="product-photo w-full h-full object-cover" loading="lazy" src="images/products/03-premium-perfume.jpg"/>
+                            <button class="wishlist-btn absolute top-3 right-3 z-[4] w-9 h-9 grid place-items-center rounded-full bg-white/90 text-[#222] transition-all duration-300 hover:bg-ink hover:text-white hover:scale-105" aria-label="Add to wishlist">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <button class="quick-view absolute left-3 right-3 bottom-3 z-[3] h-[42px] bg-ink/90 text-white text-[10px] font-bold tracking-[1px] uppercase opacity-0 translate-y-2.5 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-gold-dark">Quick View</button>
+                        </div>
+                        <div class="product-info pt-4">
+                            <span class="product-category block mb-2 text-[#aaa] text-[8px] font-bold tracking-[1.3px]">BEAUTY / FRAGRANCE</span>
+                            <h3 class="mb-2 text-ink font-heading text-[19px] font-semibold leading-[1.3]">LUXORA Noir Perfume</h3>
+                            <div class="rating mb-3 text-gold-dark text-[10px] tracking-[1px]">★★★★☆<span class="ml-1 text-[#999] text-[9px] tracking-normal">(18)</span></div>
+                            <div class="product-bottom flex items-center justify-between gap-2.5">
+                                <strong class="text-ink text-[15px] font-bold">$149</strong>
+                                <button class="add-cart relative text-ink text-[9px] font-bold tracking-[0.8px] uppercase hover:text-gold-dark transition after:content-[''] after:block after:w-0 after:h-px after:mt-1 after:bg-gold-dark after:transition-all hover:after:w-full" data-image="images/products/03-premium-perfume.jpg" data-price="149" data-product="LUXORA Noir Perfume">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Signature Sunglasses -->
+                    <article class="shop-product-card group relative" data-category="lifestyle" data-date="9" data-price="79" data-rating="5">
+                        <div class="shop-product-image relative h-[390px] flex items-center justify-center overflow-hidden bg-[linear-gradient(145deg,#f3f0e9,#ddd8cd)]">
+                            <img alt="Signature Sunglasses" class="product-photo w-full h-full object-cover" loading="lazy" src="images/products/04-sunglasses.jpg"/>
+                            <button class="wishlist-btn absolute top-3 right-3 z-[4] w-9 h-9 grid place-items-center rounded-full bg-white/90 text-[#222] transition-all duration-300 hover:bg-ink hover:text-white hover:scale-105" aria-label="Add to wishlist">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <button class="quick-view absolute left-3 right-3 bottom-3 z-[3] h-[42px] bg-ink/90 text-white text-[10px] font-bold tracking-[1px] uppercase opacity-0 translate-y-2.5 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-gold-dark">Quick View</button>
+                        </div>
+                        <div class="product-info pt-4">
+                            <span class="product-category block mb-2 text-[#aaa] text-[8px] font-bold tracking-[1.3px]">ACCESSORIES / EYEWEAR</span>
+                            <h3 class="mb-2 text-ink font-heading text-[19px] font-semibold leading-[1.3]">Signature Sunglasses</h3>
+                            <div class="rating mb-3 text-gold-dark text-[10px] tracking-[1px]">★★★★★<span class="ml-1 text-[#999] text-[9px] tracking-normal">(42)</span></div>
+                            <div class="product-bottom flex items-center justify-between gap-2.5">
+                                <strong class="text-ink text-[15px] font-bold">$79</strong>
+                                <button class="add-cart relative text-ink text-[9px] font-bold tracking-[0.8px] uppercase hover:text-gold-dark transition after:content-[''] after:block after:w-0 after:h-px after:mt-1 after:bg-gold-dark after:transition-all hover:after:w-full" data-image="images/products/04-sunglasses.jpg" data-price="79" data-product="Signature Sunglasses">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Classic Leather Wallet -->
+                    <article class="shop-product-card group relative" data-category="men" data-date="8" data-price="219" data-rating="5">
+                        <div class="shop-product-image relative h-[390px] flex items-center justify-center overflow-hidden bg-[linear-gradient(145deg,#f3f0e9,#ddd8cd)]">
+                            <img alt="Classic Leather Wallet" class="product-photo w-full h-full object-cover" loading="lazy" src="images/products/05-leather-wallet.jpg"/>
+                            <button class="wishlist-btn absolute top-3 right-3 z-[4] w-9 h-9 grid place-items-center rounded-full bg-white/90 text-[#222] transition-all duration-300 hover:bg-ink hover:text-white hover:scale-105" aria-label="Add to wishlist">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <button class="quick-view absolute left-3 right-3 bottom-3 z-[3] h-[42px] bg-ink/90 text-white text-[10px] font-bold tracking-[1px] uppercase opacity-0 translate-y-2.5 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-gold-dark">Quick View</button>
+                        </div>
+                        <div class="product-info pt-4">
+                            <span class="product-category block mb-2 text-[#aaa] text-[8px] font-bold tracking-[1.3px]">ACCESSORIES / LEATHER</span>
+                            <h3 class="mb-2 text-ink font-heading text-[19px] font-semibold leading-[1.3]">Classic Leather Wallet</h3>
+                            <div class="rating mb-3 text-gold-dark text-[10px] tracking-[1px]">★★★★★<span class="ml-1 text-[#999] text-[9px] tracking-normal">(21)</span></div>
+                            <div class="product-bottom flex items-center justify-between gap-2.5">
+                                <strong class="text-ink text-[15px] font-bold">$219</strong>
+                                <button class="add-cart relative text-ink text-[9px] font-bold tracking-[0.8px] uppercase hover:text-gold-dark transition after:content-[''] after:block after:w-0 after:h-px after:mt-1 after:bg-gold-dark after:transition-all hover:after:w-full" data-image="images/products/05-leather-wallet.jpg" data-price="219" data-product="Classic Leather Wallet">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Luxury Dress Shoes -->
+                    <article class="shop-product-card group relative" data-category="women" data-date="7" data-price="159" data-rating="4">
+                        <div class="shop-product-image relative h-[390px] flex items-center justify-center overflow-hidden bg-[linear-gradient(145deg,#f3f0e9,#ddd8cd)]">
+                            <img alt="Luxury Dress Shoes" class="product-photo w-full h-full object-cover" loading="lazy" src="images/products/06-luxury-shoes.jpg"/>
+                            <button class="wishlist-btn absolute top-3 right-3 z-[4] w-9 h-9 grid place-items-center rounded-full bg-white/90 text-[#222] transition-all duration-300 hover:bg-ink hover:text-white hover:scale-105" aria-label="Add to wishlist">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <button class="quick-view absolute left-3 right-3 bottom-3 z-[3] h-[42px] bg-ink/90 text-white text-[10px] font-bold tracking-[1px] uppercase opacity-0 translate-y-2.5 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-gold-dark">Quick View</button>
+                        </div>
+                        <div class="product-info pt-4">
+                            <span class="product-category block mb-2 text-[#aaa] text-[8px] font-bold tracking-[1.3px]">MEN / FOOTWEAR</span>
+                            <h3 class="mb-2 text-ink font-heading text-[19px] font-semibold leading-[1.3]">Luxury Dress Shoes</h3>
+                            <div class="rating mb-3 text-gold-dark text-[10px] tracking-[1px]">★★★★★<span class="ml-1 text-[#999] text-[9px] tracking-normal">(29)</span></div>
+                            <div class="product-bottom flex items-center justify-between gap-2.5">
+                                <strong class="text-ink text-[15px] font-bold">$159</strong>
+                                <button class="add-cart relative text-ink text-[9px] font-bold tracking-[0.8px] uppercase hover:text-gold-dark transition after:content-[''] after:block after:w-0 after:h-px after:mt-1 after:bg-gold-dark after:transition-all hover:after:w-full" data-image="images/products/06-luxury-shoes.jpg" data-price="159" data-product="Luxury Dress Shoes">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Premium Gold Jewelry -->
+                    <article class="shop-product-card group relative" data-category="accessories" data-date="6" data-price="99" data-rating="4">
+                        <div class="shop-product-image relative h-[390px] flex items-center justify-center overflow-hidden bg-[linear-gradient(145deg,#f3f0e9,#ddd8cd)]">
+                            <img alt="Premium Gold Jewelry" class="product-photo w-full h-full object-cover" loading="lazy" src="images/products/08-premium-jewelry.jpg"/>
+                            <button class="wishlist-btn absolute top-3 right-3 z-[4] w-9 h-9 grid place-items-center rounded-full bg-white/90 text-[#222] transition-all duration-300 hover:bg-ink hover:text-white hover:scale-105" aria-label="Add to wishlist">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <button class="quick-view absolute left-3 right-3 bottom-3 z-[3] h-[42px] bg-ink/90 text-white text-[10px] font-bold tracking-[1px] uppercase opacity-0 translate-y-2.5 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-gold-dark">Quick View</button>
+                        </div>
+                        <div class="product-info pt-4">
+                            <span class="product-category block mb-2 text-[#aaa] text-[8px] font-bold tracking-[1.3px]">JEWELRY / NECKLACES</span>
+                            <h3 class="mb-2 text-ink font-heading text-[19px] font-semibold leading-[1.3]">Premium Gold Jewelry</h3>
+                            <div class="rating mb-3 text-gold-dark text-[10px] tracking-[1px]">★★★★☆<span class="ml-1 text-[#999] text-[9px] tracking-normal">(13)</span></div>
+                            <div class="product-bottom flex items-center justify-between gap-2.5">
+                                <strong class="text-ink text-[15px] font-bold">$99</strong>
+                                <button class="add-cart relative text-ink text-[9px] font-bold tracking-[0.8px] uppercase hover:text-gold-dark transition after:content-[''] after:block after:w-0 after:h-px after:mt-1 after:bg-gold-dark after:transition-all hover:after:w-full" data-image="images/products/08-premium-jewelry.jpg" data-price="99" data-product="Premium Gold Jewelry">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- LUXORA Luxury Headphones -->
+                    <article class="shop-product-card group relative" data-category="lifestyle" data-date="5" data-price="119" data-rating="5">
+                        <div class="shop-product-image relative h-[390px] flex items-center justify-center overflow-hidden bg-[linear-gradient(145deg,#f3f0e9,#ddd8cd)]">
+                            <img alt="LUXORA Luxury Headphones" class="product-photo w-full h-full object-cover" loading="lazy" src="images/products/09-luxury-headphones.jpg"/>
+                            <button class="wishlist-btn absolute top-3 right-3 z-[4] w-9 h-9 grid place-items-center rounded-full bg-white/90 text-[#222] transition-all duration-300 hover:bg-ink hover:text-white hover:scale-105" aria-label="Add to wishlist">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <button class="quick-view absolute left-3 right-3 bottom-3 z-[3] h-[42px] bg-ink/90 text-white text-[10px] font-bold tracking-[1px] uppercase opacity-0 translate-y-2.5 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-gold-dark">Quick View</button>
+                        </div>
+                        <div class="product-info pt-4">
+                            <span class="product-category block mb-2 text-[#aaa] text-[8px] font-bold tracking-[1.3px]">TECH / AUDIO</span>
+                            <h3 class="mb-2 text-ink font-heading text-[19px] font-semibold leading-[1.3]">LUXORA Luxury Headphones</h3>
+                            <div class="rating mb-3 text-gold-dark text-[10px] tracking-[1px]">★★★★★<span class="ml-1 text-[#999] text-[9px] tracking-normal">(36)</span></div>
+                            <div class="product-bottom flex items-center justify-between gap-2.5">
+                                <strong class="text-ink text-[15px] font-bold">$119</strong>
+                                <button class="add-cart relative text-ink text-[9px] font-bold tracking-[0.8px] uppercase hover:text-gold-dark transition after:content-[''] after:block after:w-0 after:h-px after:mt-1 after:bg-gold-dark after:transition-all hover:after:w-full" data-image="images/products/09-luxury-headphones.jpg" data-price="119" data-product="LUXORA Luxury Headphones">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Premium Travel Bag -->
+                    <article class="shop-product-card group relative" data-category="men" data-date="4" data-price="179" data-rating="4">
+                        <div class="shop-product-image relative h-[390px] flex items-center justify-center overflow-hidden bg-[linear-gradient(145deg,#f3f0e9,#ddd8cd)]">
+                            <img alt="Premium Travel Bag" class="product-photo w-full h-full object-cover" loading="lazy" src="images/products/10-travel-bag.jpg"/>
+                            <button class="wishlist-btn absolute top-3 right-3 z-[4] w-9 h-9 grid place-items-center rounded-full bg-white/90 text-[#222] transition-all duration-300 hover:bg-ink hover:text-white hover:scale-105" aria-label="Add to wishlist">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <button class="quick-view absolute left-3 right-3 bottom-3 z-[3] h-[42px] bg-ink/90 text-white text-[10px] font-bold tracking-[1px] uppercase opacity-0 translate-y-2.5 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-gold-dark">Quick View</button>
+                        </div>
+                        <div class="product-info pt-4">
+                            <span class="product-category block mb-2 text-[#aaa] text-[8px] font-bold tracking-[1.3px]">TRAVEL / BAGS</span>
+                            <h3 class="mb-2 text-ink font-heading text-[19px] font-semibold leading-[1.3]">Premium Travel Bag</h3>
+                            <div class="rating mb-3 text-gold-dark text-[10px] tracking-[1px]">★★★★☆<span class="ml-1 text-[#999] text-[9px] tracking-normal">(21)</span></div>
+                            <div class="product-bottom flex items-center justify-between gap-2.5">
+                                <strong class="text-ink text-[15px] font-bold">$179</strong>
+                                <button class="add-cart relative text-ink text-[9px] font-bold tracking-[0.8px] uppercase hover:text-gold-dark transition after:content-[''] after:block after:w-0 after:h-px after:mt-1 after:bg-gold-dark after:transition-all hover:after:w-full" data-image="images/products/10-travel-bag.jpg" data-price="179" data-product="Premium Travel Bag">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- LUXORA Luxury Watch -->
+                    <article class="shop-product-card group relative" data-category="women" data-date="3" data-price="199" data-rating="5">
+                        <div class="shop-product-image relative h-[390px] flex items-center justify-center overflow-hidden bg-[linear-gradient(145deg,#f3f0e9,#ddd8cd)]">
+                            <img alt="LUXORA Luxury Watch" class="product-photo w-full h-full object-cover" loading="lazy" src="images/products/01-luxury-watch.jpg"/>
+                            <button class="wishlist-btn absolute top-3 right-3 z-[4] w-9 h-9 grid place-items-center rounded-full bg-white/90 text-[#222] transition-all duration-300 hover:bg-ink hover:text-white hover:scale-105" aria-label="Add to wishlist">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <button class="quick-view absolute left-3 right-3 bottom-3 z-[3] h-[42px] bg-ink/90 text-white text-[10px] font-bold tracking-[1px] uppercase opacity-0 translate-y-2.5 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-gold-dark">Quick View</button>
+                        </div>
+                        <div class="product-info pt-4">
+                            <span class="product-category block mb-2 text-[#aaa] text-[8px] font-bold tracking-[1.3px]">ACCESSORIES / WATCHES</span>
+                            <h3 class="mb-2 text-ink font-heading text-[19px] font-semibold leading-[1.3]">LUXORA Luxury Watch</h3>
+                            <div class="rating mb-3 text-gold-dark text-[10px] tracking-[1px]">★★★★★<span class="ml-1 text-[#999] text-[9px] tracking-normal">(29)</span></div>
+                            <div class="product-bottom flex items-center justify-between gap-2.5">
+                                <strong class="text-ink text-[15px] font-bold">$199</strong>
+                                <button class="add-cart relative text-ink text-[9px] font-bold tracking-[0.8px] uppercase hover:text-gold-dark transition after:content-[''] after:block after:w-0 after:h-px after:mt-1 after:bg-gold-dark after:transition-all hover:after:w-full" data-image="images/products/01-luxury-watch.jpg" data-price="199" data-product="LUXORA Luxury Watch">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Classic Chronograph -->
+                    <article class="shop-product-card group relative" data-category="accessories" data-date="2" data-price="129" data-rating="5">
+                        <div class="shop-product-image relative h-[390px] flex items-center justify-center overflow-hidden bg-[linear-gradient(145deg,#f3f0e9,#ddd8cd)]">
+                            <img alt="LUXORA Classic Chronograph Luxury Watch" class="product-photo w-full h-full object-cover" loading="lazy" src="images/products/product-11.jpg"/>
+                            <button class="wishlist-btn absolute top-3 right-3 z-[4] w-9 h-9 grid place-items-center rounded-full bg-white/90 text-[#222] transition-all duration-300 hover:bg-ink hover:text-white hover:scale-105" aria-label="Add to wishlist">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <button class="quick-view absolute left-3 right-3 bottom-3 z-[3] h-[42px] bg-ink/90 text-white text-[10px] font-bold tracking-[1px] uppercase opacity-0 translate-y-2.5 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-gold-dark">Quick View</button>
+                        </div>
+                        <div class="product-info pt-4">
+                            <span class="product-category block mb-2 text-[#aaa] text-[8px] font-bold tracking-[1.3px]">ACCESSORIES / WATCHES</span>
+                            <h3 class="mb-2 text-ink font-heading text-[19px] font-semibold leading-[1.3]">Classic Chronograph</h3>
+                            <div class="rating mb-3 text-gold-dark text-[10px] tracking-[1px]">★★★★★<span class="ml-1 text-[#999] text-[9px] tracking-normal">(33)</span></div>
+                            <div class="product-bottom flex items-center justify-between gap-2.5">
+                                <strong class="text-ink text-[15px] font-bold">$129</strong>
+                                <button class="add-cart relative text-ink text-[9px] font-bold tracking-[0.8px] uppercase hover:text-gold-dark transition after:content-[''] after:block after:w-0 after:h-px after:mt-1 after:bg-gold-dark after:transition-all hover:after:w-full" data-price="129" data-product="Classic Chronograph">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Artisan Coffee Collection -->
+                    <article class="shop-product-card group relative" data-category="lifestyle" data-date="1" data-price="89" data-rating="4">
+                        <div class="shop-product-image relative h-[390px] flex items-center justify-center overflow-hidden bg-[linear-gradient(145deg,#f3f0e9,#ddd8cd)]">
+                            <img alt="LUXORA Artisan Coffee Collection" class="product-photo w-full h-full object-cover" loading="lazy" src="images/products/product-12.jpg"/>
+                            <button class="wishlist-btn absolute top-3 right-3 z-[4] w-9 h-9 grid place-items-center rounded-full bg-white/90 text-[#222] transition-all duration-300 hover:bg-ink hover:text-white hover:scale-105" aria-label="Add to wishlist">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <button class="quick-view absolute left-3 right-3 bottom-3 z-[3] h-[42px] bg-ink/90 text-white text-[10px] font-bold tracking-[1px] uppercase opacity-0 translate-y-2.5 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-gold-dark">Quick View</button>
+                        </div>
+                        <div class="product-info pt-4">
+                            <span class="product-category block mb-2 text-[#aaa] text-[8px] font-bold tracking-[1.3px]">LIFESTYLE / DINING</span>
+                            <h3 class="mb-2 text-ink font-heading text-[19px] font-semibold leading-[1.3]">Artisan Coffee Collection</h3>
+                            <div class="rating mb-3 text-gold-dark text-[10px] tracking-[1px]">★★★★☆<span class="ml-1 text-[#999] text-[9px] tracking-normal">(19)</span></div>
+                            <div class="product-bottom flex items-center justify-between gap-2.5">
+                                <strong class="text-ink text-[15px] font-bold">$89</strong>
+                                <button class="add-cart relative text-ink text-[9px] font-bold tracking-[0.8px] uppercase hover:text-gold-dark transition after:content-[''] after:block after:w-0 after:h-px after:mt-1 after:bg-gold-dark after:transition-all hover:after:w-full" data-price="89" data-product="Artisan Coffee Collection">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- PAGINATION -->
+                <div class="pagination flex items-center justify-center gap-1.5 mt-16">
+                    <button class="page active w-[42px] h-[42px] border border-line bg-white text-[#555] text-[10px] font-bold transition-colors">01</button>
+                    <button class="page w-[42px] h-[42px] border border-line bg-white text-[#555] text-[10px] font-bold transition-colors">02</button>
+                    <button class="page w-[42px] h-[42px] border border-line bg-white text-[#555] text-[10px] font-bold transition-colors">03</button>
+                    <span class="px-1 text-[#aaa] text-xs">...</span>
+                    <button class="page w-[42px] h-[42px] border border-line bg-white text-[#555] text-[10px] font-bold transition-colors">06</button>
+                    <button class="next-page flex items-center gap-2.5 h-[42px] px-4 border border-line bg-white text-[#555] text-[10px] font-bold hover:bg-gold-dark hover:border-gold-dark hover:text-white transition-colors">
+                        Next <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- ================= NEWSLETTER ================= -->
+<section class="newsletter py-20 bg-[linear-gradient(135deg,#1a1917,#28251e)] text-white">
+    <div class="max-w-boxed mx-auto px-5 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(360px,500px)] gap-8 lg:gap-20 items-center">
+        <div class="newsletter-content">
+            <span class="section-label inline-block mb-4 text-gold text-[10px] font-bold tracking-[3px]">STAY IN THE KNOW</span>
+            <h2 class="mb-4 font-heading text-[48px] font-semibold leading-[1.05]">Join the LUXORA Circle</h2>
+            <p class="max-w-[550px] text-white/65 text-[13px] leading-[1.8]">
+                Get early access to new collections, private offers and inspiration delivered to your inbox.
+            </p>
+        </div>
+        <form class="newsletter-form flex items-stretch gap-2.5">
+            <div class="email-input relative flex-1">
+                <i class="fa-regular fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-[#999] text-[13px]"></i>
+                <input placeholder="Your email address" required type="email" class="w-full h-[52px] pl-[45px] pr-4 border border-white/15 outline-none bg-white/[0.08] text-white text-xs placeholder-white/45 focus:border-gold-dark transition">
+            </div>
+            <button class="btn btn-gold min-w-[130px] h-[52px] border border-gold-dark bg-gold-dark text-white text-[10px] font-bold tracking-[1px] uppercase hover:bg-transparent hover:text-gold transition" type="submit">Subscribe</button>
+        </form>
+        <small class="lg:col-start-2 -mt-4 text-white/35 text-[9px]">By subscribing, you agree to our Privacy Policy.</small>
+    </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer bg-dark pt-16">
+    <div class="max-w-boxed mx-auto px-5 footer-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-12">
+        <div class="footer-brand">
+            <a class="logo font-heading text-2xl font-semibold text-white" href="index.html">LUX<span class="text-gold">ORA</span></a>
+            <p class="text-white/50 text-sm mt-4 mb-6 leading-relaxed">
+                Modern luxury, thoughtfully curated for those who appreciate quality, design and timeless style.
+            </p>
+            <div class="social-links flex gap-3">
+                <a href="#" class="w-9 h-9 rounded-full border border-white/20 text-white flex items-center justify-center hover:bg-gold hover:border-gold transition"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#" class="w-9 h-9 rounded-full border border-white/20 text-white flex items-center justify-center hover:bg-gold hover:border-gold transition"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="w-9 h-9 rounded-full border border-white/20 text-white flex items-center justify-center hover:bg-gold hover:border-gold transition"><i class="fa-brands fa-pinterest-p"></i></a>
+                <a href="#" class="w-9 h-9 rounded-full border border-white/20 text-white flex items-center justify-center hover:bg-gold hover:border-gold transition"><i class="fa-brands fa-x-twitter"></i></a>
+            </div>
+        </div>
+        <div class="footer-column flex flex-col gap-3">
+            <h3 class="text-white font-heading text-lg mb-2">Shop</h3>
+            <a href="#" class="text-white/50 text-sm hover:text-gold transition">New Arrivals</a>
+            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Men</a>
+            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Women</a>
+            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Accessories</a>
+            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Sale</a>
+        </div>
+        <div class="footer-column flex flex-col gap-3">
+            <h3 class="text-white font-heading text-lg mb-2">Help</h3>
+            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Contact Us</a>
+            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Shipping</a>
+            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Returns</a>
+            <a href="#" class="text-white/50 text-sm hover:text-gold transition">FAQ</a>
+            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Size Guide</a>
+        </div>
+        <div class="footer-column flex flex-col gap-3">
+            <h3 class="text-white font-heading text-lg mb-2">Company</h3>
+            <a href="#" class="text-white/50 text-sm hover:text-gold transition">About LUXORA</a>
+            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Our Story</a>
+            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Journal</a>
+            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Careers</a>
+            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Privacy Policy</a>
+        </div>
+    </div>
+    <div class="footer-bottom border-t border-white/10 py-6">
+        <div class="max-w-boxed mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p class="text-white/40 text-xs">© 2026 LUXORA. All rights reserved.</p>
+            <div class="flex gap-4 text-white/40 text-xl">
+                <i class="fa-brands fa-cc-visa"></i>
+                <i class="fa-brands fa-cc-mastercard"></i>
+                <i class="fa-brands fa-cc-amex"></i>
+                <i class="fa-brands fa-cc-paypal"></i>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- ================= TOAST ================= -->
+<div class="toast" id="toast">
+    <i class="fa-solid fa-check text-gold"></i>
+    <span>Product added to cart</span>
+</div>
+
+<script src="js/main.js"></script>
+<script src="js/shop.js"></script>
+</body>
+</html>

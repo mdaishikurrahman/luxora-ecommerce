@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>About Us | LUXORA</title>
+
+    <meta name="description"
+        content="Discover the story, philosophy and premium experience behind LUXORA.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Tailwind CSS (Play CDN — for production, run `npm install -D tailwindcss` and build with tailwind.config.js) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ink: '#111111',
+                        dark: '#181818',
+                        gold: { DEFAULT: '#c9a227', dark: '#a98518' },
+                        cream: '#f8f7f4',
+                        muted: '#777777',
+                        line: '#e7e4de',
+                        soft: '#f3f2ef',
+                    },
+                    fontFamily: {
+                        heading: ['"Playfair Display"', 'serif'],
+                        body: ['"DM Sans"', 'sans-serif'],
+                    },
+                    maxWidth: {
+                        boxed: '1240px',
+                    },
+                }
+            }
+        }
+    </script>
+
+    <!-- Small custom layer: only for JS-driven state classes Tailwind utilities can't express -->
+    <style type="text/tailwindcss">
+        @layer utilities {
+            #navbar.active { @apply flex; }
+        }
+    </style>
+</head>
+
+<body class="font-body text-[#333] antialiased">
+
+<!-- ================= HEADER ================= -->
+<header class="header sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-line">
+    <div class="max-w-boxed mx-auto px-5 flex items-center justify-between h-20">
+
+        <a href="index.html" class="logo font-heading text-2xl font-semibold text-ink">
+            LUXORA<span class="text-gold">.</span>
+        </a>
+
+        <nav class="navbar hidden md:flex items-center gap-8 text-sm font-medium tracking-wide" id="navbar">
+            <a href="index.html" class="text-[#333] hover:text-gold transition">Home</a>
+            <a href="shop.html" class="text-[#333] hover:text-gold transition">Shop</a>
+            <a href="about.html" class="active text-ink border-b-2 border-gold pb-1">About</a>
+            <a href="contact.html" class="text-[#333] hover:text-gold transition">Contact</a>
+        </nav>
+
+        <div class="nav-actions flex items-center gap-5">
+
+            <a href="shop.html" class="nav-icon text-lg hover:text-gold transition" aria-label="Search">
+                <i class="fas fa-search"></i>
+            </a>
+
+            <a href="cart.html" class="nav-icon text-lg hover:text-gold transition" aria-label="Shopping Bag">
+                <i class="fas fa-shopping-bag"></i>
+            </a>
+
+            <button class="menu-toggle md:hidden text-xl" type="button" aria-label="Open menu">
+                <i class="fas fa-bars"></i>
+            </button>
+
+        </div>
+    </div>
+</header>
+
+
+<!-- ================= ABOUT HERO ================= -->
+<section class="about-hero relative overflow-hidden flex items-center min-h-[560px] bg-[linear-gradient(90deg,rgba(15,15,15,0.82),rgba(15,15,15,0.52),rgba(15,15,15,0.35)),url('images/hero/home-hero.jpg')] bg-cover bg-center">
+    <div class="max-w-boxed mx-auto px-5 w-full">
+        <div class="max-w-[760px] text-white">
+
+            <div class="flex items-center gap-2.5 mb-9 text-[10px] tracking-[2px] uppercase">
+                <a href="index.html" class="text-white/65 hover:text-white transition">Home</a>
+                <span class="text-white/65">/</span>
+                <span class="text-white/95">About</span>
+            </div>
+
+            <span class="block mb-5 text-gold text-[11px] font-bold tracking-[4px] uppercase">
+                THE LUXORA STORY
+            </span>
+
+            <h1 class="max-w-[760px] font-heading text-[clamp(55px,7vw,88px)] font-semibold leading-[0.98] tracking-[-2px]">
+                Luxury that feels effortlessly yours.
+            </h1>
+
+            <p class="max-w-[590px] mt-8 text-white/80 text-[15px] leading-[1.85]">
+                A modern luxury destination created for those who
+                appreciate timeless design, exceptional quality and
+                effortless elegance.
+            </p>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ================= STORY ================= -->
+<section class="about-story bg-white py-24">
+    <div class="max-w-boxed mx-auto px-5">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-[85px] items-center">
+
+            <div class="relative min-h-[400px] lg:min-h-[570px] overflow-hidden bg-[#eeeae1] group after:content-[''] after:absolute after:inset-[18px] after:border after:border-white/50 after:pointer-events-none">
+                <img src="images/categories/lifestyle.jpg"
+                     alt="LUXORA premium collection"
+                     loading="lazy"
+                     class="w-full h-full min-h-[400px] lg:min-h-[570px] object-cover transition-transform duration-700 group-hover:scale-[1.04]">
+            </div>
+
+            <div class="max-w-[570px]">
+                <span class="block mb-4 text-gold-dark text-[10px] font-bold tracking-[3px] uppercase">
+                    OUR STORY
+                </span>
+
+                <h2 class="mb-7 text-ink font-heading text-[clamp(42px,5vw,64px)] font-semibold leading-[1.05] tracking-[-1px]">
+                    Designed for a life well lived.
+                </h2>
+
+                <p class="mb-4 text-[#686868] text-sm leading-[1.9]">
+                    LUXORA was created from a simple idea:
+                    luxury should feel personal, timeless and effortless.
+                </p>
+
+                <p class="mb-4 text-[#686868] text-sm leading-[1.9]">
+                    We carefully curate premium products that combine
+                    refined aesthetics with everyday functionality.
+                    Every collection is selected with attention to
+                    materials, craftsmanship, design and lasting appeal.
+                </p>
+
+                <p class="mb-4 text-[#686868] text-sm leading-[1.9]">
+                    From the first click to the moment your order arrives,
+                    our goal is to create an experience that feels as
+                    considered as the products themselves.
+                </p>
+
+                <a href="shop.html" class="about-btn group inline-flex items-center justify-center gap-3 min-h-[48px] mt-4 px-6 border border-ink bg-ink text-white text-[10px] font-bold tracking-[1.5px] uppercase transition-all duration-300 hover:bg-gold-dark hover:border-gold-dark hover:-translate-y-0.5">
+                    Explore Collection
+                    <i class="fas fa-arrow-right text-[10px] transition-transform duration-300 group-hover:translate-x-1"></i>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ================= VALUES ================= -->
+<section class="about-values bg-soft py-24">
+    <div class="max-w-boxed mx-auto px-5">
+
+        <div class="max-w-[700px] mx-auto mb-16 text-center">
+            <span class="block mb-4 text-gold-dark text-[10px] font-bold tracking-[3px] uppercase">
+                WHAT WE BELIEVE
+            </span>
+            <h2 class="text-ink font-heading text-[clamp(42px,5vw,60px)] font-semibold leading-[1.05]">
+                The LUXORA Standard
+            </h2>
+            <p class="max-w-[500px] mx-auto mt-5 text-muted text-sm leading-[1.8]">
+                Three principles guide everything we create,
+                curate and deliver.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 border-t border-l border-line">
+
+            <!-- Value 01 -->
+            <article class="value-card group relative min-h-[330px] p-10 border-r border-b border-line bg-white overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_45px_rgba(0,0,0,0.08)]">
+                <span class="absolute top-0 left-0 h-[3px] w-0 bg-gold-dark transition-all duration-500 group-hover:w-full"></span>
+                <div class="absolute top-6 right-8 text-[#ebe8e1] font-heading text-5xl leading-none">01</div>
+                <div class="w-[58px] h-[58px] grid place-items-center mb-7 border border-gold/50 text-gold-dark text-lg transition-colors duration-300 group-hover:bg-gold-dark group-hover:text-white">
+                    <i class="fas fa-gem"></i>
+                </div>
+                <h3 class="relative mb-4 text-ink font-heading text-2xl font-semibold">Exceptional Quality</h3>
+                <p class="max-w-[330px] text-[#737373] text-[13px] leading-[1.85]">
+                    We focus on premium materials, thoughtful details
+                    and products designed to stand the test of time.
+                </p>
+            </article>
+
+            <!-- Value 02 -->
+            <article class="value-card group relative min-h-[330px] p-10 border-r border-b border-line bg-white overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_45px_rgba(0,0,0,0.08)]">
+                <span class="absolute top-0 left-0 h-[3px] w-0 bg-gold-dark transition-all duration-500 group-hover:w-full"></span>
+                <div class="absolute top-6 right-8 text-[#ebe8e1] font-heading text-5xl leading-none">02</div>
+                <div class="w-[58px] h-[58px] grid place-items-center mb-7 border border-gold/50 text-gold-dark text-lg transition-colors duration-300 group-hover:bg-gold-dark group-hover:text-white">
+                    <i class="fas fa-compass"></i>
+                </div>
+                <h3 class="relative mb-4 text-ink font-heading text-2xl font-semibold">Timeless Design</h3>
+                <p class="max-w-[330px] text-[#737373] text-[13px] leading-[1.85]">
+                    We choose designs that remain elegant beyond seasonal
+                    trends and complement modern lifestyles.
+                </p>
+            </article>
+
+            <!-- Value 03 -->
+            <article class="value-card group relative min-h-[330px] p-10 border-r border-b border-line bg-white overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_45px_rgba(0,0,0,0.08)]">
+                <span class="absolute top-0 left-0 h-[3px] w-0 bg-gold-dark transition-all duration-500 group-hover:w-full"></span>
+                <div class="absolute top-6 right-8 text-[#ebe8e1] font-heading text-5xl leading-none">03</div>
+                <div class="w-[58px] h-[58px] grid place-items-center mb-7 border border-gold/50 text-gold-dark text-lg transition-colors duration-300 group-hover:bg-gold-dark group-hover:text-white">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h3 class="relative mb-4 text-ink font-heading text-2xl font-semibold">Customer First</h3>
+                <p class="max-w-[330px] text-[#737373] text-[13px] leading-[1.85]">
+                    Every interaction matters. We aim to make your
+                    shopping experience simple, personal and memorable.
+                </p>
+            </article>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ================= PHILOSOPHY ================= -->
+<section class="about-philosophy bg-white py-24">
+    <div class="max-w-boxed mx-auto px-5">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-[85px] items-center">
+
+            <div class="max-w-[570px] order-2 lg:order-1">
+                <span class="block mb-4 text-gold-dark text-[10px] font-bold tracking-[3px] uppercase">
+                    OUR PHILOSOPHY
+                </span>
+                <h2 class="max-w-[520px] mb-7 text-ink font-heading text-[clamp(42px,5vw,64px)] font-semibold leading-[1.05] tracking-[-1px]">
+                    Less noise. More elegance.
+                </h2>
+                <p class="mb-4 text-[#686868] text-sm leading-[1.9]">
+                    We believe true luxury does not need to be loud.
+                    It lives in the details—the texture of a material,
+                    the balance of a silhouette and the feeling a product
+                    creates when you use it.
+                </p>
+                <p class="mb-4 text-[#686868] text-sm leading-[1.9]">
+                    That's why LUXORA embraces a refined aesthetic
+                    built around simplicity, quality and confidence.
+                </p>
+
+                <div class="flex flex-col mt-10 pt-6 border-t border-line">
+                    <strong class="text-gold-dark font-heading text-[70px] font-medium leading-none">01</strong>
+                    <span class="mt-2 text-muted text-[10px] font-semibold tracking-[2px] uppercase">Quality over quantity</span>
+                </div>
+            </div>
+
+            <div class="relative min-h-[400px] lg:min-h-[550px] overflow-hidden bg-[#eeeae1] order-1 lg:order-2 group before:content-[''] before:absolute before:z-10 before:inset-[18px] before:border before:border-white/55 before:pointer-events-none">
+                <img src="images/categories/men.jpg"
+                     alt="LUXORA luxury lifestyle"
+                     loading="lazy"
+                     class="w-full h-full min-h-[400px] lg:min-h-[550px] object-cover transition-transform duration-700 group-hover:scale-[1.04]">
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ================= CTA ================= -->
+<section class="about-cta relative min-h-[500px] flex items-center overflow-hidden text-center bg-[linear-gradient(rgba(15,15,15,0.72),rgba(15,15,15,0.72)),url('images/luxora-premium.jpg')] bg-cover bg-center">
+    <div class="max-w-boxed mx-auto px-5 w-full">
+        <div class="max-w-[750px] mx-auto text-white">
+
+            <span class="block mb-5 text-gold text-[10px] font-bold tracking-[4px] uppercase">
+                DISCOVER LUXORA
+            </span>
+
+            <h2 class="font-heading text-[clamp(45px,6vw,70px)] font-semibold leading-[1.05] tracking-[-1px]">
+                Find your signature style.
+            </h2>
+
+            <p class="max-w-[550px] mx-auto mt-6 text-white/80 text-sm leading-[1.85]">
+                Explore our carefully curated collection of premium
+                essentials designed for modern living.
+            </p>
+
+            <a href="shop.html" class="about-btn group inline-flex items-center justify-center gap-3 min-h-[48px] mt-8 px-6 border border-white bg-white text-ink text-[10px] font-bold tracking-[1.5px] uppercase transition-all duration-300 hover:bg-gold-dark hover:border-gold-dark hover:text-white">
+                Shop Now
+                <i class="fas fa-arrow-right text-[10px] transition-transform duration-300 group-hover:translate-x-1"></i>
+            </a>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer bg-dark pt-16">
+    <div class="max-w-boxed mx-auto px-5 footer-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-12">
+
+        <div class="footer-brand">
+            <a href="index.html" class="logo font-heading text-2xl font-semibold text-white">
+                LUXORA<span class="text-gold">.</span>
+            </a>
+            <p class="text-white/50 text-sm mt-4 mb-6 leading-relaxed">
+                Timeless luxury, thoughtfully curated for modern living.
+            </p>
+        </div>
+
+        <div class="footer-column flex flex-col gap-3">
+            <h3 class="text-white font-heading text-lg mb-2">Explore</h3>
+            <a href="index.html" class="text-white/50 text-sm hover:text-gold transition">Home</a>
+            <a href="shop.html" class="text-white/50 text-sm hover:text-gold transition">Shop</a>
+            <a href="about.html" class="text-white/50 text-sm hover:text-gold transition">About Us</a>
+            <a href="contact.html" class="text-white/50 text-sm hover:text-gold transition">Contact</a>
+        </div>
+
+        <div class="footer-column flex flex-col gap-3">
+            <h3 class="text-white font-heading text-lg mb-2">Customer Care</h3>
+            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Shipping & Delivery</a>
+            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Returns</a>
+            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Privacy Policy</a>
+            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Terms & Conditions</a>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom border-t border-white/10 py-6">
+        <div class="max-w-boxed mx-auto px-5 text-center">
+            <p class="text-white/40 text-xs">© 2026 LUXORA. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+
+<!-- About JavaScript -->
+<script src="js/about.js"></script>
+
+</body>
+</html>

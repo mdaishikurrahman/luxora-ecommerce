@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+        content="Essential Linen Shirt — premium lightweight linen shirt from LUXORA.">
+
+    <title>Essential Linen Shirt | LUXORA</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- Tailwind CSS (Play CDN — for production, run `npm install -D tailwindcss` and build with tailwind.config.js) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ink: '#111111',
+                        dark: '#181818',
+                        gold: { DEFAULT: '#c9a227', dark: '#a98518' },
+                        cream: '#f8f7f4',
+                        muted: '#777777',
+                        line: '#e7e4de',
+                        soft: '#f3f2ef',
+                    },
+                    fontFamily: {
+                        heading: ['"Playfair Display"', 'serif'],
+                        body: ['"DM Sans"', 'sans-serif'],
+                    },
+                    maxWidth: { boxed: '1240px' },
+                }
+            }
+        }
+    </script>
+
+    <!-- Site-wide + page components reimplemented with Tailwind @apply (replaces style.css / product.css / responsive.css) -->
+    <style type="text/tailwindcss">
+        @layer components {
+            /* Shared layout */
+            .container { @apply max-w-boxed mx-auto px-5; }
+            .header { @apply sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-line; }
+            .nav-container { @apply flex items-center justify-between h-20; }
+            .logo { @apply font-heading text-2xl font-semibold text-ink; }
+            .logo span { @apply text-gold; }
+            .navbar { @apply hidden md:flex items-center gap-8 text-sm font-medium tracking-wide; }
+            .navbar a { @apply relative pb-1 text-[#333] hover:text-gold transition; }
+            .navbar a.active { @apply text-ink border-b-2 border-gold; }
+            .nav-actions { @apply flex items-center gap-5; }
+            .nav-icon { @apply relative text-lg hover:text-gold transition; }
+            .count { @apply absolute -top-2 -right-2 bg-gold text-white text-[10px] leading-none rounded-full w-4 h-4 flex items-center justify-center; }
+            .menu-toggle { @apply md:hidden text-xl; }
+            .footer { @apply bg-dark pt-16; }
+            .footer-grid { @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-12; }
+            .footer-brand .logo { @apply text-white; }
+            .footer-brand > p { @apply text-white/50 text-sm mt-4 mb-6 leading-relaxed; }
+            .social-links { @apply flex gap-3; }
+            .social-links a { @apply w-9 h-9 rounded-full border border-white/20 text-white flex items-center justify-center hover:bg-gold hover:border-gold transition; }
+            .footer-column { @apply flex flex-col gap-3; }
+            .footer-column h3 { @apply text-white font-heading text-lg mb-2; }
+            .footer-column a { @apply text-white/50 text-sm hover:text-gold transition; }
+            .footer-bottom { @apply border-t border-white/10 py-6; }
+            .footer-bottom-inner { @apply flex flex-col sm:flex-row items-center justify-between gap-4; }
+            .footer-bottom p { @apply text-white/40 text-xs; }
+            .payment-methods { @apply flex gap-4 text-white/40 text-xl; }
+            .toast { @apply fixed bottom-6 right-6 z-[200] min-w-[220px] bg-ink text-white px-5 py-4 rounded flex items-center gap-3 opacity-0 invisible translate-y-4 transition-all duration-300; }
+            .toast.show { @apply opacity-100 visible translate-y-0; }
+            .toast i { @apply text-gold; }
+
+            /* Breadcrumb */
+            .product-breadcrumb { @apply py-6 border-b border-line bg-white; }
+            .product-breadcrumb .container { @apply flex items-center gap-3 text-[10px] tracking-[1.2px] uppercase; }
+            .product-breadcrumb a { @apply text-muted hover:text-ink transition; }
+            .product-breadcrumb i { @apply text-[8px] text-muted; }
+            .product-breadcrumb span { @apply text-ink; }
+
+            /* Product details layout */
+            .product-details { @apply py-[75px] pb-[100px] bg-white; }
+            .product-container { @apply grid grid-cols-1 lg:grid-cols-[minmax(0,1.15fr)_minmax(400px,0.85fr)] gap-12 lg:gap-[75px] items-start; }
+
+            /* Gallery */
+            .product-gallery { @apply grid grid-cols-1 sm:grid-cols-[85px_minmax(0,1fr)] gap-4 min-w-0; }
+            .product-thumbnails { @apply flex sm:flex-col gap-3; }
+            .thumbnail { @apply relative w-full h-[105px] p-0 overflow-hidden border border-transparent bg-[#f5f3ee] cursor-pointer transition-all hover:opacity-80; }
+            .thumbnail img { @apply w-full h-full block object-cover; }
+            .thumbnail.active { @apply border-ink; }
+            .product-main-image { @apply relative min-h-[400px] sm:min-h-[680px] overflow-hidden bg-[#f4f1eb]; }
+            .product-main-image > img { @apply w-full h-full min-h-[400px] sm:min-h-[680px] block object-cover transition-transform duration-500; }
+            .product-main-image:hover > img { @apply scale-[1.025]; }
+            .product-main-badge { @apply absolute top-[22px] left-[22px] z-[2] px-3.5 py-2 bg-ink text-white text-[9px] font-semibold tracking-[1.5px]; }
+            .image-zoom { @apply absolute top-[22px] right-[22px] z-[2] w-[42px] h-[42px] grid place-items-center border border-white/80 bg-white/90 text-ink transition-all hover:bg-ink hover:text-white; }
+
+            /* Info panel */
+            .product-info-panel { @apply pt-1; }
+            .product-detail-category { @apply block mb-[18px] text-muted text-[9px] font-semibold tracking-[2px]; }
+            .product-info-panel h1 { @apply max-w-[600px] mb-[18px] text-ink font-heading text-[40px] sm:text-[56px] font-semibold leading-[1.05] tracking-[-1.5px]; }
+            .product-detail-rating { @apply flex items-center gap-4 mb-7; }
+            .product-detail-rating .stars { @apply text-[#b38a45] text-[13px] tracking-[2px]; }
+            .product-detail-rating a { @apply text-muted text-[11px] hover:text-ink transition; }
+            .product-detail-rating a span { @apply ml-1; }
+            .product-detail-price { @apply flex items-center gap-4 mb-6; }
+            .product-detail-price strong { @apply text-ink text-[32px] font-semibold; }
+            .product-detail-price del { @apply text-muted text-sm; }
+            .product-detail-price span { @apply px-2.5 py-1.5 bg-[#f1e8d7] text-[#8c6a31] text-[9px] font-bold tracking-[0.5px]; }
+            .product-short-description { @apply max-w-[590px] text-muted text-sm leading-[1.9]; }
+            .product-divider { @apply w-full h-px my-8 bg-line; }
+
+            /* Options */
+            .product-option { @apply mb-[30px]; }
+            .option-heading { @apply flex items-center justify-between mb-3.5; }
+            .option-heading strong, .product-option > strong { @apply text-ink text-[11px] font-bold tracking-[1px] uppercase; }
+            .option-heading span { @apply text-muted text-[11px]; }
+            .option-heading a { @apply text-ink border-b border-ink text-[10px] font-semibold; }
+            .color-options { @apply flex items-center gap-2.5; }
+            .color-option { @apply relative w-[31px] h-[31px] border-2 border-transparent rounded-full cursor-pointer shadow-[0_0_0_1px_#d8d4cb] transition-transform hover:scale-105; }
+            .color-option.active { @apply shadow-[0_0_0_1px_#111111,0_0_0_4px_#ffffff,0_0_0_5px_#111111]; }
+            .product-size-options { @apply flex flex-wrap gap-2 mt-3.5; }
+            .product-size-options button { @apply min-w-[55px] h-[45px] px-4 border border-line bg-white text-ink text-[10px] font-semibold transition-all; }
+            .product-size-options button:hover, .product-size-options button.active { @apply border-ink bg-ink text-white; }
+
+            /* Quantity */
+            .quantity-option { @apply flex items-center justify-between gap-5; }
+            .quantity-control { @apply w-[135px] h-[45px] grid grid-cols-[40px_1fr_40px] border border-line; }
+            .quantity-control button { @apply grid place-items-center border-0 bg-white text-ink cursor-pointer transition-colors hover:bg-[#f4f2ed]; }
+            .quantity-control input { @apply w-full min-w-0 border-0 outline-0 bg-white text-ink text-center text-xs; }
+
+            /* Actions */
+            .product-actions { @apply grid grid-cols-[1fr_1fr_52px] gap-2.5 mt-9; }
+            .add-product-cart, .buy-now-btn, .product-wishlist { @apply min-h-[54px] border border-ink text-[10px] font-bold tracking-[1px] uppercase transition-all cursor-pointer; }
+            .add-product-cart { @apply bg-ink text-white hover:bg-[#333]; }
+            .buy-now-btn { @apply bg-white text-ink hover:bg-ink hover:text-white; }
+            .product-wishlist { @apply grid place-items-center bg-white text-ink text-base hover:bg-[#f5f2ec]; }
+            .product-wishlist.active { @apply bg-ink text-white; }
+
+            /* Benefits */
+            .product-benefits { @apply mt-9 border-t border-line; }
+            .benefit { @apply flex items-center gap-4 py-5 border-b border-line; }
+            .benefit i { @apply w-10 h-10 grid place-items-center flex-shrink-0 bg-[#f5f2eb] text-ink text-sm; }
+            .benefit div { @apply flex flex-col gap-1; }
+            .benefit strong { @apply text-ink text-[11px] font-bold; }
+            .benefit span { @apply text-muted text-[10px]; }
+
+            /* Tabs */
+            .product-tabs-section { @apply py-[85px] border-t border-line bg-[#faf9f6]; }
+            .product-tabs { @apply flex flex-wrap items-center justify-center gap-8 sm:gap-11 border-b border-line; }
+            .product-tab { @apply relative pb-[18px] border-0 bg-transparent text-muted cursor-pointer text-[10px] font-bold tracking-[1.2px] uppercase after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-px after:h-0.5 after:bg-ink after:scale-x-0 after:origin-center after:transition-transform; }
+            .product-tab.active { @apply text-ink after:scale-x-100; }
+            .tab-content { @apply hidden; }
+            .tab-content.active { @apply block; }
+            .tab-content-inner { @apply max-w-[800px] mx-auto pt-14; }
+            .tab-content-inner h2 { @apply mb-5 text-ink font-heading text-[32px] sm:text-4xl font-semibold; }
+            .tab-content-inner p { @apply mb-4 text-muted text-sm leading-[1.9]; }
+            .details-list { @apply m-0 p-0 list-none border-t border-line; }
+            .details-list li { @apply flex justify-between gap-8 py-4 border-b border-line text-muted text-xs; }
+            .details-list li strong { @apply text-ink font-semibold text-right; }
+
+            /* Reviews */
+            .reviews-summary { @apply max-w-[850px] mx-auto pt-14 grid grid-cols-1 sm:grid-cols-[220px_1fr] gap-10 sm:gap-[70px] items-center; }
+            .review-score { @apply flex flex-col items-center text-center; }
+            .review-score strong { @apply text-ink font-heading text-[65px] font-semibold leading-none; }
+            .review-score .stars { @apply my-3 text-[#b38a45] text-[13px] tracking-[2px]; }
+            .review-score span { @apply text-muted text-[10px]; }
+            .review-bars { @apply flex flex-col gap-3; }
+            .review-bars > div { @apply grid grid-cols-[15px_1fr] items-center gap-3; }
+            .review-bars > div > span { @apply text-muted text-[10px]; }
+            .review-bars > div > div { @apply h-[5px] overflow-hidden bg-[#e3dfd6]; }
+            .review-bars i { @apply block h-full bg-ink; }
+
+            /* Related products */
+            .related-products { @apply py-24 bg-white; }
+            .related-products .section-heading { @apply text-center mb-12; }
+            .section-label { @apply block mb-3 text-muted text-[9px] font-bold tracking-[2px]; }
+            .related-products .section-heading h2 { @apply text-ink font-heading text-4xl font-semibold; }
+            .related-grid { @apply grid grid-cols-2 lg:grid-cols-4 gap-5; }
+            .related-card { @apply cursor-pointer transition-transform hover:-translate-y-1.5; }
+            .related-image { @apply relative h-[350px] grid place-items-center overflow-hidden bg-[#f4f1eb] text-[#777] text-5xl; }
+            .related-image > span { @apply absolute top-3.5 left-3.5 px-2.5 py-1.5 bg-ink text-white text-[8px] font-bold tracking-[1px]; }
+            .related-info { @apply pt-4; }
+            .related-info small { @apply block mb-1.5 text-muted text-[7px] font-bold tracking-[1.2px]; }
+            .related-info h3 { @apply mb-2 text-ink font-heading text-lg font-semibold; }
+            .related-info strong { @apply text-ink text-[13px] font-semibold; }
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="header">
+
+        <div class="container nav-container">
+
+            <a href="index.html"
+                class="logo">
+
+                LUX<span>ORA</span>
+
+            </a>
+
+
+            <nav class="navbar"
+                id="navbar">
+
+                <a href="index.html">
+                    Home
+                </a>
+
+                <a href="shop.html">
+                    Shop
+                </a>
+
+                <a href="shop.html#collections">
+                    Collections
+                </a>
+
+                <a href="shop.html#new">
+                    New Arrivals
+                </a>
+
+                <a href="shop.html#sale">
+                    Sale
+                </a>
+
+                <a href="#contact">
+                    Contact
+                </a>
+
+            </nav>
+
+
+            <div class="nav-actions">
+
+                <button
+                    class="nav-icon product-search-btn"
+                    aria-label="Search">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                </button>
+
+
+                <button
+                    class="nav-icon"
+                    aria-label="Account">
+
+                    <i class="fa-regular fa-user"></i>
+
+                </button>
+
+
+                <a href="cart.html"
+                    class="nav-icon cart-icon">
+
+                    <i class="fa-solid fa-bag-shopping"></i>
+
+                    <span class="count cart-count">
+                        0
+                    </span>
+
+                </a>
+
+
+                <button
+                    class="menu-toggle"
+                    id="menuToggle"
+                    aria-label="Menu">
+
+                    <i class="fa-solid fa-bars"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         BREADCRUMB
+    ====================================================== -->
+
+    <section class="product-breadcrumb">
+
+        <div class="container">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <i class="fa-solid fa-chevron-right"></i>
+
+            <a href="shop.html">
+                Shop
+            </a>
+
+            <i class="fa-solid fa-chevron-right"></i>
+
+            <span>
+                Essential Linen Shirt
+            </span>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         PRODUCT DETAILS
+    ====================================================== -->
+
+    <main class="product-details">
+
+        <div class="container product-container">
+
+
+            <!-- =================================================
+                 PRODUCT GALLERY
+            ================================================== -->
+
+            <div class="product-gallery">
+
+
+                <div class="product-thumbnails">
+
+                    <button
+                        class="thumbnail active"
+                        data-image="images/products/linen-shirt.jpg">
+
+                        <img
+                            src="images/products/linen-shirt.jpg"
+                            alt="Essential Linen Shirt front view">
+
+                    </button>
+
+
+                    <button
+                        class="thumbnail"
+                        data-image="images/products/07-silk-shirt.jpg">
+
+                        <img
+                            src="images/products/07-silk-shirt.jpg"
+                            alt="Essential Linen Shirt detail">
+
+                    </button>
+
+
+                    <button
+                        class="thumbnail"
+                        data-image="images/products/linen-shirt.jpg">
+
+                        <img
+                            src="images/products/linen-shirt.jpg"
+                            alt="Essential Linen Shirt side view">
+
+                    </button>
+
+
+                    <button
+                        class="thumbnail"
+                        data-image="images/products/07-silk-shirt.jpg">
+
+                        <img
+                            src="images/products/07-silk-shirt.jpg"
+                            alt="Essential Linen Shirt lifestyle">
+
+                    </button>
+
+                </div>
+
+
+
+                <div class="product-main-image">
+
+                    <span class="product-main-badge">
+                        NEW
+                    </span>
+
+
+                    <button
+                        class="image-zoom"
+                        aria-label="Zoom image">
+
+                        <i class="fa-solid fa-expand"></i>
+
+                    </button>
+
+
+                    <img
+                        id="mainProductImage"
+                        src="images/products/linen-shirt.jpg"
+                        alt="Essential Linen Shirt">
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 PRODUCT INFORMATION
+            ================================================== -->
+
+            <div class="product-info-panel">
+
+
+                <span class="product-detail-category">
+                    MEN / CLOTHING
+                </span>
+
+
+                <h1>
+                    Essential Linen Shirt
+                </h1>
+
+
+                <!-- Rating -->
+
+                <div class="product-detail-rating">
+
+                    <div class="stars">
+                        ★★★★★
+                    </div>
+
+                    <a href="#reviews">
+                        4.9
+                        <span>
+                            (24 Reviews)
+                        </span>
+                    </a>
+
+                </div>
+
+
+
+                <!-- Price -->
+
+                <div class="product-detail-price">
+
+                    <strong>
+                        $129
+                    </strong>
+
+                    <del>
+                        $159
+                    </del>
+
+                    <span>
+                        Save 19%
+                    </span>
+
+                </div>
+
+
+
+                <!-- Description -->
+
+                <p class="product-short-description">
+
+                    Crafted from premium breathable linen,
+                    the Essential Linen Shirt combines
+                    effortless sophistication with everyday
+                    comfort. Designed with a relaxed silhouette
+                    and timeless detailing.
+
+                </p>
+
+
+
+                <!-- Divider -->
+
+                <div class="product-divider"></div>
+
+
+
+                <!-- Color -->
+
+                <div class="product-option">
+
+                    <div class="option-heading">
+
+                        <strong>
+                            Color
+                        </strong>
+
+                        <span id="selectedColor">
+                            Natural
+                        </span>
+
+                    </div>
+
+
+                    <div class="color-options">
+
+                        <button
+                            class="color-option active"
+                            data-color="Natural"
+                            style="background:#ded5c3;"
+                            aria-label="Natural">
+
+                        </button>
+
+
+                        <button
+                            class="color-option"
+                            data-color="Black"
+                            style="background:#191919;"
+                            aria-label="Black">
+
+                        </button>
+
+
+                        <button
+                            class="color-option"
+                            data-color="Stone"
+                            style="background:#9b9588;"
+                            aria-label="Stone">
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Size -->
+
+                <div class="product-option">
+
+                    <div class="option-heading">
+
+                        <strong>
+                            Size
+                        </strong>
+
+                        <a href="#size-guide">
+                            Size Guide
+                        </a>
+
+                    </div>
+
+
+                    <div class="product-size-options">
+
+                        <button>
+                            XS
+                        </button>
+
+                        <button>
+                            S
+                        </button>
+
+                        <button class="active">
+                            M
+                        </button>
+
+                        <button>
+                            L
+                        </button>
+
+                        <button>
+                            XL
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Quantity -->
+
+                <div class="product-option quantity-option">
+
+                    <strong>
+                        Quantity
+                    </strong>
+
+
+                    <div class="quantity-control">
+
+                        <button
+                            id="decreaseQty"
+                            aria-label="Decrease quantity">
+
+                            <i class="fa-solid fa-minus"></i>
+
+                        </button>
+
+
+                        <input
+                            type="number"
+                            id="productQuantity"
+                            value="1"
+                            min="1"
+                            max="10">
+
+
+                        <button
+                            id="increaseQty"
+                            aria-label="Increase quantity">
+
+                            <i class="fa-solid fa-plus"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Actions -->
+
+                <div class="product-actions">
+
+                    <button
+                        class="add-product-cart"
+                        id="addProductCart">
+
+                        <i class="fa-solid fa-bag-shopping"></i>
+
+                        Add to Cart
+
+                    </button>
+
+
+                    <button
+                        class="buy-now-btn"
+                        id="buyNow">
+
+                        Buy It Now
+
+                    </button>
+
+
+                    <button
+                        class="product-wishlist"
+                        id="productWishlist"
+                        aria-label="Add to wishlist">
+
+                        <i class="fa-regular fa-heart"></i>
+
+                    </button>
+
+                </div>
+
+
+
+                <!-- Product Benefits -->
+
+                <div class="product-benefits">
+
+                    <div class="benefit">
+
+                        <i class="fa-solid fa-truck-fast"></i>
+
+                        <div>
+
+                            <strong>
+                                Free Shipping
+                            </strong>
+
+                            <span>
+                                On orders over $100
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="benefit">
+
+                        <i class="fa-solid fa-arrow-rotate-left"></i>
+
+                        <div>
+
+                            <strong>
+                                Easy Returns
+                            </strong>
+
+                            <span>
+                                30-day return policy
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="benefit">
+
+                        <i class="fa-solid fa-shield-halved"></i>
+
+                        <div>
+
+                            <strong>
+                                Secure Payment
+                            </strong>
+
+                            <span>
+                                100% secure checkout
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         PRODUCT INFORMATION TABS
+    ====================================================== -->
+
+    <section class="product-tabs-section">
+
+        <div class="container">
+
+
+            <div class="product-tabs">
+
+                <button
+                    class="product-tab active"
+                    data-tab="description">
+
+                    Description
+
+                </button>
+
+
+                <button
+                    class="product-tab"
+                    data-tab="details">
+
+                    Details
+
+                </button>
+
+
+                <button
+                    class="product-tab"
+                    data-tab="shipping">
+
+                    Shipping & Returns
+
+                </button>
+
+
+                <button
+                    class="product-tab"
+                    data-tab="reviews">
+
+                    Reviews (24)
+
+                </button>
+
+            </div>
+
+
+
+            <!-- Description -->
+
+            <div
+                class="tab-content active"
+                id="description">
+
+                <div class="tab-content-inner">
+
+                    <h2>
+                        Made for effortless days.
+                    </h2>
+
+                    <p>
+
+                        The Essential Linen Shirt is designed
+                        around a relaxed approach to modern
+                        dressing. Made with carefully selected
+                        linen fabric, it delivers a lightweight,
+                        breathable feel without compromising
+                        on structure.
+
+                    </p>
+
+                    <p>
+
+                        Wear it casually with tailored trousers
+                        or dress it up with a structured blazer.
+                        Its timeless silhouette makes it a
+                        versatile addition to any wardrobe.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Details -->
+
+            <div
+                class="tab-content"
+                id="details">
+
+                <div class="tab-content-inner">
+
+                    <h2>
+                        Product Details
+                    </h2>
+
+
+                    <ul class="details-list">
+
+                        <li>
+                            <span>
+                                Material
+                            </span>
+
+                            <strong>
+                                100% Premium Linen
+                            </strong>
+                        </li>
+
+
+                        <li>
+                            <span>
+                                Fit
+                            </span>
+
+                            <strong>
+                                Relaxed
+                            </strong>
+                        </li>
+
+
+                        <li>
+                            <span>
+                                Collar
+                            </span>
+
+                            <strong>
+                                Classic Spread
+                            </strong>
+                        </li>
+
+
+                        <li>
+                            <span>
+                                Sleeve
+                            </span>
+
+                            <strong>
+                                Long Sleeve
+                            </strong>
+                        </li>
+
+
+                        <li>
+                            <span>
+                                Care
+                            </span>
+
+                            <strong>
+                                Cold Machine Wash
+                            </strong>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Shipping -->
+
+            <div
+                class="tab-content"
+                id="shipping">
+
+                <div class="tab-content-inner">
+
+                    <h2>
+                        Shipping & Returns
+                    </h2>
+
+                    <p>
+
+                        Enjoy complimentary standard shipping
+                        on orders over $100. Orders are carefully
+                        packaged and dispatched within 1–2
+                        business days.
+
+                    </p>
+
+                    <p>
+
+                        If you're not completely satisfied,
+                        you can return your purchase within
+                        30 days of delivery in its original
+                        condition.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Reviews -->
+
+            <div
+                class="tab-content"
+                id="reviews">
+
+                <div class="reviews-summary">
+
+                    <div class="review-score">
+
+                        <strong>
+                            4.9
+                        </strong>
+
+                        <div class="stars">
+                            ★★★★★
+                        </div>
+
+                        <span>
+                            Based on 24 reviews
+                        </span>
+
+                    </div>
+
+
+                    <div class="review-bars">
+
+                        <div>
+                            <span>5</span>
+                            <div>
+                                <i style="width:92%;"></i>
+                            </div>
+                        </div>
+
+                        <div>
+                            <span>4</span>
+                            <div>
+                                <i style="width:65%;"></i>
+                            </div>
+                        </div>
+
+                        <div>
+                            <span>3</span>
+                            <div>
+                                <i style="width:15%;"></i>
+                            </div>
+                        </div>
+
+                        <div>
+                            <span>2</span>
+                            <div>
+                                <i style="width:5%;"></i>
+                            </div>
+                        </div>
+
+                        <div>
+                            <span>1</span>
+                            <div>
+                                <i style="width:2%;"></i>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         RELATED PRODUCTS
+    ====================================================== -->
+
+    <section class="related-products">
+
+        <div class="container">
+
+            <div class="section-heading">
+
+                <span class="section-label">
+                    YOU MAY ALSO LIKE
+                </span>
+
+                <h2>
+                    Complete Your Look
+                </h2>
+
+            </div>
+
+
+            <div class="related-grid">
+
+
+                <article class="related-card">
+
+                    <div class="related-image">
+
+                        <span>
+                            NEW
+                        </span>
+
+                        <i class="fa-solid fa-vest"></i>
+
+                    </div>
+
+                    <div class="related-info">
+
+                        <small>
+                            MEN / OUTERWEAR
+                        </small>
+
+                        <h3>
+                            Milano Wool Jacket
+                        </h3>
+
+                        <strong>
+                            $219
+                        </strong>
+
+                    </div>
+
+                </article>
+
+
+
+                <article class="related-card">
+
+                    <div class="related-image">
+
+                        <i class="fa-solid fa-bag-shopping"></i>
+
+                    </div>
+
+                    <div class="related-info">
+
+                        <small>
+                            ACCESSORIES / BAGS
+                        </small>
+
+                        <h3>
+                            Signature Leather Bag
+                        </h3>
+
+                        <strong>
+                            $149
+                        </strong>
+
+                    </div>
+
+                </article>
+
+
+
+                <article class="related-card">
+
+                    <div class="related-image">
+
+                        <i class="fa-solid fa-clock"></i>
+
+                    </div>
+
+                    <div class="related-info">
+
+                        <small>
+                            ACCESSORIES / WATCHES
+                        </small>
+
+                        <h3>
+                            Classic Chronograph
+                        </h3>
+
+                        <strong>
+                            $129
+                        </strong>
+
+                    </div>
+
+                </article>
+
+
+
+                <article class="related-card">
+
+                    <div class="related-image">
+
+                        <i class="fa-solid fa-glasses"></i>
+
+                    </div>
+
+                    <div class="related-info">
+
+                        <small>
+                            ACCESSORIES / EYEWEAR
+                        </small>
+
+                        <h3>
+                            Noir Signature Frames
+                        </h3>
+
+                        <strong>
+                            $99
+                        </strong>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer class="footer">
+
+        <div class="container footer-grid">
+
+
+            <div class="footer-brand">
+
+                <a href="index.html"
+                    class="logo">
+
+                    LUX<span>ORA</span>
+
+                </a>
+
+
+                <p>
+
+                    Modern luxury, thoughtfully curated
+                    for those who appreciate quality,
+                    design and timeless style.
+
+                </p>
+
+
+                <div class="social-links">
+
+                    <a href="#">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+
+                    <a href="#">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+
+                    <a href="#">
+                        <i class="fa-brands fa-pinterest-p"></i>
+                    </a>
+
+                    <a href="#">
+                        <i class="fa-brands fa-x-twitter"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="footer-column">
+
+                <h3>
+                    SHOP
+                </h3>
+
+                <a href="shop.html">
+                    New Arrivals
+                </a>
+
+                <a href="shop.html">
+                    Men
+                </a>
+
+                <a href="shop.html">
+                    Women
+                </a>
+
+                <a href="shop.html">
+                    Accessories
+                </a>
+
+                <a href="shop.html">
+                    Sale
+                </a>
+
+            </div>
+
+
+            <div class="footer-column">
+
+                <h3>
+                    HELP
+                </h3>
+
+                <a href="#">
+                    Contact Us
+                </a>
+
+                <a href="#">
+                    Shipping
+                </a>
+
+                <a href="#">
+                    Returns
+                </a>
+
+                <a href="#">
+                    FAQ
+                </a>
+
+                <a href="#">
+                    Size Guide
+                </a>
+
+            </div>
+
+
+            <div class="footer-column">
+
+                <h3>
+                    COMPANY
+                </h3>
+
+                <a href="#">
+                    About LUXORA
+                </a>
+
+                <a href="#">
+                    Our Story
+                </a>
+
+                <a href="#">
+                    Journal
+                </a>
+
+                <a href="#">
+                    Careers
+                </a>
+
+                <a href="#">
+                    Privacy Policy
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            <div class="container footer-bottom-inner">
+
+                <p>
+                    © 2026 LUXORA. All rights reserved.
+                </p>
+
+
+                <div class="payment-methods">
+
+                    <i class="fa-brands fa-cc-visa"></i>
+
+                    <i class="fa-brands fa-cc-mastercard"></i>
+
+                    <i class="fa-brands fa-cc-amex"></i>
+
+                    <i class="fa-brands fa-cc-paypal"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+
+    <!-- =====================================================
+         TOAST
+    ====================================================== -->
+
+    <div
+        class="toast"
+        id="productToast">
+
+        <i class="fa-solid fa-check"></i>
+
+        <span>
+            Added to cart
+        </span>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script src="js/main.js"></script>
+
+    <script src="js/api-config.js"></script>
+    <script src="js/product.js"></script>
+
+
+</body>
+
+</html>

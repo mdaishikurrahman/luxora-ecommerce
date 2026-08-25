@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Your shopping bag at LUXORA."
+    >
+
+    <title>Your Shopping Bag | LUXORA</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <!-- Tailwind CSS (Play CDN — for production, run `npm install -D tailwindcss` and build with tailwind.config.js) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ink: '#111111',
+                        dark: '#181818',
+                        gold: { DEFAULT: '#c9a227', dark: '#a98518' },
+                        cream: '#f8f7f4',
+                        muted: '#777777',
+                        line: '#e7e4de',
+                        soft: '#f3f2ef',
+                    },
+                    fontFamily: {
+                        heading: ['"Playfair Display"', 'serif'],
+                        body: ['"DM Sans"', 'sans-serif'],
+                    },
+                    maxWidth: { boxed: '1240px' },
+                }
+            }
+        }
+    </script>
+
+    <!-- Site-wide + page components reimplemented with Tailwind @apply (replaces style.css / cart.css / responsive.css) -->
+    <style type="text/tailwindcss">
+        @layer components {
+            /* Shared header/footer (site-header/site-footer were unstyled in the original build) */
+            .container { @apply max-w-boxed mx-auto px-5; }
+            .site-header, .header { @apply sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-line; }
+            .nav-container { @apply flex items-center justify-between h-20; }
+            .logo { @apply font-heading text-2xl font-semibold text-ink; }
+            .logo span { @apply text-gold; }
+            .navbar { @apply hidden md:flex items-center gap-8 text-sm font-medium tracking-wide; }
+            .navbar a { @apply relative pb-1 text-[#333] hover:text-gold transition; }
+            .navbar a.active { @apply text-ink border-b-2 border-gold; }
+            .nav-actions { @apply flex items-center gap-5; }
+            .nav-icon { @apply relative text-lg hover:text-gold transition; }
+            .nav-icon.active { @apply text-gold; }
+            .cart-count { @apply absolute -top-2 -right-2 bg-gold text-white text-[10px] leading-none rounded-full w-4 h-4 flex items-center justify-center; }
+            .menu-toggle { @apply md:hidden text-xl; }
+            .site-footer, .footer { @apply bg-dark pt-16; }
+            .footer-grid { @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-12; }
+            .footer-brand .logo { @apply text-white; }
+            .footer-brand > p { @apply text-white/50 text-sm mt-4 mb-6 leading-relaxed; }
+            .footer-column { @apply flex flex-col gap-3; }
+            .footer-column h3 { @apply text-white font-heading text-lg mb-2; }
+            .footer-column a { @apply text-white/50 text-sm hover:text-gold transition; }
+            .footer-bottom { @apply border-t border-white/10 py-6; }
+            .footer-bottom-inner { @apply flex flex-col sm:flex-row items-center justify-between gap-4 text-white/40 text-xs; }
+            .footer-bottom-inner a { @apply text-white/40 hover:text-gold transition mr-4; }
+
+            /* Cart hero */
+            .cart-hero { @apply relative overflow-hidden flex items-center min-h-[320px] sm:min-h-[390px] bg-[linear-gradient(110deg,#f5f2eb_0%,#eee9df_55%,#e7e0d4_100%)]; }
+            .cart-breadcrumb { @apply relative z-[2] flex items-center gap-3 mb-8 sm:mb-11 text-[11px] tracking-[1px] uppercase; }
+            .cart-breadcrumb a { @apply text-[#77736b] hover:text-gold-dark transition; }
+            .cart-breadcrumb i { @apply text-[8px] text-gold-dark; }
+            .cart-breadcrumb span { @apply text-ink; }
+            .cart-hero-content { @apply relative z-[2]; }
+            .cart-hero-content > span { @apply block mb-4 text-[10px] font-bold tracking-[4px] text-gold-dark; }
+            .cart-hero-content h1 { @apply text-ink font-heading text-[clamp(45px,10vw,86px)] leading-[0.95] font-semibold tracking-[-2px]; }
+            .cart-hero-content p { @apply max-w-[520px] mt-6 text-[#68645d] text-[13px] sm:text-sm leading-[1.8]; }
+
+            /* Cart section */
+            .cart-section { @apply py-16 sm:py-24 lg:py-[100px] lg:pb-[120px] bg-white; }
+            .cart-top { @apply flex flex-col sm:flex-row sm:items-end justify-between gap-5 mb-9 sm:mb-12 pb-6 border-b border-[#e5e1d8]; }
+            .cart-label { @apply block mb-2.5 text-[10px] font-bold tracking-[3px] text-gold-dark; }
+            .cart-top h2 { @apply text-ink font-heading text-[32px] sm:text-4xl font-semibold; }
+            .continue-shopping { @apply inline-flex items-center gap-2.5 pb-1 border-b border-gold-dark text-ink text-[11px] font-semibold tracking-[1px] uppercase hover:text-gold-dark transition; }
+            .continue-shopping i { @apply text-[10px]; }
+
+            .cart-layout { @apply grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_390px] gap-12 xl:gap-[70px] items-start; }
+            .cart-items { @apply min-w-0; }
+            .cart-item { @apply relative grid grid-cols-[90px_minmax(0,1fr)] sm:grid-cols-[110px_minmax(150px,1fr)_75px_110px_80px_20px] xl:grid-cols-[130px_minmax(180px,1fr)_90px_125px_100px_25px] gap-4 sm:gap-4 xl:gap-6 items-center py-6 xl:py-6 border-b border-[#e5e1d8] first:pt-0; }
+
+            .cart-product-image { @apply w-[90px] h-[115px] sm:w-[110px] sm:h-[135px] xl:w-[130px] xl:h-[155px] flex items-center justify-center overflow-hidden bg-[#f3f0e9] row-span-3 sm:row-span-1; }
+            .cart-product-image img { @apply w-full h-full block object-cover transition-transform duration-500; }
+            .cart-item:hover .cart-product-image img { @apply scale-[1.04]; }
+
+            .cart-product-info { @apply min-w-0; }
+            .cart-product-info > span { @apply block mb-2 text-[7px] sm:text-[8px] font-bold tracking-[1.8px] uppercase text-gold-dark; }
+            .cart-product-info h3 { @apply mb-2 text-ink font-heading text-[17px] sm:text-xl xl:text-[21px] leading-[1.25] font-semibold; }
+            .cart-product-info p { @apply mb-3 text-[11px] text-[#77736b]; }
+            .save-item { @apply p-0 border-0 bg-transparent cursor-pointer text-[9px] tracking-[0.7px] uppercase text-[#77736b] hover:text-gold-dark transition; }
+            .save-item i { @apply mr-1.5; }
+
+            .cart-item-price { @apply hidden sm:block; }
+            .cart-item-price strong { @apply text-[13px] font-semibold text-ink; }
+
+            .cart-quantity { @apply w-[95px] sm:w-[105px] xl:w-[115px] h-9 sm:h-[38px] xl:h-[42px] grid grid-cols-[28px_1fr_28px] sm:grid-cols-[34px_1fr_34px] items-center border border-[#ddd8ce] mt-1 sm:mt-0; }
+            .cart-quantity button { @apply grid place-items-center border-0 bg-transparent cursor-pointer text-[#555149] transition-colors hover:bg-[#f5f2eb] hover:text-gold-dark; }
+            .quantity-input { @apply w-full h-full border-0 outline-0 bg-transparent text-center text-xs font-semibold text-ink; }
+
+            .cart-item-total { @apply absolute right-0 top-6 sm:static text-right; }
+            .cart-item-total strong { @apply text-[13px] xl:text-sm font-bold text-ink; }
+
+            .remove-item { @apply absolute right-[-4px] top-6 sm:static w-7 h-7 grid place-items-center border-0 bg-transparent cursor-pointer text-[#8b877e] transition-colors hover:bg-[#f5f2eb] hover:text-gold-dark; }
+
+            .empty-cart { @apply min-h-[350px] sm:min-h-[400px] flex flex-col items-center justify-center text-center; }
+            .empty-cart-icon { @apply w-20 h-20 grid place-items-center mb-6 border border-[#ddd8ce] text-gold-dark text-3xl; }
+            .empty-cart h3 { @apply mb-3 text-ink font-heading text-2xl sm:text-[28px]; }
+            .empty-cart p { @apply max-w-[380px] mb-6 text-[13px] leading-[1.7] text-[#77736b]; }
+            .btn-gold { @apply inline-flex items-center justify-center min-h-[48px] px-7 border border-ink bg-ink text-white text-[10px] font-bold tracking-[1.5px] uppercase transition-all hover:bg-gold-dark hover:border-gold-dark; }
+
+            .cart-summary { @apply xl:sticky xl:top-[100px] p-6 sm:p-7 xl:p-[35px] bg-[#f6f3ec] border border-[#e5e1d8]; }
+            .summary-header { @apply pb-6 border-b border-[#ddd8ce]; }
+            .summary-header > span { @apply block mb-2 text-[9px] font-bold tracking-[2.5px] text-gold-dark; }
+            .summary-header h2 { @apply text-ink font-heading text-[27px] sm:text-[31px] font-semibold; }
+
+            .coupon-box { @apply py-6 border-b border-[#ddd8ce]; }
+            .coupon-box label { @apply block mb-2.5 text-[10px] font-semibold text-[#555149]; }
+            .coupon-form { @apply grid grid-cols-[1fr_auto] h-[42px] sm:h-[45px]; }
+            .coupon-form input { @apply w-full px-3.5 border border-[#d8d2c7] border-r-0 outline-0 bg-white text-[11px] text-ink placeholder-[#aaa59b] focus:border-gold-dark transition; }
+            .coupon-form button { @apply min-w-[68px] sm:min-w-[75px] border border-ink bg-ink cursor-pointer text-[9px] font-bold tracking-[1px] uppercase text-white transition-colors hover:bg-gold-dark hover:border-gold-dark; }
+            .coupon-message { @apply block mt-2.5 text-[9px] text-gold-dark; }
+
+            .summary-lines { @apply py-6 pb-4; }
+            .summary-lines > div { @apply flex items-center justify-between mb-4; }
+            .summary-lines span { @apply text-[11px] text-[#77736b]; }
+            .summary-lines strong { @apply text-xs font-semibold text-ink; }
+            .discount-line strong { @apply text-gold-dark; }
+
+            .summary-total { @apply flex items-center justify-between py-5 border-t border-[#ddd8ce]; }
+            .summary-total span { @apply font-heading text-[18px] sm:text-xl text-ink; }
+            .summary-total strong { @apply font-heading text-[20px] sm:text-2xl font-semibold text-ink; }
+            .tax-note { @apply mb-5 text-[9px] leading-[1.6] text-[#88837a]; }
+
+            .checkout-btn { @apply w-full min-h-[52px] sm:min-h-[56px] flex items-center justify-center gap-3.5 border border-ink bg-ink text-white text-[9px] sm:text-[10px] font-bold tracking-[1.7px] uppercase transition-all hover:bg-gold-dark hover:border-gold-dark; }
+            .checkout-btn i { @apply text-[10px]; }
+
+            .secure-payment { @apply flex items-start gap-3 mt-6 pt-5 border-t border-[#ddd8ce]; }
+            .secure-payment > i { @apply text-gold-dark text-[15px]; }
+            .secure-payment div { @apply flex flex-col gap-1; }
+            .secure-payment strong { @apply text-[10px] text-ink; }
+            .secure-payment span { @apply text-[8px] leading-[1.5] text-[#88837a]; }
+
+            .payment-methods { @apply flex items-center gap-2 mt-5; }
+            .payment-methods span { @apply w-[38px] h-[25px] sm:w-[42px] sm:h-[27px] grid place-items-center border border-[#ddd8ce] bg-white text-[#555149] text-base sm:text-lg; }
+
+            .cart-benefits { @apply py-14 sm:py-[70px] border-t border-[#e5e1d8] bg-[#faf9f6]; }
+            .cart-benefits-grid { @apply grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 sm:gap-8 xl:gap-0; }
+            .cart-benefit { @apply flex items-start gap-4 xl:px-7 xl:border-r xl:border-[#e5e1d8] pb-6 xl:pb-0 border-b xl:border-b-0 border-[#e5e1d8] last:border-b-0 xl:first:pl-0 xl:last:pr-0 xl:last:border-r-0; }
+            .cart-benefit > i { @apply mt-0.5 text-gold-dark text-[19px]; }
+            .cart-benefit h3 { @apply mb-1.5 text-[11px] font-bold text-ink; }
+            .cart-benefit p { @apply text-[9px] leading-[1.6] text-[#88837a]; }
+
+            .toast { @apply fixed bottom-6 right-4 sm:right-6 left-4 sm:left-auto z-[200] min-w-0 sm:min-w-[250px] min-h-[50px] flex items-center justify-center sm:justify-start gap-3 px-4 bg-ink text-white text-[10px] shadow-[0_15px_35px_rgba(0,0,0,0.18)] opacity-0 invisible translate-y-4 transition-all duration-300; }
+            .toast.show { @apply opacity-100 visible translate-y-0; }
+            .toast i { @apply text-gold; }
+        }
+    </style>
+</head>
+
+<body>
+
+
+<!-- ======================================================
+     HEADER
+====================================================== -->
+
+<header class="site-header">
+
+    <div class="container nav-container">
+
+        <a href="index.html" class="logo">
+            LUXORA
+        </a>
+
+
+        <nav class="navbar" id="mainNavbar">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="shop.html">
+                Shop
+            </a>
+
+            <a href="shop.html?category=watches">
+                Watches
+            </a>
+
+            <a href="shop.html?category=bags">
+                Bags
+            </a>
+
+            <a href="shop.html?category=shoes">
+                Shoes
+            </a>
+
+            <a href="shop.html?category=fragrance">
+                Fragrance
+            </a>
+
+        </nav>
+
+
+        <div class="nav-actions">
+
+            <button
+                class="nav-icon user-icon"
+                type="button"
+                aria-label="Account"
+            >
+                <i class="fa-regular fa-user"></i>
+            </button>
+
+
+            <a
+                href="shop.html"
+                class="nav-icon"
+                aria-label="Search"
+            >
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </a>
+
+
+            <a
+                href="cart.html"
+                class="nav-icon cart-icon active"
+                aria-label="Shopping Cart"
+            >
+                <i class="fa-solid fa-bag-shopping"></i>
+
+                <span class="cart-count">
+                    0
+                </span>
+            </a>
+
+
+            <button
+                class="menu-toggle"
+                type="button"
+                aria-label="Open Menu"
+                aria-expanded="false"
+            >
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- ======================================================
+     CART HERO
+====================================================== -->
+
+<section class="cart-hero">
+
+    <div class="container">
+
+        <div class="cart-breadcrumb">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <i class="fa-solid fa-chevron-right"></i>
+
+            <span>
+                Shopping Bag
+            </span>
+
+        </div>
+
+
+        <div class="cart-hero-content">
+
+            <span>
+                YOUR SELECTION
+            </span>
+
+            <h1>
+                Shopping Bag
+            </h1>
+
+            <p>
+                Review your carefully selected LUXORA pieces
+                before completing your purchase.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================================
+     CART SECTION
+====================================================== -->
+
+<main>
+
+<section class="cart-section">
+
+    <div class="container">
+
+
+        <!-- ==================================================
+             CART HEADER
+        ================================================== -->
+
+        <div class="cart-top">
+
+            <div>
+
+                <span class="cart-label">
+                    YOUR BAG
+                </span>
+
+                <h2>
+                    Selected Items
+                </h2>
+
+            </div>
+
+
+            <a
+                href="shop.html"
+                class="continue-shopping"
+            >
+                <i class="fa-solid fa-arrow-left"></i>
+
+                Continue Shopping
+            </a>
+
+        </div>
+
+
+
+        <!-- ==================================================
+             CART CONTENT
+        ================================================== -->
+
+        <div class="cart-layout">
+
+
+            <!-- ==================================================
+                 CART ITEMS
+            ================================================== -->
+
+            <div class="cart-items" id="cartItems">
+
+
+                <!-- Product 01 -->
+
+                <article
+                    class="cart-item"
+                    data-product-id="aurelia-watch"
+                    data-price="249"
+                >
+
+                    <div class="cart-product-image">
+
+                        <img
+                            src="images/products/01-luxury-watch.jpg"
+                            alt="Aurelia Classic Watch"
+                        >
+
+                    </div>
+
+
+                    <div class="cart-product-info">
+
+                        <span>
+                            LUXURY WATCHES
+                        </span>
+
+                        <h3>
+                            Aurelia Classic Watch
+                        </h3>
+
+                        <p>
+                            Gold / Black
+                        </p>
+
+
+                        <button
+                            class="save-item"
+                            type="button"
+                        >
+                            <i class="fa-regular fa-heart"></i>
+                            Save for later
+                        </button>
+
+                    </div>
+
+
+                    <div class="cart-item-price">
+
+                        <strong>
+                            $249.00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="cart-quantity">
+
+                        <button
+                            type="button"
+                            class="quantity-decrease"
+                            aria-label="Decrease quantity"
+                        >
+                            <i class="fa-solid fa-minus"></i>
+                        </button>
+
+
+                        <input
+                            type="number"
+                            value="1"
+                            min="1"
+                            max="99"
+                            aria-label="Quantity"
+                            class="quantity-input"
+                        >
+
+
+                        <button
+                            type="button"
+                            class="quantity-increase"
+                            aria-label="Increase quantity"
+                        >
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+
+                    </div>
+
+
+                    <div class="cart-item-total">
+
+                        <strong>
+                            $249.00
+                        </strong>
+
+                    </div>
+
+
+                    <button
+                        class="remove-item"
+                        type="button"
+                        aria-label="Remove Aurelia Classic Watch"
+                    >
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+
+                </article>
+
+
+
+                <!-- Product 02 -->
+
+                <article
+                    class="cart-item"
+                    data-product-id="milano-bag"
+                    data-price="189"
+                >
+
+                    <div class="cart-product-image">
+
+                        <img
+                            src="images/products/02-leather-handbag.jpg"
+                            alt="Milano Leather Handbag"
+                        >
+
+                    </div>
+
+
+                    <div class="cart-product-info">
+
+                        <span>
+                            HANDBAGS
+                        </span>
+
+                        <h3>
+                            Milano Leather Handbag
+                        </h3>
+
+                        <p>
+                            Black Leather
+                        </p>
+
+
+                        <button
+                            class="save-item"
+                            type="button"
+                        >
+                            <i class="fa-regular fa-heart"></i>
+                            Save for later
+                        </button>
+
+                    </div>
+
+
+                    <div class="cart-item-price">
+
+                        <strong>
+                            $189.00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="cart-quantity">
+
+                        <button
+                            type="button"
+                            class="quantity-decrease"
+                            aria-label="Decrease quantity"
+                        >
+                            <i class="fa-solid fa-minus"></i>
+                        </button>
+
+
+                        <input
+                            type="number"
+                            value="1"
+                            min="1"
+                            max="99"
+                            aria-label="Quantity"
+                            class="quantity-input"
+                        >
+
+
+                        <button
+                            type="button"
+                            class="quantity-increase"
+                            aria-label="Increase quantity"
+                        >
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+
+                    </div>
+
+
+                    <div class="cart-item-total">
+
+                        <strong>
+                            $189.00
+                        </strong>
+
+                    </div>
+
+
+                    <button
+                        class="remove-item"
+                        type="button"
+                        aria-label="Remove Milano Leather Handbag"
+                    >
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+
+                </article>
+
+
+
+                <!-- Product 03 -->
+
+                <article
+                    class="cart-item"
+                    data-product-id="maison-noir"
+                    data-price="119"
+                >
+
+                    <div class="cart-product-image">
+
+                        <img
+                            src="images/products/03-premium-perfume.jpg"
+                            alt="Maison Noir Eau de Parfum"
+                        >
+
+                    </div>
+
+
+                    <div class="cart-product-info">
+
+                        <span>
+                            FRAGRANCE
+                        </span>
+
+                        <h3>
+                            Maison Noir Eau de Parfum
+                        </h3>
+
+                        <p>
+                            100ml
+                        </p>
+
+
+                        <button
+                            class="save-item"
+                            type="button"
+                        >
+                            <i class="fa-regular fa-heart"></i>
+                            Save for later
+                        </button>
+
+                    </div>
+
+
+                    <div class="cart-item-price">
+
+                        <strong>
+                            $119.00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="cart-quantity">
+
+                        <button
+                            type="button"
+                            class="quantity-decrease"
+                            aria-label="Decrease quantity"
+                        >
+                            <i class="fa-solid fa-minus"></i>
+                        </button>
+
+
+                        <input
+                            type="number"
+                            value="1"
+                            min="1"
+                            max="99"
+                            aria-label="Quantity"
+                            class="quantity-input"
+                        >
+
+
+                        <button
+                            type="button"
+                            class="quantity-increase"
+                            aria-label="Increase quantity"
+                        >
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+
+                    </div>
+
+
+                    <div class="cart-item-total">
+
+                        <strong>
+                            $119.00
+                        </strong>
+
+                    </div>
+
+
+                    <button
+                        class="remove-item"
+                        type="button"
+                        aria-label="Remove Maison Noir Eau de Parfum"
+                    >
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+
+                </article>
+
+
+
+                <!-- Empty Cart -->
+
+                <div
+                    class="empty-cart"
+                    id="emptyCart"
+                    hidden
+                >
+
+                    <div class="empty-cart-icon">
+
+                        <i class="fa-solid fa-bag-shopping"></i>
+
+                    </div>
+
+                    <h3>
+                        Your shopping bag is empty
+                    </h3>
+
+                    <p>
+                        Discover something exceptional from
+                        our latest collection.
+                    </p>
+
+                    <a
+                        href="shop.html"
+                        class="btn-gold"
+                    >
+                        Explore Collection
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ==================================================
+                 ORDER SUMMARY
+            ================================================== -->
+
+            <aside class="cart-summary">
+
+
+                <div class="summary-header">
+
+                    <span>
+                        ORDER SUMMARY
+                    </span>
+
+                    <h2>
+                        Your Total
+                    </h2>
+
+                </div>
+
+
+                <!-- Coupon -->
+
+                <div class="coupon-box">
+
+                    <label for="coupon">
+                        Have a promo code?
+                    </label>
+
+
+                    <div class="coupon-form">
+
+                        <input
+                            type="text"
+                            id="coupon"
+                            placeholder="Enter code"
+                            autocomplete="off"
+                        >
+
+                        <button
+                            type="button"
+                            id="applyCoupon"
+                        >
+                            Apply
+                        </button>
+
+                    </div>
+
+
+                    <small
+                        class="coupon-message"
+                        id="couponMessage"
+                    ></small>
+
+                </div>
+
+
+
+                <!-- Summary -->
+
+                <div class="summary-lines">
+
+                    <div>
+
+                        <span>
+                            Subtotal
+                        </span>
+
+                        <strong id="cartSubtotal">
+                            $557.00
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Shipping
+                        </span>
+
+                        <strong id="cartShipping">
+                            FREE
+                        </strong>
+
+                    </div>
+
+
+                    <div
+                        class="discount-line"
+                        id="discountLine"
+                        hidden
+                    >
+
+                        <span>
+                            Discount
+                        </span>
+
+                        <strong id="cartDiscount">
+                            -$0.00
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Total -->
+
+                <div class="summary-total">
+
+                    <span>
+                        Total
+                    </span>
+
+                    <strong id="cartTotal">
+                        $557.00
+                    </strong>
+
+                </div>
+
+
+                <p class="tax-note">
+                    Taxes and final shipping costs are calculated
+                    at checkout.
+                </p>
+
+
+
+                <!-- Checkout -->
+
+                <a
+                    href="checkout.html"
+                    class="checkout-btn"
+                    id="checkoutButton"
+                >
+                    Proceed to Checkout
+
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+
+
+
+                <!-- Secure Payment -->
+
+                <div class="secure-payment">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    <div>
+
+                        <strong>
+                            Secure Checkout
+                        </strong>
+
+                        <span>
+                            Your payment information is protected.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Payment Icons -->
+
+                <div class="payment-methods">
+
+                    <span>
+                        <i class="fa-brands fa-cc-visa"></i>
+                    </span>
+
+                    <span>
+                        <i class="fa-brands fa-cc-mastercard"></i>
+                    </span>
+
+                    <span>
+                        <i class="fa-brands fa-cc-amex"></i>
+                    </span>
+
+                    <span>
+                        <i class="fa-brands fa-cc-paypal"></i>
+                    </span>
+
+                </div>
+
+            </aside>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================================
+     SHOPPING BENEFITS
+====================================================== -->
+
+<section class="cart-benefits">
+
+    <div class="container cart-benefits-grid">
+
+
+        <div class="cart-benefit">
+
+            <i class="fa-solid fa-truck-fast"></i>
+
+            <div>
+
+                <h3>
+                    Complimentary Shipping
+                </h3>
+
+                <p>
+                    Free delivery on orders over $100.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="cart-benefit">
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+            <div>
+
+                <h3>
+                    Secure Payments
+                </h3>
+
+                <p>
+                    Your payment details are always protected.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="cart-benefit">
+
+            <i class="fa-solid fa-rotate-left"></i>
+
+            <div>
+
+                <h3>
+                    Easy Returns
+                </h3>
+
+                <p>
+                    Return eligible items within 30 days.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="cart-benefit">
+
+            <i class="fa-solid fa-headset"></i>
+
+            <div>
+
+                <h3>
+                    Dedicated Support
+                </h3>
+
+                <p>
+                    Our team is here whenever you need us.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+
+<!-- ======================================================
+     TOAST
+====================================================== -->
+
+<div
+    class="toast"
+    id="cartToast"
+    role="status"
+    aria-live="polite"
+>
+
+    <i class="fa-solid fa-check"></i>
+
+    <span>
+        Cart updated successfully.
+    </span>
+
+</div>
+
+
+
+<!-- ======================================================
+     FOOTER
+====================================================== -->
+
+<footer class="site-footer">
+
+    <div class="container footer-grid">
+
+
+        <div class="footer-brand">
+
+            <a
+                href="index.html"
+                class="logo"
+            >
+                LUXORA
+            </a>
+
+            <p>
+                Timeless luxury. Exceptional quality.
+                Designed for those who appreciate the finer things.
+            </p>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h3>
+                SHOP
+            </h3>
+
+            <a href="shop.html">
+                All Products
+            </a>
+
+            <a href="shop.html?category=watches">
+                Watches
+            </a>
+
+            <a href="shop.html?category=bags">
+                Bags
+            </a>
+
+            <a href="shop.html?category=shoes">
+                Shoes
+            </a>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h3>
+                HELP
+            </h3>
+
+            <a href="#">
+                Contact Us
+            </a>
+
+            <a href="#">
+                Shipping
+            </a>
+
+            <a href="#">
+                Returns
+            </a>
+
+            <a href="#">
+                FAQ
+            </a>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h3>
+                FOLLOW
+            </h3>
+
+            <a href="#">
+                Instagram
+            </a>
+
+            <a href="#">
+                Facebook
+            </a>
+
+            <a href="#">
+                Pinterest
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        <div class="container footer-bottom-inner">
+
+            <p>
+                © 2026 LUXORA. All rights reserved.
+            </p>
+
+            <div>
+
+                <a href="#">
+                    Privacy
+                </a>
+
+                <a href="#">
+                    Terms
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+
+<!-- ======================================================
+     JAVASCRIPT
+====================================================== -->
+
+<script src="js/main.js"></script>
+<script src="js/api-config.js"></script>
+<script src="js/cart.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,1603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Checkout | LUXORA</title>
+
+    <meta
+        name="description"
+        content="Complete your secure checkout at LUXORA — premium luxury products."
+    >
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <!-- Tailwind CSS (Play CDN — for production, run `npm install -D tailwindcss` and build with tailwind.config.js) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ink: '#111111',
+                        dark: '#181818',
+                        gold: { DEFAULT: '#c9a227', dark: '#a98518' },
+                        cream: '#f8f7f4',
+                        muted: '#777777',
+                        line: '#e7e4de',
+                        soft: '#f3f2ef',
+                    },
+                    fontFamily: {
+                        heading: ['"Playfair Display"', 'serif'],
+                        body: ['"DM Sans"', 'sans-serif'],
+                    },
+                    maxWidth: { boxed: '1240px' },
+                }
+            }
+        }
+    </script>
+
+    <!-- Site-wide + page components reimplemented with Tailwind @apply (replaces style.css / checkout.css / responsive.css) -->
+    <style type="text/tailwindcss">
+        @layer components {
+            /* Shared header/footer */
+            .container { @apply max-w-boxed mx-auto px-5; }
+            .site-header { @apply sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-line; }
+            .nav-container { @apply flex items-center justify-between h-20; }
+            .logo { @apply font-heading text-2xl font-semibold text-ink; }
+            .navbar { @apply hidden md:flex items-center gap-8 text-sm font-medium tracking-wide; }
+            .navbar a { @apply relative pb-1 text-[#333] hover:text-gold transition; }
+            .navbar a.active { @apply text-ink border-b-2 border-gold; }
+            .nav-actions { @apply flex items-center gap-5; }
+            .nav-icon { @apply relative text-lg hover:text-gold transition; }
+            .cart-count { @apply absolute -top-2 -right-2 bg-gold text-white text-[10px] leading-none rounded-full w-4 h-4 flex items-center justify-center; }
+            .menu-toggle { @apply md:hidden text-xl; }
+            .site-footer { @apply bg-dark pt-16; }
+            .footer-grid { @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-12; }
+            .footer-brand .logo { @apply text-white; }
+            .footer-brand > p { @apply text-white/50 text-sm mt-4 mb-6 leading-relaxed; }
+            .footer-social { @apply flex gap-3 mt-2; }
+            .footer-social a { @apply w-9 h-9 rounded-full border border-white/20 text-white flex items-center justify-center hover:bg-gold hover:border-gold transition; }
+            .footer-column { @apply flex flex-col gap-3; }
+            .footer-column h3 { @apply text-white font-heading text-lg mb-2; }
+            .footer-column a { @apply text-white/50 text-sm hover:text-gold transition; }
+            .footer-bottom { @apply border-t border-white/10 py-6; }
+            .footer-bottom-inner { @apply flex flex-col sm:flex-row items-center justify-between gap-3 text-white/40 text-xs; }
+
+            /* Hero */
+            .checkout-hero { @apply relative overflow-hidden flex items-center min-h-[320px] sm:min-h-[390px] text-white bg-[linear-gradient(135deg,#171717_0%,#22201d_55%,#302b24_100%)]; }
+            .checkout-hero-content { @apply relative z-[2]; }
+            .checkout-breadcrumb { @apply flex items-center gap-2.5 mb-8 sm:mb-11 text-[10px] tracking-[1.5px] uppercase text-white/55; }
+            .checkout-breadcrumb a { @apply text-white/55 hover:text-gold transition; }
+            .checkout-breadcrumb span:last-child { @apply text-gold; }
+            .checkout-label { @apply block mb-4 text-gold text-[10px] font-semibold tracking-[4px]; }
+            .checkout-hero h1 { @apply font-heading text-[clamp(45px,7vw,88px)] leading-[0.95] font-medium tracking-[-2px]; }
+            .checkout-hero p { @apply max-w-[520px] mt-6 text-white/70 text-sm leading-[1.8]; }
+
+            /* Section layout */
+            .checkout-section { @apply py-16 sm:py-24 lg:py-[90px] lg:pb-[110px] bg-cream; }
+            .checkout-layout { @apply grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_390px] items-start gap-10 xl:gap-[60px]; }
+            .checkout-main { @apply flex flex-col gap-6; }
+
+            .checkout-card { @apply p-6 sm:p-7 lg:p-[35px] bg-white border border-[#e6e2d9]; }
+            .checkout-card-header { @apply flex items-start justify-between gap-5 mb-7 pb-5 border-b border-[#ebe7df]; }
+            .checkout-card-header > div { @apply flex items-center gap-4; }
+            .step-number { @apply grid place-items-center w-[38px] h-[38px] flex-none border border-gold text-[#9b7a3b] text-[10px] font-semibold tracking-[1px]; }
+            .checkout-card-header h2 { @apply text-ink font-heading text-2xl sm:text-[27px] font-semibold; }
+            .checkout-card-header p, .checkout-card-header > div + p, .checkout-card-header > span { @apply mt-2 text-[#77736c] text-[10px]; }
+            .checkout-card-header a { @apply text-[#9b7a3b] underline; }
+            .secure-label { @apply flex items-center gap-1.5 text-[#5d7b59] text-[9px] font-semibold uppercase tracking-[1px]; }
+            .secure-label i { @apply text-[11px]; }
+
+            /* Form */
+            .form-group { @apply flex flex-col mb-5; }
+            .form-group label { @apply mb-2 text-[#34322e] text-[10px] font-semibold tracking-[0.6px]; }
+            .form-group label span { @apply ml-1.5 text-[#aaa59b] font-normal; }
+            .form-group input, .form-group select, .form-group textarea { @apply w-full px-4 border border-[#dcd8cf] outline-none bg-white text-[#222] text-xs transition focus:border-gold-dark focus:shadow-[0_0_0_3px_rgba(201,166,91,0.08)]; }
+            .form-group input, .form-group select { @apply h-[50px]; }
+            .form-group textarea { @apply min-h-[115px] py-3.5 resize-y leading-relaxed; }
+            .form-row { @apply grid grid-cols-1 sm:grid-cols-2 gap-4; }
+            .form-row.three-columns { @apply sm:grid-cols-3; }
+            .form-group.error input, .form-group.error select, .form-group.error textarea { @apply border-[#b85c5c]; }
+            .form-error { @apply mt-1.5 text-[#b85c5c] text-[8px]; }
+            .form-group.success input, .form-group.success select { @apply border-[#7a9a70]; }
+
+            .checkbox-label { @apply flex items-center gap-2.5 cursor-pointer text-[#6e6a63] text-[10px] leading-relaxed; }
+            .checkbox-label input { @apply w-4 h-4 m-0 accent-gold-dark cursor-pointer; }
+
+            /* Delivery */
+            .delivery-options { @apply flex flex-col gap-3; }
+            .delivery-option { @apply relative grid grid-cols-[20px_1fr_auto] items-center gap-3.5 p-4 border border-[#ddd9d0] bg-white cursor-pointer transition-colors hover:border-gold-dark; }
+            .delivery-option.active { @apply border-gold-dark bg-[#fcfaf5]; }
+            .delivery-option input { @apply absolute opacity-0 pointer-events-none; }
+            .delivery-radio { @apply relative w-[18px] h-[18px] border border-[#aaa59b] rounded-full grid place-items-center; }
+            .delivery-option.active .delivery-radio { @apply border-gold-dark; }
+            .delivery-option.active .delivery-radio::after { content: ''; @apply w-2 h-2 rounded-full bg-gold-dark; }
+            .delivery-content { @apply flex flex-col gap-1; }
+            .delivery-content strong { @apply text-[#292723] text-xs font-semibold; }
+            .delivery-content small { @apply text-[#88837a] text-[9px]; }
+            .delivery-price { @apply text-[#292723] text-[11px] font-semibold; }
+
+            /* Payment */
+            .payment-options { @apply flex flex-col; }
+            .payment-option { @apply relative min-h-[62px] flex items-center gap-3 py-4 border-b border-[#ebe7df] cursor-pointer text-[#292723] text-[11px] font-semibold last-of-type:border-b-0; }
+            .payment-option input { @apply absolute opacity-0 pointer-events-none; }
+            .payment-radio { @apply relative w-[18px] h-[18px] flex-none border border-[#aaa59b] rounded-full grid place-items-center; }
+            .payment-option.active .payment-radio { @apply border-gold-dark; }
+            .payment-option.active .payment-radio::after { content: ''; @apply w-2 h-2 rounded-full bg-gold-dark; }
+            .payment-icons { @apply flex items-center gap-2 ml-auto; }
+            .payment-icons i { @apply text-[#4a4844] text-2xl; }
+            .payment-brand { @apply ml-auto text-[#76623b] text-xl; }
+            .card-payment-fields { @apply p-5 mb-2 bg-[#faf9f6] border border-[#e8e3da]; }
+            .input-icon { @apply relative; }
+            .input-icon input { @apply pr-11; }
+            .input-icon i { @apply absolute top-1/2 right-4 -translate-y-1/2 text-[#9c978d]; }
+
+            /* Sidebar / order summary */
+            .checkout-sidebar { @apply xl:sticky xl:top-[100px]; }
+            .order-summary { @apply p-6 sm:p-8 bg-white border border-[#e1ddd4]; }
+            .summary-header { @apply pb-6 border-b border-[#e8e4dc]; }
+            .summary-header > span { @apply block mb-2 text-gold-dark text-[8px] font-bold tracking-[3px]; }
+            .summary-header h2 { @apply text-ink font-heading text-[26px] sm:text-[30px] font-semibold; }
+
+            .checkout-products { @apply flex flex-col; }
+            .checkout-product { @apply grid grid-cols-[68px_minmax(0,1fr)_auto] items-center gap-3.5 py-5 border-b border-[#eeeae2]; }
+            .checkout-product-image { @apply relative w-[68px] h-[78px] overflow-hidden bg-[#f3f1ec]; }
+            .checkout-product-image img { @apply w-full h-full block object-cover; }
+            .checkout-product-qty { @apply absolute top-1.5 right-1.5 grid place-items-center w-[19px] h-[19px] rounded-full bg-ink text-white text-[8px]; }
+            .checkout-product-info { @apply min-w-0; }
+            .checkout-product-info h3 { @apply mb-1 text-[#282621] text-[11px] font-semibold; }
+            .checkout-product-info span { @apply text-[#99948b] text-[8px]; }
+            .checkout-product > strong { @apply text-[#292723] text-[10px] font-semibold; }
+
+            .checkout-coupon { @apply py-5 border-b border-[#e8e4dc]; }
+            .checkout-coupon > label { @apply block mb-2 text-[#35322d] text-[9px] font-semibold tracking-[0.7px]; }
+            .coupon-form { @apply flex h-11; }
+            .coupon-form input { @apply min-w-0 flex-1 px-3.5 border border-[#dcd8cf] border-r-0 outline-none text-[#222] text-[10px] focus:border-gold-dark transition; }
+            .coupon-form button { @apply min-w-[75px] border border-ink bg-ink text-white cursor-pointer text-[8px] font-semibold tracking-[1px] uppercase transition-colors hover:bg-gold-dark hover:border-gold-dark; }
+            #couponMessage { @apply block mt-2 text-[#6e7c5b] text-[8px]; }
+
+            .summary-lines { @apply py-5 border-b border-[#e8e4dc]; }
+            .summary-lines > div { @apply flex items-center justify-between gap-5 mb-3 last:mb-0; }
+            .summary-lines span { @apply text-[#77736c] text-[10px]; }
+            .summary-lines strong { @apply text-[#2d2a26] text-[10px] font-semibold; }
+            .summary-discount strong { @apply text-[#6d835c]; }
+
+            .summary-total { @apply flex items-center justify-between py-6; }
+            .summary-total span { @apply text-[#292723] font-heading text-[19px]; }
+            .summary-total strong { @apply text-ink font-heading text-2xl sm:text-[27px] font-semibold; }
+
+            .place-order-btn { @apply w-full min-h-[58px] flex items-center justify-center gap-3.5 border-0 bg-ink text-white cursor-pointer text-[9px] font-semibold tracking-[2px] uppercase transition-all hover:bg-gold-dark hover:-translate-y-0.5; }
+            .place-order-btn i { @apply text-[10px]; }
+            .place-order-btn.loading { @apply pointer-events-none opacity-70; }
+            .place-order-btn.loading i { animation: checkoutSpin 0.8s linear infinite; }
+            @keyframes checkoutSpin { to { transform: rotate(360deg); } }
+
+            .checkout-security { @apply flex flex-col gap-2.5 mt-6 pt-5 border-t border-[#e8e4dc]; }
+            .checkout-security div { @apply flex items-center gap-2.5; }
+            .checkout-security i { @apply w-4 text-[#9b7a3b] text-[11px] text-center; }
+            .checkout-security span { @apply text-[#8b867d] text-[8px]; }
+
+            .back-to-cart { @apply flex items-center justify-center gap-2.5 mt-5 text-[#77736c] text-[9px] font-semibold tracking-[1px] uppercase transition-colors hover:text-gold-dark; }
+            .back-to-cart i { @apply text-[9px]; }
+
+            /* Trust section */
+            .checkout-trust { @apply py-10 border-t border-[#e3dfd6] bg-white; }
+            .trust-grid { @apply grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-0; }
+            .trust-item { @apply flex items-center justify-center sm:justify-start gap-4 px-6 sm:border-r sm:border-[#e3dfd6] sm:first:justify-start sm:last:justify-end sm:last:border-r-0; }
+            .trust-item > i { @apply text-gold-dark text-xl; }
+            .trust-item div { @apply flex flex-col gap-1; }
+            .trust-item strong { @apply text-[#292723] text-[10px] font-semibold; }
+            .trust-item span { @apply text-[#99948b] text-[8px]; }
+
+            /* Order success modal */
+            .order-modal[hidden] { @apply hidden; }
+            .order-modal { @apply fixed inset-0 z-[9999] grid place-items-center p-6; }
+            .order-modal-overlay { @apply absolute inset-0 bg-ink/70 backdrop-blur-sm; }
+            .order-modal-content { @apply relative z-[2] w-full max-w-[480px] px-7 py-12 sm:px-11 sm:py-14 bg-white text-center shadow-[0_30px_80px_rgba(0,0,0,0.25)]; }
+            .modal-close { @apply absolute top-4 right-4 w-9 h-9 grid place-items-center border border-[#ddd8ce] bg-white text-[#555] cursor-pointer hover:text-gold-dark hover:border-gold-dark transition; }
+            .success-icon { @apply w-[70px] h-[70px] grid place-items-center mx-auto mb-6 rounded-full bg-[#f4f0e6] text-gold-dark text-2xl; }
+            .order-modal-content > span { @apply text-gold-dark text-[8px] font-bold tracking-[3px]; }
+            .order-modal-content h2 { @apply mt-3 mb-4 text-ink font-heading text-[32px] sm:text-[42px] font-semibold; }
+            .order-modal-content p { @apply max-w-[340px] mx-auto text-[#77736c] text-[11px] leading-[1.8]; }
+            .order-number { @apply my-6 p-3.5 bg-[#f8f6f1] text-[#77736c] text-[9px]; }
+            .order-number strong { @apply text-ink tracking-[1px]; }
+            .modal-home-btn { @apply inline-flex items-center justify-center min-h-[50px] px-7 bg-ink text-white text-[9px] font-semibold tracking-[1.5px] uppercase transition-colors hover:bg-gold-dark; }
+
+            /* Toast */
+            .toast { @apply fixed bottom-6 right-4 sm:right-6 left-4 sm:left-auto z-[300] min-w-0 sm:min-w-[230px] flex items-center justify-center sm:justify-start gap-2.5 px-4 py-3.5 bg-ink text-white shadow-[0_15px_35px_rgba(0,0,0,0.18)] text-[9px] opacity-0 invisible translate-y-4 transition-all duration-300; }
+            .toast.show { @apply opacity-100 visible translate-y-0; }
+            .toast i { @apply text-gold; }
+        }
+    </style>
+</head>
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="site-header">
+
+    <div class="container nav-container">
+
+        <!-- Logo -->
+
+        <a href="index.html" class="logo">
+            LUXORA
+        </a>
+
+
+        <!-- Navigation -->
+
+        <nav class="navbar" id="navbar">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="shop.html">
+                Shop
+            </a>
+
+            <a href="index.html#collections">
+                Collections
+            </a>
+
+            <a href="index.html#about">
+                About
+            </a>
+
+            <a href="index.html#contact">
+                Contact
+            </a>
+
+        </nav>
+
+
+        <!-- Navigation Actions -->
+
+        <div class="nav-actions">
+
+            <a
+                href="shop.html"
+                class="nav-icon"
+                aria-label="Search"
+            >
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </a>
+
+            <a
+                href="cart.html"
+                class="nav-icon cart-icon"
+                aria-label="Shopping Cart"
+            >
+                <i class="fa-solid fa-bag-shopping"></i>
+
+                <span class="cart-count">
+                    0
+                </span>
+            </a>
+
+            <button
+                class="menu-toggle"
+                id="menuToggle"
+                aria-label="Open Menu"
+            >
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     CHECKOUT HERO
+===================================================== -->
+
+<section class="checkout-hero">
+
+    <div class="container checkout-hero-content">
+
+        <div class="checkout-breadcrumb">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <span>/</span>
+
+            <a href="cart.html">
+                Cart
+            </a>
+
+            <span>/</span>
+
+            <span>Checkout</span>
+
+        </div>
+
+
+        <span class="checkout-label">
+            SECURE CHECKOUT
+        </span>
+
+
+        <h1>
+            Checkout
+        </h1>
+
+
+        <p>
+            Complete your order securely and enjoy
+            a premium LUXORA shopping experience.
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     CHECKOUT SECTION
+===================================================== -->
+
+<main class="checkout-section">
+
+    <div class="container">
+
+        <form
+            class="checkout-layout"
+            id="checkoutForm"
+        >
+
+
+            <!-- =================================================
+                 CUSTOMER INFORMATION
+            ================================================= -->
+
+            <div class="checkout-main">
+
+
+                <!-- Contact -->
+
+                <section class="checkout-card">
+
+                    <div class="checkout-card-header">
+
+                        <div>
+
+                            <span class="step-number">
+                                01
+                            </span>
+
+                            <h2>
+                                Contact Information
+                            </h2>
+
+                        </div>
+
+                        <p>
+                            Already have an account?
+                            <a href="#">
+                                Log in
+                            </a>
+                        </p>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="email">
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="you@example.com"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
+
+
+                    <label class="checkbox-label">
+
+                        <input
+                            type="checkbox"
+                            id="newsletter"
+                            name="newsletter"
+                        >
+
+                        <span>
+                            Email me with news and exclusive offers
+                        </span>
+
+                    </label>
+
+                </section>
+
+
+
+                <!-- Shipping Address -->
+
+                <section class="checkout-card">
+
+                    <div class="checkout-card-header">
+
+                        <div>
+
+                            <span class="step-number">
+                                02
+                            </span>
+
+                            <h2>
+                                Shipping Address
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label for="firstName">
+                                First Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="firstName"
+                                name="firstName"
+                                placeholder="First name"
+                                autocomplete="given-name"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="lastName">
+                                Last Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="lastName"
+                                name="lastName"
+                                placeholder="Last name"
+                                autocomplete="family-name"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="address">
+                            Address
+                        </label>
+
+                        <input
+                            type="text"
+                            id="address"
+                            name="address"
+                            placeholder="Street address"
+                            autocomplete="street-address"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="apartment">
+                            Apartment, suite, etc.
+                            <span>Optional</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="apartment"
+                            name="apartment"
+                            placeholder="Apartment, suite, unit..."
+                            autocomplete="address-line2"
+                        >
+
+                    </div>
+
+
+                    <div class="form-row three-columns">
+
+                        <div class="form-group">
+
+                            <label for="city">
+                                City
+                            </label>
+
+                            <input
+                                type="text"
+                                id="city"
+                                name="city"
+                                placeholder="City"
+                                autocomplete="address-level2"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="state">
+                                State / Region
+                            </label>
+
+                            <input
+                                type="text"
+                                id="state"
+                                name="state"
+                                placeholder="State"
+                                autocomplete="address-level1"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="zip">
+                                ZIP Code
+                            </label>
+
+                            <input
+                                type="text"
+                                id="zip"
+                                name="zip"
+                                placeholder="ZIP"
+                                autocomplete="postal-code"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="country">
+                            Country
+                        </label>
+
+                        <select
+                            id="country"
+                            name="country"
+                            required
+                        >
+
+                            <option value="">
+                                Select country
+                            </option>
+
+                            <option value="BD">
+                                Bangladesh
+                            </option>
+
+                            <option value="US">
+                                United States
+                            </option>
+
+                            <option value="GB">
+                                United Kingdom
+                            </option>
+
+                            <option value="CA">
+                                Canada
+                            </option>
+
+                            <option value="AU">
+                                Australia
+                            </option>
+
+                            <option value="DE">
+                                Germany
+                            </option>
+
+                            <option value="FR">
+                                France
+                            </option>
+
+                            <option value="AE">
+                                United Arab Emirates
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="phone">
+                            Phone
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            placeholder="+880 1XXXXXXXXX"
+                            autocomplete="tel"
+                            required
+                        >
+
+                    </div>
+
+
+                    <label class="checkbox-label">
+
+                        <input
+                            type="checkbox"
+                            id="saveAddress"
+                            name="saveAddress"
+                        >
+
+                        <span>
+                            Save this information for next time
+                        </span>
+
+                    </label>
+
+                </section>
+
+
+
+                <!-- Delivery -->
+
+                <section class="checkout-card">
+
+                    <div class="checkout-card-header">
+
+                        <div>
+
+                            <span class="step-number">
+                                03
+                            </span>
+
+                            <h2>
+                                Delivery Method
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="delivery-options">
+
+
+                        <label class="delivery-option active">
+
+                            <input
+                                type="radio"
+                                name="delivery"
+                                value="standard"
+                                checked
+                            >
+
+                            <span class="delivery-radio"></span>
+
+                            <span class="delivery-content">
+
+                                <strong>
+                                    Standard Delivery
+                                </strong>
+
+                                <small>
+                                    5–7 business days
+                                </small>
+
+                            </span>
+
+                            <strong class="delivery-price">
+                                $15.00
+                            </strong>
+
+                        </label>
+
+
+
+                        <label class="delivery-option">
+
+                            <input
+                                type="radio"
+                                name="delivery"
+                                value="express"
+                            >
+
+                            <span class="delivery-radio"></span>
+
+                            <span class="delivery-content">
+
+                                <strong>
+                                    Express Delivery
+                                </strong>
+
+                                <small>
+                                    2–3 business days
+                                </small>
+
+                            </span>
+
+                            <strong class="delivery-price">
+                                $30.00
+                            </strong>
+
+                        </label>
+
+
+
+                        <label class="delivery-option">
+
+                            <input
+                                type="radio"
+                                name="delivery"
+                                value="free"
+                            >
+
+                            <span class="delivery-radio"></span>
+
+                            <span class="delivery-content">
+
+                                <strong>
+                                    Free Luxury Delivery
+                                </strong>
+
+                                <small>
+                                    Orders over $150
+                                </small>
+
+                            </span>
+
+                            <strong class="delivery-price">
+                                FREE
+                            </strong>
+
+                        </label>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- Payment -->
+
+                <section class="checkout-card">
+
+                    <div class="checkout-card-header">
+
+                        <div>
+
+                            <span class="step-number">
+                                04
+                            </span>
+
+                            <h2>
+                                Payment
+                            </h2>
+
+                        </div>
+
+                        <span class="secure-label">
+                            <i class="fa-solid fa-lock"></i>
+                            Secure
+                        </span>
+
+                    </div>
+
+
+                    <div class="payment-options">
+
+
+                        <!-- Card -->
+
+                        <label class="payment-option active">
+
+                            <input
+                                type="radio"
+                                name="payment"
+                                value="card"
+                                checked
+                            >
+
+                            <span class="payment-radio"></span>
+
+                            <span>
+                                Credit / Debit Card
+                            </span>
+
+                            <div class="payment-icons">
+
+                                <i class="fa-brands fa-cc-visa"></i>
+
+                                <i class="fa-brands fa-cc-mastercard"></i>
+
+                                <i class="fa-brands fa-cc-amex"></i>
+
+                            </div>
+
+                        </label>
+
+
+                        <div
+                            class="card-payment-fields"
+                            id="cardPaymentFields"
+                        >
+
+                            <div class="form-group">
+
+                                <label for="cardNumber">
+                                    Card Number
+                                </label>
+
+                                <div class="input-icon">
+
+                                    <input
+                                        type="text"
+                                        id="cardNumber"
+                                        name="cardNumber"
+                                        placeholder="1234 5678 9012 3456"
+                                        inputmode="numeric"
+                                        maxlength="19"
+                                    >
+
+                                    <i class="fa-regular fa-credit-card"></i>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-row">
+
+                                <div class="form-group">
+
+                                    <label for="cardName">
+                                        Name on Card
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="cardName"
+                                        name="cardName"
+                                        placeholder="Name on card"
+                                    >
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label for="expiry">
+                                        Expiry Date
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="expiry"
+                                        name="expiry"
+                                        placeholder="MM / YY"
+                                        maxlength="7"
+                                    >
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label for="cvv">
+                                        CVV
+                                    </label>
+
+                                    <input
+                                        type="password"
+                                        id="cvv"
+                                        name="cvv"
+                                        placeholder="•••"
+                                        maxlength="4"
+                                        inputmode="numeric"
+                                    >
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- PayPal -->
+
+                        <label class="payment-option">
+
+                            <input
+                                type="radio"
+                                name="payment"
+                                value="paypal"
+                            >
+
+                            <span class="payment-radio"></span>
+
+                            <span>
+                                PayPal
+                            </span>
+
+                            <i class="fa-brands fa-paypal payment-brand"></i>
+
+                        </label>
+
+
+
+                        <!-- Cash -->
+
+                        <label class="payment-option">
+
+                            <input
+                                type="radio"
+                                name="payment"
+                                value="cash"
+                            >
+
+                            <span class="payment-radio"></span>
+
+                            <span>
+                                Cash on Delivery
+                            </span>
+
+                            <i class="fa-solid fa-money-bill-wave payment-brand"></i>
+
+                        </label>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- Order Notes -->
+
+                <section class="checkout-card">
+
+                    <div class="checkout-card-header">
+
+                        <div>
+
+                            <span class="step-number">
+                                05
+                            </span>
+
+                            <h2>
+                                Order Notes
+                            </h2>
+
+                        </div>
+
+                        <span>
+                            Optional
+                        </span>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <textarea
+                            id="orderNotes"
+                            name="orderNotes"
+                            rows="4"
+                            placeholder="Special instructions for your order..."
+                        ></textarea>
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 ORDER SUMMARY
+            ================================================= -->
+
+            <aside class="checkout-sidebar">
+
+                <div class="order-summary">
+
+                    <div class="summary-header">
+
+                        <span>
+                            YOUR ORDER
+                        </span>
+
+                        <h2>
+                            Order Summary
+                        </h2>
+
+                    </div>
+
+
+                    <!-- Product -->
+
+                    <div
+                        class="checkout-products"
+                        id="checkoutProducts"
+                    >
+
+                        <div class="checkout-product">
+
+                            <div class="checkout-product-image">
+
+                                <img
+                                    src="images/products/01-luxury-watch.jpg"
+                                    alt="Luxora Luxury Watch"
+                                >
+
+                                <span class="checkout-product-qty">
+                                    1
+                                </span>
+
+                            </div>
+
+                            <div class="checkout-product-info">
+
+                                <h3>
+                                    Élan Chronograph
+                                </h3>
+
+                                <span>
+                                    Luxury Collection
+                                </span>
+
+                            </div>
+
+                            <strong>
+                                $249.00
+                            </strong>
+
+                        </div>
+
+
+                        <div class="checkout-product">
+
+                            <div class="checkout-product-image">
+
+                                <img
+                                    src="images/products/02-leather-handbag.jpg"
+                                    alt="Luxora Leather Bag"
+                                >
+
+                                <span class="checkout-product-qty">
+                                    1
+                                </span>
+
+                            </div>
+
+                            <div class="checkout-product-info">
+
+                                <h3>
+                                    Aurelia Leather Bag
+                                </h3>
+
+                                <span>
+                                    Signature Collection
+                                </span>
+
+                            </div>
+
+                            <strong>
+                                $189.00
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- Coupon -->
+
+                    <div class="checkout-coupon">
+
+                        <label for="checkoutCoupon">
+                            Discount Code
+                        </label>
+
+                        <div class="coupon-form">
+
+                            <input
+                                type="text"
+                                id="checkoutCoupon"
+                                placeholder="Enter code"
+                            >
+
+                            <button type="button" id="applyCoupon">
+                                Apply
+                            </button>
+
+                        </div>
+
+                        <small id="couponMessage"></small>
+
+                    </div>
+
+
+
+                    <!-- Totals -->
+
+                    <div class="summary-lines">
+
+                        <div>
+
+                            <span>
+                                Subtotal
+                            </span>
+
+                            <strong id="checkoutSubtotal">
+                                $438.00
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Shipping
+                            </span>
+
+                            <strong id="checkoutShipping">
+                                $15.00
+                            </strong>
+
+                        </div>
+
+
+                        <div
+                            class="summary-discount"
+                            id="checkoutDiscountRow"
+                            hidden
+                        >
+
+                            <span>
+                                Discount
+                            </span>
+
+                            <strong id="checkoutDiscount">
+                                -$0.00
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- Total -->
+
+                    <div class="summary-total">
+
+                        <span>
+                            Total
+                        </span>
+
+                        <strong id="checkoutTotal">
+                            $453.00
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- Place Order -->
+
+                    <button
+                        type="submit"
+                        class="place-order-btn"
+                        id="placeOrderBtn"
+                    >
+
+                        <span>
+                            Place Order
+                        </span>
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </button>
+
+
+
+                    <!-- Security -->
+
+                    <div class="checkout-security">
+
+                        <div>
+
+                            <i class="fa-solid fa-shield-halved"></i>
+
+                            <span>
+                                Secure & encrypted checkout
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <i class="fa-solid fa-rotate-left"></i>
+
+                            <span>
+                                Easy returns within 30 days
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Back to Cart -->
+
+                <a
+                    href="cart.html"
+                    class="back-to-cart"
+                >
+
+                    <i class="fa-solid fa-arrow-left"></i>
+
+                    Return to Cart
+
+                </a>
+
+            </aside>
+
+        </form>
+
+    </div>
+
+</main>
+
+
+
+<!-- =====================================================
+     TRUST SECTION
+===================================================== -->
+
+<section class="checkout-trust">
+
+    <div class="container">
+
+        <div class="trust-grid">
+
+            <div class="trust-item">
+
+                <i class="fa-solid fa-lock"></i>
+
+                <div>
+
+                    <strong>
+                        Secure Payment
+                    </strong>
+
+                    <span>
+                        Your information is protected
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="trust-item">
+
+                <i class="fa-solid fa-truck-fast"></i>
+
+                <div>
+
+                    <strong>
+                        Premium Delivery
+                    </strong>
+
+                    <span>
+                        Carefully delivered to your door
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="trust-item">
+
+                <i class="fa-solid fa-headset"></i>
+
+                <div>
+
+                    <strong>
+                        Dedicated Support
+                    </strong>
+
+                    <span>
+                        We're here whenever you need us
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="site-footer">
+
+    <div class="container footer-grid">
+
+
+        <div class="footer-brand">
+
+            <a href="index.html" class="logo">
+                LUXORA
+            </a>
+
+            <p>
+                Timeless luxury, thoughtfully curated
+                for the modern lifestyle.
+            </p>
+
+            <div class="footer-social">
+
+                <a href="#" aria-label="Instagram">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+
+                <a href="#" aria-label="Facebook">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+
+                <a href="#" aria-label="Pinterest">
+                    <i class="fa-brands fa-pinterest-p"></i>
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h3>
+                SHOP
+            </h3>
+
+            <a href="shop.html">
+                All Products
+            </a>
+
+            <a href="shop.html">
+                New Arrivals
+            </a>
+
+            <a href="shop.html">
+                Best Sellers
+            </a>
+
+            <a href="shop.html">
+                Collections
+            </a>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h3>
+                HELP
+            </h3>
+
+            <a href="#">
+                Shipping
+            </a>
+
+            <a href="#">
+                Returns
+            </a>
+
+            <a href="#">
+                FAQ
+            </a>
+
+            <a href="#">
+                Contact Us
+            </a>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h3>
+                COMPANY
+            </h3>
+
+            <a href="index.html#about">
+                About LUXORA
+            </a>
+
+            <a href="#">
+                Privacy
+            </a>
+
+            <a href="#">
+                Terms
+            </a>
+
+            <a href="#">
+                Careers
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        <div class="container footer-bottom-inner">
+
+            <p>
+                © 2026 LUXORA. All rights reserved.
+            </p>
+
+            <span>
+                Crafted for timeless luxury.
+            </span>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+
+<!-- =====================================================
+     ORDER SUCCESS MODAL
+===================================================== -->
+
+<div
+    class="order-modal"
+    id="orderModal"
+    hidden
+>
+
+    <div class="order-modal-overlay"></div>
+
+    <div class="order-modal-content">
+
+        <button
+            type="button"
+            class="modal-close"
+            id="modalClose"
+            aria-label="Close"
+        >
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+
+        <div class="success-icon">
+
+            <i class="fa-solid fa-check"></i>
+
+        </div>
+
+
+        <span>
+            ORDER CONFIRMED
+        </span>
+
+
+        <h2>
+            Thank You
+        </h2>
+
+
+        <p>
+            Your LUXORA order has been successfully placed.
+            We'll send your confirmation details by email.
+        </p>
+
+
+        <div class="order-number">
+
+            Order #
+            <strong id="orderNumber">
+                LX000000
+            </strong>
+
+        </div>
+
+
+        <a
+            href="index.html"
+            class="modal-home-btn"
+        >
+            Continue Shopping
+        </a>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script src="js/api-config.js"></script>
+<script src="js/checkout.js"></script>
+
+</body>
+</html>
