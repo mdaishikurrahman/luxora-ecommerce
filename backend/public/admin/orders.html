@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orders | LUXORA Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+        theme: { extend: {
+            colors: { ink: '#111111', dark: '#181818', gold: { DEFAULT: '#c9a227', dark: '#a98518' }, cream: '#f8f7f4', muted: '#777777', line: '#e7e4de', soft: '#f3f2ef' },
+            fontFamily: { heading: ['"Playfair Display"', 'serif'], body: ['"DM Sans"', 'sans-serif'] },
+        }}
+    }
+</script>
+</head>
+<body class="font-body antialiased">
+
+<div id="adminLayout" data-active="orders"></div>
+
+<!-- Order Detail Drawer -->
+<div id="orderDrawer" class="hidden fixed inset-0 z-[400]">
+    <div class="absolute inset-0 bg-ink/60" id="drawerOverlay"></div>
+    <div class="absolute right-0 top-0 h-full w-full max-w-[480px] bg-white overflow-y-auto p-7">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="font-heading text-xl font-semibold text-ink">Order Details</h2>
+            <button id="drawerClose" class="text-xl text-muted hover:text-ink"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="drawerContent"></div>
+    </div>
+</div>
+
+<script src="js/admin-common.js"></script>
+<script>Auth.guard();</script>
+<script src="js/admin-layout.js"></script>
+<script>
+    document.getElementById("adminPageTitle").textContent = "Orders";
+    const main = document.getElementById("adminMain");
+
+    const statusColors = {
+        pending: "bg-yellow-100 text-yellow-800",
+        processing: "bg-blue-100 text-blue-800",
+        shipped: "bg-purple-100 text-purple-800",
+        delivered: "bg-green-100 text-green-800",
+        cancelled: "bg-red-100 text-red-800",
+    };
+
+    main.innerHTML = `
+        <div class="flex items-center gap-2 mb-6" id="statusFilters">
+            ${["all", "pending", "processing", "shipped", "delivered", "cancelled"]
+                .map(
+                    (s) => `<button data-status="${s}" class="statusFilterBtn px-4 py-2 text-xs font-semibold uppercase border border-line ${s === "all" ? "bg-ink text-white" : "bg-white text-muted hover:border-gold-dark"}">${s}</button>`
+                )
+                .join("")}
+        </div>
+        <div class="bg-white border border-line overflow-x-auto">
+            <table class="w-full text-left min-w-[720px]">
+                <thead>
+                    <tr class="border-b border-line text-[10px] text-muted uppercase tracking-wide bg-soft">
+                        <th class="p-4 font-semibold">Order #</th>
+                        <th class="p-4 font-semibold">Customer</th>
+                        <th class="p-4 font-semibold">Date</th>
+                        <th class="p-4 font-semibold">Total</th>
+                        <th class="p-4 font-semibold">Status</th>
+                        <th class="p-4 font-semibold text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersBody"></tbody>
+            </table>
+        </div>
+    `;
+
+    let currentStatus = "";
+
+    function renderRows(items) {
+        const body = document.getElementById("ordersBody");
+        if (!items.length) {
+            body.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-muted text-sm">No orders found.</td></tr>`;
+            return;
+        }
+        body.innerHTML = items
+            .map(
+                (o) => `
+            <tr class="border-b border-line last:border-0">
+                <td class="p-4 text-sm font-medium text-ink">${o.orderNumber}</td>
+                <td class="p-4 text-sm text-muted">${o.customer?.firstName || ""} ${o.customer?.lastName || ""}</td>
+                <td class="p-4 text-sm text-muted">${formatDate(o.createdAt)}</td>
+                <td class="p-4 text-sm font-semibold text-ink">${money(o.total)}</td>
+                <td class="p-4"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${statusColors[o.status] || ""}">${o.status}</span></td>
+                <td class="p-4 text-right">
+                    <button class="viewBtn text-xs font-semibold text-gold-dark hover:underline" data-id="${o._id}">View</button>
+                </td>
+            </tr>`
+            )
+            .join("");
+
+        body.querySelectorAll(".viewBtn").forEach((btn) =>
+            btn.addEventListener("click", () => openDrawer(items.find((o) => o._id === btn.dataset.id)))
+        );
+    }
+
+    async function loadOrders() {
+        try {
+            const query = currentStatus ? `?status=${currentStatus}` : "";
+            const data = await apiFetch(`/orders${query}`);
+            renderRows(data.items);
+        } catch (err) {
+            showToast(err.message, true);
+        }
+    }
+
+    document.querySelectorAll(".statusFilterBtn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            currentStatus = btn.dataset.status === "all" ? "" : btn.dataset.status;
+            document.querySelectorAll(".statusFilterBtn").forEach((b) => b.classList.remove("bg-ink", "text-white"));
+            document.querySelectorAll(".statusFilterBtn").forEach((b) => b.classList.add("bg-white", "text-muted"));
+            btn.classList.remove("bg-white", "text-muted");
+            btn.classList.add("bg-ink", "text-white");
+            loadOrders();
+        });
+    });
+
+    const drawer = document.getElementById("orderDrawer");
+    function openDrawer(order) {
+        const itemsHtml = order.items
+            .map(
+                (i) => `
+            <div class="flex items-center justify-between py-3 border-b border-line">
+                <div class="min-w-0">
+                    <p class="text-sm text-ink font-medium truncate">${i.name}</p>
+                    <p class="text-xs text-muted">Qty ${i.qty}</p>
+                </div>
+                <p class="text-sm font-semibold text-ink">${money(i.price * i.qty)}</p>
+            </div>`
+            )
+            .join("");
+
+        document.getElementById("drawerContent").innerHTML = `
+            <div class="mb-6">
+                <p class="text-[10px] text-muted uppercase font-bold tracking-wide mb-1">Order Number</p>
+                <p class="font-heading text-2xl text-ink">${order.orderNumber}</p>
+            </div>
+
+            <div class="mb-6">
+                <label class="text-[10px] text-muted uppercase font-bold tracking-wide mb-2 block">Status</label>
+                <select id="statusSelect" class="w-full h-11 px-3.5 border border-line text-sm outline-none focus:border-gold-dark">
+                    ${["pending", "processing", "shipped", "delivered", "cancelled"]
+                        .map((s) => `<option value="${s}" ${s === order.status ? "selected" : ""}>${s}</option>`)
+                        .join("")}
+                </select>
+            </div>
+
+            <div class="mb-6">
+                <p class="text-[10px] text-muted uppercase font-bold tracking-wide mb-2">Customer</p>
+                <p class="text-sm text-ink">${order.customer.firstName} ${order.customer.lastName}</p>
+                <p class="text-sm text-muted">${order.customer.email}</p>
+                <p class="text-sm text-muted">${order.customer.phone}</p>
+            </div>
+
+            <div class="mb-6">
+                <p class="text-[10px] text-muted uppercase font-bold tracking-wide mb-2">Shipping Address</p>
+                <p class="text-sm text-muted leading-relaxed">
+                    ${order.shippingAddress.address}${order.shippingAddress.apartment ? ", " + order.shippingAddress.apartment : ""}<br>
+                    ${order.shippingAddress.city}, ${order.shippingAddress.state} ${order.shippingAddress.zip}<br>
+                    ${order.shippingAddress.country}
+                </p>
+            </div>
+
+            <div class="mb-6">
+                <p class="text-[10px] text-muted uppercase font-bold tracking-wide mb-2">Items</p>
+                ${itemsHtml}
+            </div>
+
+            <div class="text-sm space-y-2 mb-6">
+                <div class="flex justify-between text-muted"><span>Subtotal</span><span>${money(order.subtotal)}</span></div>
+                <div class="flex justify-between text-muted"><span>Shipping (${order.delivery.method})</span><span>${money(order.shipping)}</span></div>
+                ${order.discount ? `<div class="flex justify-between text-green-700"><span>Discount ${order.couponCode ? "(" + order.couponCode + ")" : ""}</span><span>-${money(order.discount)}</span></div>` : ""}
+                <div class="flex justify-between font-semibold text-ink text-base pt-2 border-t border-line"><span>Total</span><span>${money(order.total)}</span></div>
+            </div>
+
+            <div class="mb-6">
+                <p class="text-[10px] text-muted uppercase font-bold tracking-wide mb-1">Payment</p>
+                <p class="text-sm text-ink capitalize">${order.payment.method} — <span class="capitalize">${order.payment.status}</span></p>
+            </div>
+
+            ${order.notes ? `<div class="mb-6"><p class="text-[10px] text-muted uppercase font-bold tracking-wide mb-1">Notes</p><p class="text-sm text-muted">${order.notes}</p></div>` : ""}
+
+            <button id="saveStatusBtn" class="w-full h-12 bg-ink text-white text-xs font-bold uppercase hover:bg-gold-dark transition">Update Status</button>
+        `;
+
+        document.getElementById("saveStatusBtn").addEventListener("click", async () => {
+            try {
+                await apiFetch(`/orders/${order._id}/status`, {
+                    method: "PUT",
+                    body: JSON.stringify({ status: document.getElementById("statusSelect").value }),
+                });
+                showToast("Order status updated.");
+                closeDrawer();
+                loadOrders();
+            } catch (err) {
+                showToast(err.message, true);
+            }
+        });
+
+        drawer.classList.remove("hidden");
+    }
+    function closeDrawer() {
+        drawer.classList.add("hidden");
+    }
+    document.getElementById("drawerClose").addEventListener("click", closeDrawer);
+    document.getElementById("drawerOverlay").addEventListener("click", closeDrawer);
+
+    loadOrders();
+</script>
+</body>
+</html>

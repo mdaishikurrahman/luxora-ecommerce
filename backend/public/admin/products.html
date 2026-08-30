@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Products | LUXORA Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+        theme: { extend: {
+            colors: { ink: '#111111', dark: '#181818', gold: { DEFAULT: '#c9a227', dark: '#a98518' }, cream: '#f8f7f4', muted: '#777777', line: '#e7e4de', soft: '#f3f2ef' },
+            fontFamily: { heading: ['"Playfair Display"', 'serif'], body: ['"DM Sans"', 'sans-serif'] },
+        }}
+    }
+</script>
+</head>
+<body class="font-body antialiased">
+
+<div id="adminLayout" data-active="products"></div>
+
+<!-- Add/Edit Product Modal -->
+<div id="productModal" class="hidden fixed inset-0 z-[400] grid place-items-center p-5">
+    <div class="absolute inset-0 bg-ink/60" id="modalOverlay"></div>
+    <div class="relative z-10 w-full max-w-[560px] max-h-[90vh] overflow-y-auto bg-white p-7">
+        <div class="flex items-center justify-between mb-6">
+            <h2 id="modalTitle" class="font-heading text-xl font-semibold text-ink">Add Product</h2>
+            <button id="modalClose" class="text-xl text-muted hover:text-ink"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <form id="productForm" class="flex flex-col gap-4">
+            <input type="hidden" id="productId">
+
+            <div class="flex flex-col">
+                <label class="mb-1.5 text-[10px] font-bold text-[#555] uppercase">Name *</label>
+                <input id="f_name" required class="h-11 px-3.5 border border-line text-sm outline-none focus:border-gold-dark">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div class="flex flex-col">
+                    <label class="mb-1.5 text-[10px] font-bold text-[#555] uppercase">Category *</label>
+                    <select id="f_category" required class="h-11 px-3.5 border border-line text-sm outline-none focus:border-gold-dark">
+                        <option value="men">Men</option>
+                        <option value="women">Women</option>
+                        <option value="accessories">Accessories</option>
+                        <option value="lifestyle">Lifestyle</option>
+                    </select>
+                </div>
+                <div class="flex flex-col">
+                    <label class="mb-1.5 text-[10px] font-bold text-[#555] uppercase">Category Label</label>
+                    <input id="f_categoryLabel" placeholder="MEN / CLOTHING" class="h-11 px-3.5 border border-line text-sm outline-none focus:border-gold-dark">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4">
+                <div class="flex flex-col">
+                    <label class="mb-1.5 text-[10px] font-bold text-[#555] uppercase">Price *</label>
+                    <input id="f_price" type="number" min="0" step="0.01" required class="h-11 px-3.5 border border-line text-sm outline-none focus:border-gold-dark">
+                </div>
+                <div class="flex flex-col">
+                    <label class="mb-1.5 text-[10px] font-bold text-[#555] uppercase">Compare-at Price</label>
+                    <input id="f_compareAtPrice" type="number" min="0" step="0.01" class="h-11 px-3.5 border border-line text-sm outline-none focus:border-gold-dark">
+                </div>
+                <div class="flex flex-col">
+                    <label class="mb-1.5 text-[10px] font-bold text-[#555] uppercase">Stock *</label>
+                    <input id="f_stock" type="number" min="0" required class="h-11 px-3.5 border border-line text-sm outline-none focus:border-gold-dark">
+                </div>
+            </div>
+
+            <div class="flex flex-col">
+                <label class="mb-1.5 text-[10px] font-bold text-[#555] uppercase">Image URL</label>
+                <input id="f_image" placeholder="images/products/example.jpg" class="h-11 px-3.5 border border-line text-sm outline-none focus:border-gold-dark">
+                <p class="mt-1 text-[10px] text-muted">Path relative to the storefront's root, or a full https:// URL.</p>
+            </div>
+
+            <div class="flex flex-col">
+                <label class="mb-1.5 text-[10px] font-bold text-[#555] uppercase">Short Description</label>
+                <textarea id="f_shortDescription" rows="3" class="px-3.5 py-2.5 border border-line text-sm outline-none focus:border-gold-dark resize-y"></textarea>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div class="flex flex-col">
+                    <label class="mb-1.5 text-[10px] font-bold text-[#555] uppercase">Badge</label>
+                    <select id="f_badge" class="h-11 px-3.5 border border-line text-sm outline-none focus:border-gold-dark">
+                        <option value="">None</option>
+                        <option value="New">New</option>
+                        <option value="Sale">Sale</option>
+                        <option value="Best Seller">Best Seller</option>
+                    </select>
+                </div>
+                <label class="flex items-center gap-2 mt-6">
+                    <input id="f_featured" type="checkbox" class="w-4 h-4 accent-gold-dark">
+                    <span class="text-xs font-semibold text-[#555]">Featured on homepage</span>
+                </label>
+            </div>
+
+            <p id="formError" class="hidden text-xs text-red-600"></p>
+
+            <div class="flex gap-3 mt-2">
+                <button type="button" id="modalCancel" class="flex-1 h-12 border border-line text-ink text-xs font-bold uppercase hover:bg-soft transition">Cancel</button>
+                <button type="submit" id="modalSave" class="flex-1 h-12 bg-ink text-white text-xs font-bold uppercase hover:bg-gold-dark transition">Save Product</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="js/admin-common.js"></script>
+<script>const currentUser = Auth.guard();</script>
+<script src="js/admin-layout.js"></script>
+<script>
+    document.getElementById("adminPageTitle").textContent = "Products";
+    const main = document.getElementById("adminMain");
+
+    let allProducts = [];
+
+    main.innerHTML = `
+        <div class="flex items-center justify-between mb-6">
+            <div class="relative w-full max-w-xs">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-muted text-xs"></i>
+                <input id="searchBox" placeholder="Search products..." class="w-full h-10 pl-9 pr-3 border border-line text-sm outline-none focus:border-gold-dark">
+            </div>
+            <button id="addProductBtn" class="h-10 px-5 bg-ink text-white text-xs font-bold uppercase hover:bg-gold-dark transition">
+                <i class="fa-solid fa-plus mr-1.5"></i> Add Product
+            </button>
+        </div>
+        <div class="bg-white border border-line overflow-x-auto">
+            <table class="w-full text-left min-w-[720px]">
+                <thead>
+                    <tr class="border-b border-line text-[10px] text-muted uppercase tracking-wide bg-soft">
+                        <th class="p-4 font-semibold">Product</th>
+                        <th class="p-4 font-semibold">Category</th>
+                        <th class="p-4 font-semibold">Price</th>
+                        <th class="p-4 font-semibold">Stock</th>
+                        <th class="p-4 font-semibold">Status</th>
+                        <th class="p-4 font-semibold text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="productsBody"></tbody>
+            </table>
+        </div>
+    `;
+
+    function renderRows(items) {
+        const body = document.getElementById("productsBody");
+        if (!items.length) {
+            body.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-muted text-sm">No products found.</td></tr>`;
+            return;
+        }
+        body.innerHTML = items
+            .map(
+                (p) => `
+            <tr class="border-b border-line last:border-0">
+                <td class="p-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 bg-soft flex-none overflow-hidden">
+                            ${p.images?.[0] ? `<img src="/../${p.images[0]}" onerror="this.style.display='none'" class="w-full h-full object-cover">` : ""}
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-sm font-medium text-ink truncate">${p.name}</p>
+                            <p class="text-[10px] text-muted truncate">${p.categoryLabel || ""}</p>
+                        </div>
+                    </div>
+                </td>
+                <td class="p-4 text-sm text-muted capitalize">${p.category}</td>
+                <td class="p-4 text-sm font-semibold text-ink">${money(p.price)}</td>
+                <td class="p-4 text-sm ${p.stock <= 5 ? "text-red-600 font-semibold" : "text-muted"}">${p.stock}</td>
+                <td class="p-4">
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${p.active ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-600"}">
+                        ${p.active ? "Active" : "Hidden"}
+                    </span>
+                </td>
+                <td class="p-4 text-right">
+                    <button class="editBtn text-muted hover:text-gold-dark mr-3" data-id="${p._id}"><i class="fa-solid fa-pen"></i></button>
+                    <button class="deleteBtn text-muted hover:text-red-600" data-id="${p._id}"><i class="fa-solid fa-trash"></i></button>
+                </td>
+            </tr>`
+            )
+            .join("");
+
+        body.querySelectorAll(".editBtn").forEach((btn) =>
+            btn.addEventListener("click", () => openModal(allProducts.find((p) => p._id === btn.dataset.id)))
+        );
+        body.querySelectorAll(".deleteBtn").forEach((btn) =>
+            btn.addEventListener("click", () => deleteProduct(btn.dataset.id))
+        );
+    }
+
+    async function loadProducts() {
+        try {
+            const data = await apiFetch("/products/admin/all");
+            allProducts = data.items;
+            renderRows(allProducts);
+        } catch (err) {
+            showToast(err.message, true);
+        }
+    }
+
+    document.getElementById("searchBox").addEventListener("input", (e) => {
+        const q = e.target.value.toLowerCase();
+        renderRows(allProducts.filter((p) => p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q)));
+    });
+
+    // ---- Modal ----
+    const modal = document.getElementById("productModal");
+    const form = document.getElementById("productForm");
+
+    function openModal(product = null) {
+        form.reset();
+        document.getElementById("formError").classList.add("hidden");
+        document.getElementById("modalTitle").textContent = product ? "Edit Product" : "Add Product";
+        document.getElementById("productId").value = product?._id || "";
+        document.getElementById("f_name").value = product?.name || "";
+        document.getElementById("f_category").value = product?.category || "men";
+        document.getElementById("f_categoryLabel").value = product?.categoryLabel || "";
+        document.getElementById("f_price").value = product?.price ?? "";
+        document.getElementById("f_compareAtPrice").value = product?.compareAtPrice ?? "";
+        document.getElementById("f_stock").value = product?.stock ?? "";
+        document.getElementById("f_image").value = product?.images?.[0] || "";
+        document.getElementById("f_shortDescription").value = product?.shortDescription || "";
+        document.getElementById("f_badge").value = product?.badge || "";
+        document.getElementById("f_featured").checked = !!product?.featured;
+        modal.classList.remove("hidden");
+    }
+    function closeModal() {
+        modal.classList.add("hidden");
+    }
+
+    document.getElementById("addProductBtn").addEventListener("click", () => openModal());
+    document.getElementById("modalClose").addEventListener("click", closeModal);
+    document.getElementById("modalCancel").addEventListener("click", closeModal);
+    document.getElementById("modalOverlay").addEventListener("click", closeModal);
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const errorEl = document.getElementById("formError");
+        errorEl.classList.add("hidden");
+
+        const payload = {
+            name: document.getElementById("f_name").value.trim(),
+            category: document.getElementById("f_category").value,
+            categoryLabel: document.getElementById("f_categoryLabel").value.trim(),
+            price: Number(document.getElementById("f_price").value),
+            compareAtPrice: document.getElementById("f_compareAtPrice").value
+                ? Number(document.getElementById("f_compareAtPrice").value)
+                : null,
+            stock: Number(document.getElementById("f_stock").value),
+            images: document.getElementById("f_image").value.trim() ? [document.getElementById("f_image").value.trim()] : [],
+            shortDescription: document.getElementById("f_shortDescription").value.trim(),
+            badge: document.getElementById("f_badge").value,
+            featured: document.getElementById("f_featured").checked,
+        };
+
+        const id = document.getElementById("productId").value;
+
+        try {
+            if (id) {
+                await apiFetch(`/products/${id}`, { method: "PUT", body: JSON.stringify(payload) });
+                showToast("Product updated.");
+            } else {
+                await apiFetch("/products", { method: "POST", body: JSON.stringify(payload) });
+                showToast("Product created.");
+            }
+            closeModal();
+            loadProducts();
+        } catch (err) {
+            errorEl.textContent = err.message;
+            errorEl.classList.remove("hidden");
+        }
+    });
+
+    async function deleteProduct(id) {
+        if (!confirm("Remove this product from the storefront? This can be reversed by editing it later.")) return;
+        try {
+            await apiFetch(`/products/${id}`, { method: "DELETE" });
+            showToast("Product removed.");
+            loadProducts();
+        } catch (err) {
+            showToast(err.message, true);
+        }
+    }
+
+    loadProducts();
+</script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coupons | LUXORA Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+        theme: { extend: {
+            colors: { ink: '#111111', dark: '#181818', gold: { DEFAULT: '#c9a227', dark: '#a98518' }, cream: '#f8f7f4', muted: '#777777', line: '#e7e4de', soft: '#f3f2ef' },
+            fontFamily: { heading: ['"Playfair Display"', 'serif'], body: ['"DM Sans"', 'sans-serif'] },
+        }}
+    }
+</script>
+</head>
+<body class="font-body antialiased">
+
+<div id="adminLayout" data-active="coupons"></div>
+
+<script src="js/admin-common.js"></script>
+<script>Auth.guard();</script>
+<script src="js/admin-layout.js"></script>
+<script>
+    document.getElementById("adminPageTitle").textContent = "Coupons";
+    const main = document.getElementById("adminMain");
+
+    main.innerHTML = `
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
+            <div class="bg-white border border-line overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="border-b border-line text-[10px] text-muted uppercase tracking-wide bg-soft">
+                            <th class="p-4 font-semibold">Code</th>
+                            <th class="p-4 font-semibold">Discount</th>
+                            <th class="p-4 font-semibold">Status</th>
+                            <th class="p-4 font-semibold text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="couponsBody"></tbody>
+                </table>
+            </div>
+
+            <div class="bg-white border border-line p-6 h-fit">
+                <h2 class="font-heading text-lg font-semibold text-ink mb-4">New Coupon</h2>
+                <form id="couponForm" class="flex flex-col gap-4">
+                    <div class="flex flex-col">
+                        <label class="mb-1.5 text-[10px] font-bold text-[#555] uppercase">Code</label>
+                        <input id="f_code" required placeholder="SUMMER20" class="h-11 px-3.5 border border-line text-sm outline-none focus:border-gold-dark uppercase">
+                    </div>
+                    <div class="flex flex-col">
+                        <label class="mb-1.5 text-[10px] font-bold text-[#555] uppercase">Discount %</label>
+                        <input id="f_discount" type="number" min="1" max="100" required class="h-11 px-3.5 border border-line text-sm outline-none focus:border-gold-dark">
+                    </div>
+                    <p id="couponError" class="hidden text-xs text-red-600"></p>
+                    <button type="submit" class="h-12 bg-ink text-white text-xs font-bold uppercase hover:bg-gold-dark transition">Create Coupon</button>
+                </form>
+            </div>
+        </div>
+    `;
+
+    async function loadCoupons() {
+        try {
+            const data = await apiFetch("/coupons");
+            const body = document.getElementById("couponsBody");
+            if (!data.items.length) {
+                body.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-muted text-sm">No coupons yet.</td></tr>`;
+                return;
+            }
+            body.innerHTML = data.items
+                .map(
+                    (c) => `
+                <tr class="border-b border-line last:border-0">
+                    <td class="p-4 text-sm font-mono font-semibold text-ink">${c.code}</td>
+                    <td class="p-4 text-sm text-muted">${c.discountPercent}%</td>
+                    <td class="p-4">
+                        <button class="toggleBtn px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${c.active ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-600"}" data-id="${c._id}" data-active="${c.active}">
+                            ${c.active ? "Active" : "Disabled"}
+                        </button>
+                    </td>
+                    <td class="p-4 text-right">
+                        <button class="deleteBtn text-muted hover:text-red-600" data-id="${c._id}"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>`
+                )
+                .join("");
+
+            body.querySelectorAll(".toggleBtn").forEach((btn) =>
+                btn.addEventListener("click", async () => {
+                    try {
+                        await apiFetch(`/coupons/${btn.dataset.id}`, {
+                            method: "PUT",
+                            body: JSON.stringify({ active: btn.dataset.active !== "true" }),
+                        });
+                        loadCoupons();
+                    } catch (err) {
+                        showToast(err.message, true);
+                    }
+                })
+            );
+            body.querySelectorAll(".deleteBtn").forEach((btn) =>
+                btn.addEventListener("click", async () => {
+                    if (!confirm("Delete this coupon?")) return;
+                    try {
+                        await apiFetch(`/coupons/${btn.dataset.id}`, { method: "DELETE" });
+                        showToast("Coupon deleted.");
+                        loadCoupons();
+                    } catch (err) {
+                        showToast(err.message, true);
+                    }
+                })
+            );
+        } catch (err) {
+            showToast(err.message, true);
+        }
+    }
+
+    document.getElementById("couponForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const errorEl = document.getElementById("couponError");
+        errorEl.classList.add("hidden");
+        try {
+            await apiFetch("/coupons", {
+                method: "POST",
+                body: JSON.stringify({
+                    code: document.getElementById("f_code").value.trim().toUpperCase(),
+                    discountPercent: Number(document.getElementById("f_discount").value),
+                }),
+            });
+            showToast("Coupon created.");
+            e.target.reset();
+            loadCoupons();
+        } catch (err) {
+            errorEl.textContent = err.message;
+            errorEl.classList.remove("hidden");
+        }
+    });
+
+    loadCoupons();
+</script>
+</body>
+</html>

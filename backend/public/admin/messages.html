@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Messages | LUXORA Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+        theme: { extend: {
+            colors: { ink: '#111111', dark: '#181818', gold: { DEFAULT: '#c9a227', dark: '#a98518' }, cream: '#f8f7f4', muted: '#777777', line: '#e7e4de', soft: '#f3f2ef' },
+            fontFamily: { heading: ['"Playfair Display"', 'serif'], body: ['"DM Sans"', 'sans-serif'] },
+        }}
+    }
+</script>
+</head>
+<body class="font-body antialiased">
+
+<div id="adminLayout" data-active="messages"></div>
+
+<div id="messageDrawer" class="hidden fixed inset-0 z-[400]">
+    <div class="absolute inset-0 bg-ink/60" id="drawerOverlay"></div>
+    <div class="absolute right-0 top-0 h-full w-full max-w-[480px] bg-white overflow-y-auto p-7">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="font-heading text-xl font-semibold text-ink">Message</h2>
+            <button id="drawerClose" class="text-xl text-muted hover:text-ink"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="drawerContent"></div>
+    </div>
+</div>
+
+<script src="js/admin-common.js"></script>
+<script>Auth.guard();</script>
+<script src="js/admin-layout.js"></script>
+<script>
+    document.getElementById("adminPageTitle").textContent = "Messages";
+    const main = document.getElementById("adminMain");
+
+    main.innerHTML = `
+        <div class="bg-white border border-line overflow-x-auto">
+            <table class="w-full text-left min-w-[680px]">
+                <thead>
+                    <tr class="border-b border-line text-[10px] text-muted uppercase tracking-wide bg-soft">
+                        <th class="p-4 font-semibold">From</th>
+                        <th class="p-4 font-semibold">Subject</th>
+                        <th class="p-4 font-semibold">Date</th>
+                        <th class="p-4 font-semibold">Email</th>
+                        <th class="p-4 font-semibold text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="messagesBody"></tbody>
+            </table>
+        </div>
+    `;
+
+    let allMessages = [];
+
+    function renderRows() {
+        const body = document.getElementById("messagesBody");
+        if (!allMessages.length) {
+            body.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-muted text-sm">No messages yet.</td></tr>`;
+            return;
+        }
+        body.innerHTML = allMessages
+            .map(
+                (m) => `
+            <tr class="border-b border-line last:border-0 ${m.read ? "" : "bg-gold/5"}">
+                <td class="p-4">
+                    <p class="text-sm font-medium text-ink">${m.name}${m.read ? "" : ' <span class="ml-1 w-1.5 h-1.5 inline-block rounded-full bg-gold-dark"></span>'}</p>
+                    <p class="text-[10px] text-muted">${m.email}</p>
+                </td>
+                <td class="p-4 text-sm text-muted">${m.subject || "—"}</td>
+                <td class="p-4 text-sm text-muted">${formatDate(m.createdAt)}</td>
+                <td class="p-4">
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${m.emailSent ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-600"}">
+                        ${m.emailSent ? "Sent" : "Not sent"}
+                    </span>
+                </td>
+                <td class="p-4 text-right">
+                    <button class="viewBtn text-xs font-semibold text-gold-dark hover:underline" data-id="${m._id}">View</button>
+                </td>
+            </tr>`
+            )
+            .join("");
+
+        body.querySelectorAll(".viewBtn").forEach((btn) =>
+            btn.addEventListener("click", () => openDrawer(allMessages.find((m) => m._id === btn.dataset.id)))
+        );
+    }
+
+    async function loadMessages() {
+        try {
+            const data = await apiFetch("/contact");
+            allMessages = data.items;
+            renderRows();
+        } catch (err) {
+            showToast(err.message, true);
+        }
+    }
+
+    const drawer = document.getElementById("messageDrawer");
+    function openDrawer(msg) {
+        document.getElementById("drawerContent").innerHTML = `
+            <div class="mb-5">
+                <p class="text-[10px] text-muted uppercase font-bold tracking-wide mb-1">From</p>
+                <p class="text-sm text-ink font-medium">${msg.name}</p>
+                <p class="text-sm text-muted">${msg.email}</p>
+                ${msg.phone ? `<p class="text-sm text-muted">${msg.phone}</p>` : ""}
+            </div>
+            <div class="mb-5">
+                <p class="text-[10px] text-muted uppercase font-bold tracking-wide mb-1">Subject</p>
+                <p class="text-sm text-ink">${msg.subject || "—"}</p>
+            </div>
+            <div class="mb-5">
+                <p class="text-[10px] text-muted uppercase font-bold tracking-wide mb-1">Message</p>
+                <p class="text-sm text-muted leading-relaxed whitespace-pre-wrap">${msg.message}</p>
+            </div>
+            <div class="mb-5">
+                <p class="text-[10px] text-muted uppercase font-bold tracking-wide mb-1">Email delivery</p>
+                <p class="text-sm ${msg.emailSent ? "text-green-700" : "text-red-600"}">${msg.emailSent ? "Delivered" : "Failed — " + (msg.emailError || "unknown error")}</p>
+            </div>
+            <a href="mailto:${msg.email}" class="inline-flex items-center justify-center w-full h-12 bg-ink text-white text-xs font-bold uppercase hover:bg-gold-dark transition">
+                Reply by Email
+            </a>
+        `;
+        drawer.classList.remove("hidden");
+
+        if (!msg.read) {
+            apiFetch(`/contact/${msg._id}/read`, { method: "PUT" }).then(() => {
+                msg.read = true;
+                renderRows();
+            }).catch(() => {});
+        }
+    }
+    function closeDrawer() {
+        drawer.classList.add("hidden");
+    }
+    document.getElementById("drawerClose").addEventListener("click", closeDrawer);
+    document.getElementById("drawerOverlay").addEventListener("click", closeDrawer);
+
+    loadMessages();
+</script>
+</body>
+</html>
