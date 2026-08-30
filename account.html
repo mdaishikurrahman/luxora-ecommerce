@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account | LUXORA</title>
+    <meta name="description" content="View your LUXORA order history and account details.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ink: '#111111',
+                        dark: '#181818',
+                        gold: { DEFAULT: '#c9a227', dark: '#a98518' },
+                        cream: '#f8f7f4',
+                        muted: '#777777',
+                        line: '#e7e4de',
+                        soft: '#f3f2ef',
+                    },
+                    fontFamily: {
+                        heading: ['"Playfair Display"', 'serif'],
+                        body: ['"DM Sans"', 'sans-serif'],
+                    },
+                    maxWidth: { boxed: '1240px' },
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            #navbar.active { @apply flex flex-col items-start gap-4 absolute top-full left-0 right-0 bg-white px-5 py-6 border-b border-line shadow-lg z-40; }
+            .nav-icon { min-width: 22px; min-height: 22px; display: inline-flex; align-items: center; justify-content: center; }
+        }
+    </style>
+</head>
+
+<body class="font-body text-[#333] antialiased bg-soft min-h-screen">
+
+<header class="header sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-line">
+    <div class="max-w-boxed mx-auto px-5 flex items-center justify-between h-20">
+        <a href="index.html" class="logo font-heading text-2xl font-semibold text-ink">
+            LUXORA<span class="text-gold">.</span>
+        </a>
+        <nav class="hidden md:flex items-center gap-8 text-sm font-medium tracking-wide" id="navbar">
+            <a href="index.html" class="text-[#333] hover:text-gold transition">Home</a>
+            <a href="shop.html" class="text-[#333] hover:text-gold transition">Shop</a>
+            <a href="account.html" class="text-ink border-b-2 border-gold pb-1">My Account</a>
+        </nav>
+        <div class="flex items-center gap-5">
+            <a href="cart.html" class="nav-icon text-lg hover:text-gold transition" aria-label="Shopping Bag">
+                <i class="fa-solid fa-bag-shopping"></i>
+            </a>
+            <button class="menu-toggle md:hidden w-9 h-9 flex items-center justify-center text-xl" type="button" id="menuToggle" aria-label="Open menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main class="max-w-boxed mx-auto px-5 py-12">
+
+    <div id="loggedOutState" class="hidden text-center py-24">
+        <p class="text-muted text-sm mb-4">You need to log in to view your account.</p>
+        <a href="login.html" class="inline-flex items-center justify-center h-12 px-7 bg-ink text-white text-xs font-bold uppercase hover:bg-gold-dark transition">Log In</a>
+    </div>
+
+    <div id="loggedInState" class="hidden">
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
+            <div>
+                <span class="block mb-2 text-gold-dark text-[10px] font-bold tracking-[3px] uppercase">MY ACCOUNT</span>
+                <h1 class="text-ink font-heading text-4xl font-semibold">Hi, <span id="userName"></span></h1>
+                <p class="text-muted text-sm mt-1" id="userEmail"></p>
+            </div>
+            <button id="logoutBtn" class="h-11 px-6 border border-line text-ink text-xs font-bold uppercase hover:bg-ink hover:text-white hover:border-ink transition">
+                Log Out
+            </button>
+        </div>
+
+        <h2 class="text-ink font-heading text-2xl font-semibold mb-5">Order History</h2>
+
+        <div id="ordersLoading" class="text-muted text-sm">Loading your orders...</div>
+        <div id="noOrders" class="hidden text-muted text-sm bg-white border border-line p-8 text-center">
+            You haven't placed any orders yet. <a href="shop.html" class="text-gold-dark font-semibold hover:underline">Start shopping</a>
+        </div>
+
+        <div id="ordersList" class="flex flex-col gap-4"></div>
+
+    </div>
+
+</main>
+
+<script src="js/api-config.js"></script>
+<script src="js/customer-auth.js"></script>
+<script src="js/main.js"></script>
+<script>
+    const user = CustomerAuth.getUser();
+
+    if (!CustomerAuth.isLoggedIn()) {
+        document.getElementById("loggedOutState").classList.remove("hidden");
+    } else {
+        document.getElementById("loggedInState").classList.remove("hidden");
+        document.getElementById("userName").textContent = user.name;
+        document.getElementById("userEmail").textContent = user.email;
+
+        document.getElementById("logoutBtn").addEventListener("click", () => CustomerAuth.logout());
+
+        const statusColors = {
+            pending: "bg-yellow-100 text-yellow-800",
+            processing: "bg-blue-100 text-blue-800",
+            shipped: "bg-purple-100 text-purple-800",
+            delivered: "bg-green-100 text-green-800",
+            cancelled: "bg-red-100 text-red-800",
+        };
+
+        (async () => {
+            try {
+                const data = await luxoraApiFetch("/orders/me/history", {
+                    headers: { Authorization: `Bearer ${CustomerAuth.getToken()}` },
+                });
+
+                document.getElementById("ordersLoading").classList.add("hidden");
+
+                if (!data.items.length) {
+                    document.getElementById("noOrders").classList.remove("hidden");
+                    return;
+                }
+
+                document.getElementById("ordersList").innerHTML = data.items
+                    .map((o) => `
+                        <div class="bg-white border border-line p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div>
+                                <p class="text-ink font-semibold text-sm">${o.orderNumber}</p>
+                                <p class="text-muted text-xs mt-1">${new Date(o.createdAt).toLocaleDateString()} · ${o.items.length} item(s)</p>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${statusColors[o.status] || ""}">${o.status}</span>
+                                <strong class="text-ink text-sm">$${o.total.toFixed(2)}</strong>
+                            </div>
+                        </div>
+                    `)
+                    .join("");
+
+            } catch (err) {
+                document.getElementById("ordersLoading").textContent = "Could not load your orders right now.";
+            }
+        })();
+    }
+</script>
+
+</body>
+</html>

@@ -43,7 +43,8 @@
     <!-- Small custom layer: only for JS-driven state classes Tailwind utilities can't express -->
     <style type="text/tailwindcss">
         @layer utilities {
-            #navbar.active { @apply flex; }
+            .nav-icon { min-width: 22px; min-height: 22px; display: inline-flex; align-items: center; justify-content: center; }
+            #navbar.active { @apply flex flex-col items-start gap-4 absolute top-full left-0 right-0 bg-white px-5 py-6 border-b border-line shadow-lg z-40; }
             .form-message { @apply hidden mt-4 px-4 py-3 border border-transparent text-[11px] leading-relaxed; }
             .form-message.success { @apply block border-[#cbd9c4] bg-[#f1f6ee] text-[#506447]; }
             .form-message.error { @apply block border-[#e0c5c5] bg-[#fbf1f1] text-[#8a4e4e]; }
@@ -75,10 +76,10 @@
                 <i class="fa-solid fa-bag-shopping"></i>
                 <span class="cart-count absolute -top-2 -right-2 bg-gold text-white text-[10px] leading-none rounded-full w-4 h-4 flex items-center justify-center">0</span>
             </a>
-            <a href="#" class="nav-icon user-icon text-lg hover:text-gold transition" aria-label="Account">
+            <a href="login.html" class="nav-icon user-icon text-lg hover:text-gold transition" aria-label="Log in">
                 <i class="fa-regular fa-user"></i>
             </a>
-            <button class="menu-toggle md:hidden text-xl" type="button" aria-label="Open navigation" aria-expanded="false">
+            <button class="menu-toggle md:hidden w-9 h-9 flex items-center justify-center text-xl" type="button" id="menuToggle" aria-label="Open navigation" aria-expanded="false">
                 <i class="fa-solid fa-bars"></i>
             </button>
         </div>
@@ -167,9 +168,10 @@
                     <span class="text-[#999] text-[8px] font-bold tracking-[2px]">FOLLOW US</span>
                     <div class="flex items-center gap-2">
                         <a href="#" aria-label="Instagram" class="w-9 h-9 grid place-items-center border border-line text-[#333] text-xs hover:bg-ink hover:border-ink hover:text-white hover:-translate-y-1 transition-all"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="#" aria-label="Facebook" class="w-9 h-9 grid place-items-center border border-line text-[#333] text-xs hover:bg-ink hover:border-ink hover:text-white hover:-translate-y-1 transition-all"><i class="fa-brands fa-facebook-f"></i></a>
-                        <a href="#" aria-label="Pinterest" class="w-9 h-9 grid place-items-center border border-line text-[#333] text-xs hover:bg-ink hover:border-ink hover:text-white hover:-translate-y-1 transition-all"><i class="fa-brands fa-pinterest-p"></i></a>
+                        <a href="https://www.facebook.com/ashikurrahmanmpr" target="_blank" rel="noopener" aria-label="Facebook" class="w-9 h-9 grid place-items-center border border-line text-[#333] text-xs hover:bg-ink hover:border-ink hover:text-white hover:-translate-y-1 transition-all"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="https://www.pinterest.com/ashikur200195/" target="_blank" rel="noopener" aria-label="Pinterest" class="w-9 h-9 grid place-items-center border border-line text-[#333] text-xs hover:bg-ink hover:border-ink hover:text-white hover:-translate-y-1 transition-all"><i class="fa-brands fa-pinterest-p"></i></a>
                         <a href="#" aria-label="TikTok" class="w-9 h-9 grid place-items-center border border-line text-[#333] text-xs hover:bg-ink hover:border-ink hover:text-white hover:-translate-y-1 transition-all"><i class="fa-brands fa-tiktok"></i></a>
+                        <a href="https://www.linkedin.com/in/ashikur-rahman-admin" target="_blank" rel="noopener" aria-label="LinkedIn" class="w-9 h-9 grid place-items-center border border-line text-[#333] text-xs hover:bg-ink hover:border-ink hover:text-white hover:-translate-y-1 transition-all"><i class="fa-brands fa-linkedin-in"></i></a>
                     </div>
                 </div>
             </div>
@@ -302,7 +304,7 @@
             </p>
         </div>
 
-        <form class="newsletter-form flex flex-col sm:flex-row gap-3 w-full max-w-[420px]">
+        <form class="newsletter-form flex flex-col sm:flex-row gap-3 w-full max-w-[420px]" novalidate>
             <input type="email" class="email-input flex-1 h-[52px] px-4 border border-white/20 bg-transparent text-white text-sm placeholder-white/40 outline-none focus:border-gold transition" placeholder="Your email address" aria-label="Email address" required>
             <button type="submit" class="btn btn-gold h-[52px] px-7 bg-gold text-ink text-[11px] font-bold tracking-[1.5px] uppercase hover:bg-gold-dark hover:text-white transition">SUBSCRIBE</button>
         </form>
@@ -322,23 +324,23 @@
         </div>
         <div class="footer-column flex flex-col gap-3">
             <h3 class="text-white font-heading text-lg mb-2">Shop</h3>
-            <a href="shop.html" class="text-white/50 text-sm hover:text-gold transition">New Arrivals</a>
-            <a href="shop.html" class="text-white/50 text-sm hover:text-gold transition">Best Sellers</a>
+            <a href="shop.html?sort=newest" class="text-white/50 text-sm hover:text-gold transition">New Arrivals</a>
+            <a href="shop.html?sort=rating" class="text-white/50 text-sm hover:text-gold transition">Best Sellers</a>
             <a href="shop.html" class="text-white/50 text-sm hover:text-gold transition">Collections</a>
-            <a href="shop.html" class="text-white/50 text-sm hover:text-gold transition">Sale</a>
+            <a href="shop.html?badge=sale" class="text-white/50 text-sm hover:text-gold transition">Sale</a>
         </div>
         <div class="footer-column flex flex-col gap-3">
             <h3 class="text-white font-heading text-lg mb-2">Company</h3>
             <a href="about.html" class="text-white/50 text-sm hover:text-gold transition">About</a>
             <a href="contact.html" class="text-white/50 text-sm hover:text-gold transition">Contact</a>
-            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Privacy Policy</a>
-            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Terms</a>
+            <a href="privacy-policy.html" class="text-white/50 text-sm hover:text-gold transition">Privacy Policy</a>
+            <a href="terms.html" class="text-white/50 text-sm hover:text-gold transition">Terms</a>
         </div>
         <div class="footer-column flex flex-col gap-3">
             <h3 class="text-white font-heading text-lg mb-2">Support</h3>
-            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Shipping</a>
-            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Returns</a>
-            <a href="#" class="text-white/50 text-sm hover:text-gold transition">FAQ</a>
+            <a href="shipping.html" class="text-white/50 text-sm hover:text-gold transition">Shipping</a>
+            <a href="returns.html" class="text-white/50 text-sm hover:text-gold transition">Returns</a>
+            <a href="faq.html" class="text-white/50 text-sm hover:text-gold transition">FAQ</a>
             <a href="contact.html" class="text-white/50 text-sm hover:text-gold transition">Help Center</a>
         </div>
     </div>
@@ -355,6 +357,9 @@
     </div>
 </footer>
 
+<script src="js/main.js"></script>
+<script src="js/api-config.js"></script>
+<script src="js/customer-auth.js"></script>
 <script src="js/contact.js"></script>
 </body>
 </html>

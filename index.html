@@ -49,12 +49,13 @@
     <!-- Small custom layer: only for JS-driven state classes Tailwind utilities can't express -->
     <style type="text/tailwindcss">
         @layer utilities {
+            .nav-icon { min-width: 22px; min-height: 22px; display: inline-flex; align-items: center; justify-content: center; }
             body.no-scroll { @apply overflow-hidden; }
 
             #searchOverlay { @apply fixed inset-0 z-[100] bg-black/95 flex items-center justify-center opacity-0 invisible transition-all duration-300; }
             #searchOverlay.active { @apply opacity-100 visible; }
 
-            #navbar.active { @apply flex; }
+            #navbar.active { @apply flex flex-col items-start gap-4 absolute top-full left-0 right-0 bg-white px-5 py-6 border-b border-line shadow-lg z-40; }
 
             .tab.active { @apply bg-ink text-white border-ink; }
 
@@ -80,8 +81,8 @@
             <nav class="navbar hidden md:flex items-center gap-8 text-sm font-medium tracking-wide" id="navbar">
                 <a href="index.html" class="active text-ink border-b-2 border-gold pb-1">Home</a>
                 <a href="shop.html" class="text-[#333] hover:text-gold transition">Shop</a>
-                <a href="#men" class="text-[#333] hover:text-gold transition">Men</a>
-                <a href="#women" class="text-[#333] hover:text-gold transition">Women</a>
+                <a href="shop.html?category=men" class="text-[#333] hover:text-gold transition">Men</a>
+                <a href="shop.html?category=women" class="text-[#333] hover:text-gold transition">Women</a>
                 <a href="#collections" class="text-[#333] hover:text-gold transition">Collections</a>
                 <a href="about.html" class="text-[#333] hover:text-gold transition">About</a>
                 <a href="contact.html" class="text-[#333] hover:text-gold transition">Contact</a>
@@ -103,11 +104,11 @@
                     <span class="count cart-count absolute -top-2 -right-2 bg-gold text-white text-[10px] leading-none rounded-full w-4 h-4 flex items-center justify-center">0</span>
                 </a>
 
-                <a href="#" class="nav-icon user-icon text-lg hover:text-gold transition" aria-label="Account">
+                <a href="login.html" class="nav-icon user-icon text-lg hover:text-gold transition" aria-label="Log in">
                     <i class="fa-regular fa-user"></i>
                 </a>
 
-                <button class="menu-toggle md:hidden text-xl" id="menuToggle" aria-label="Open Menu">
+                <button class="menu-toggle md:hidden w-9 h-9 flex items-center justify-center text-xl" id="menuToggle" aria-label="Open Menu">
                     <i class="fa-solid fa-bars"></i>
                 </button>
 
@@ -256,7 +257,7 @@
 
                 <div class="category-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-                    <a href="#men" class="category-card group block">
+                    <a href="shop.html?category=men" class="category-card group block">
                         <div class="category-image men-category relative h-96 rounded overflow-hidden bg-[url('images/categories/men.jpg')] bg-cover bg-center">
                             <div class="category-overlay absolute inset-0 bg-black/40 group-hover:bg-black/55 transition"></div>
 
@@ -270,7 +271,7 @@
                     </a>
 
 
-                    <a href="#women" class="category-card group block">
+                    <a href="shop.html?category=women" class="category-card group block">
                         <div class="category-image women-category relative h-96 rounded overflow-hidden bg-[url('images/categories/women-.jpg')] bg-cover bg-center">
                             <div class="category-overlay absolute inset-0 bg-black/40 group-hover:bg-black/55 transition"></div>
 
@@ -284,7 +285,7 @@
                     </a>
 
 
-                    <a href="#accessories" class="category-card group block">
+                    <a href="shop.html?category=accessories" class="category-card group block">
                         <div class="category-image accessories-category relative h-96 rounded overflow-hidden bg-[url('images/categories/accessories.jpg')] bg-cover bg-center">
                             <div class="category-overlay absolute inset-0 bg-black/40 group-hover:bg-black/55 transition"></div>
 
@@ -298,7 +299,7 @@
                     </a>
 
 
-                    <a href="#lifestyle" class="category-card group block">
+                    <a href="shop.html?category=lifestyle" class="category-card group block">
                         <div class="category-image lifestyle-category relative h-96 rounded overflow-hidden bg-[url('images/categories/lifestyle.jpg')] bg-cover bg-center">
                             <div class="category-overlay absolute inset-0 bg-black/40 group-hover:bg-black/55 transition"></div>
 
@@ -967,7 +968,7 @@
                 </div>
 
 
-                <form class="newsletter-form flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
+                <form class="newsletter-form flex flex-col sm:flex-row gap-3 max-w-lg mx-auto" novalidate>
 
                     <div class="email-input flex-1 flex items-center gap-3 bg-white/10 border border-white/20 rounded px-4">
                         <i class="fa-regular fa-envelope text-white/60"></i>
@@ -1007,16 +1008,16 @@
                 </p>
 
                 <div class="social-links flex gap-3">
-                    <a href="#" aria-label="Facebook" class="w-9 h-9 rounded-full border border-white/20 text-white flex items-center justify-center hover:bg-gold hover:border-gold transition">
+                    <a href="https://www.facebook.com/ashikurrahmanmpr" target="_blank" rel="noopener" aria-label="Facebook" class="w-9 h-9 rounded-full border border-white/20 text-white flex items-center justify-center hover:bg-gold hover:border-gold transition">
                         <i class="fa-brands fa-facebook-f"></i>
                     </a>
                     <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-full border border-white/20 text-white flex items-center justify-center hover:bg-gold hover:border-gold transition">
                         <i class="fa-brands fa-instagram"></i>
                     </a>
-                    <a href="#" aria-label="Pinterest" class="w-9 h-9 rounded-full border border-white/20 text-white flex items-center justify-center hover:bg-gold hover:border-gold transition">
+                    <a href="https://www.pinterest.com/ashikur200195/" target="_blank" rel="noopener" aria-label="Pinterest" class="w-9 h-9 rounded-full border border-white/20 text-white flex items-center justify-center hover:bg-gold hover:border-gold transition">
                         <i class="fa-brands fa-pinterest-p"></i>
                     </a>
-                    <a href="#" aria-label="LinkedIn" class="w-9 h-9 rounded-full border border-white/20 text-white flex items-center justify-center hover:bg-gold hover:border-gold transition">
+                    <a href="https://www.linkedin.com/in/ashikur-rahman-admin" target="_blank" rel="noopener" aria-label="LinkedIn" class="w-9 h-9 rounded-full border border-white/20 text-white flex items-center justify-center hover:bg-gold hover:border-gold transition">
                         <i class="fa-brands fa-linkedin-in"></i>
                     </a>
                 </div>
@@ -1025,12 +1026,12 @@
 
             <div class="footer-column flex flex-col gap-3">
                 <h3 class="text-white font-heading text-lg mb-2">Shop</h3>
-                <a href="shop.html" class="text-white/50 text-sm hover:text-gold transition">New Arrivals</a>
-                <a href="shop.html" class="text-white/50 text-sm hover:text-gold transition">Best Sellers</a>
-                <a href="#men" class="text-white/50 text-sm hover:text-gold transition">Men</a>
-                <a href="#women" class="text-white/50 text-sm hover:text-gold transition">Women</a>
-                <a href="#accessories" class="text-white/50 text-sm hover:text-gold transition">Accessories</a>
-                <a href="shop.html" class="text-white/50 text-sm hover:text-gold transition">Sale</a>
+                <a href="shop.html?sort=newest" class="text-white/50 text-sm hover:text-gold transition">New Arrivals</a>
+                <a href="shop.html?sort=rating" class="text-white/50 text-sm hover:text-gold transition">Best Sellers</a>
+                <a href="shop.html?category=men" class="text-white/50 text-sm hover:text-gold transition">Men</a>
+                <a href="shop.html?category=women" class="text-white/50 text-sm hover:text-gold transition">Women</a>
+                <a href="shop.html?category=accessories" class="text-white/50 text-sm hover:text-gold transition">Accessories</a>
+                <a href="shop.html?badge=sale" class="text-white/50 text-sm hover:text-gold transition">Sale</a>
             </div>
 
 
@@ -1039,17 +1040,17 @@
                 <a href="about.html" class="text-white/50 text-sm hover:text-gold transition">About Us</a>
                 <a href="about.html" class="text-white/50 text-sm hover:text-gold transition">Our Story</a>
                 <a href="contact.html" class="text-white/50 text-sm hover:text-gold transition">Contact</a>
-                <a href="#" class="text-white/50 text-sm hover:text-gold transition">Careers</a>
+                <a href="careers.html" class="text-white/50 text-sm hover:text-gold transition">Careers</a>
             </div>
 
 
             <div class="footer-column flex flex-col gap-3">
                 <h3 class="text-white font-heading text-lg mb-2">Customer Care</h3>
-                <a href="#" class="text-white/50 text-sm hover:text-gold transition">Shipping</a>
-                <a href="#" class="text-white/50 text-sm hover:text-gold transition">Returns</a>
-                <a href="#" class="text-white/50 text-sm hover:text-gold transition">FAQ</a>
-                <a href="#" class="text-white/50 text-sm hover:text-gold transition">Privacy Policy</a>
-                <a href="#" class="text-white/50 text-sm hover:text-gold transition">Terms & Conditions</a>
+                <a href="shipping.html" class="text-white/50 text-sm hover:text-gold transition">Shipping</a>
+                <a href="returns.html" class="text-white/50 text-sm hover:text-gold transition">Returns</a>
+                <a href="faq.html" class="text-white/50 text-sm hover:text-gold transition">FAQ</a>
+                <a href="privacy-policy.html" class="text-white/50 text-sm hover:text-gold transition">Privacy Policy</a>
+                <a href="terms.html" class="text-white/50 text-sm hover:text-gold transition">Terms & Conditions</a>
             </div>
 
         </div>
@@ -1082,6 +1083,8 @@
 
     <!-- ================= MAIN JS ================= -->
     <script src="js/main.js"></script>
+    <script src="js/api-config.js"></script>
+    <script src="js/customer-auth.js"></script>
 
 </body>
 </html>

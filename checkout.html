@@ -66,10 +66,11 @@
             .navbar { @apply hidden md:flex items-center gap-8 text-sm font-medium tracking-wide; }
             .navbar a { @apply relative pb-1 text-[#333] hover:text-gold transition; }
             .navbar a.active { @apply text-ink border-b-2 border-gold; }
+            #navbar.active { @apply flex flex-col items-start gap-4 absolute top-full left-0 right-0 bg-white px-5 py-6 border-b border-line shadow-lg z-40; }
             .nav-actions { @apply flex items-center gap-5; }
-            .nav-icon { @apply relative text-lg hover:text-gold transition; }
+            .nav-icon { @apply relative inline-flex items-center justify-center min-w-[22px] min-h-[22px] text-lg hover:text-gold transition; }
             .cart-count { @apply absolute -top-2 -right-2 bg-gold text-white text-[10px] leading-none rounded-full w-4 h-4 flex items-center justify-center; }
-            .menu-toggle { @apply md:hidden text-xl; }
+            .menu-toggle { @apply md:hidden w-9 h-9 flex items-center justify-center text-xl; }
             .site-footer { @apply bg-dark pt-16; }
             .footer-grid { @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-12; }
             .footer-brand .logo { @apply text-white; }
@@ -264,11 +265,11 @@
                 Collections
             </a>
 
-            <a href="index.html#about">
+            <a href="about.html">
                 About
             </a>
 
-            <a href="index.html#contact">
+            <a href="contact.html">
                 Contact
             </a>
 
@@ -297,6 +298,14 @@
                 <span class="cart-count">
                     0
                 </span>
+            </a>
+
+            <a
+                href="login.html"
+                class="nav-icon user-icon"
+                aria-label="Log in"
+            >
+                <i class="fa-regular fa-user"></i>
             </a>
 
             <button
@@ -374,6 +383,7 @@
         <form
             class="checkout-layout"
             id="checkoutForm"
+            novalidate
         >
 
 
@@ -404,7 +414,7 @@
 
                         <p>
                             Already have an account?
-                            <a href="#">
+                            <a href="login.html?redirect=checkout.html">
                                 Log in
                             </a>
                         </p>
@@ -877,79 +887,44 @@
 
                             <div class="form-group">
 
-                                <label for="cardNumber">
-                                    Card Number
+                                <label for="cardName">
+                                    Name on Card
                                 </label>
 
-                                <div class="input-icon">
-
-                                    <input
-                                        type="text"
-                                        id="cardNumber"
-                                        name="cardNumber"
-                                        placeholder="1234 5678 9012 3456"
-                                        inputmode="numeric"
-                                        maxlength="19"
-                                    >
-
-                                    <i class="fa-regular fa-credit-card"></i>
-
-                                </div>
+                                <input
+                                    type="text"
+                                    id="cardName"
+                                    name="cardName"
+                                    placeholder="Name on card"
+                                >
 
                             </div>
 
 
-                            <div class="form-row">
+                            <div class="form-group">
 
-                                <div class="form-group">
+                                <label for="card-element">
+                                    Card Details
+                                </label>
 
-                                    <label for="cardName">
-                                        Name on Card
-                                    </label>
+                                <!-- Stripe.js mounts its own secure card input here.
+                                     Card numbers never touch this site's own code or server. -->
+                                <div
+                                    id="card-element"
+                                    class="px-4 py-3.5 border border-line bg-white"
+                                ></div>
 
-                                    <input
-                                        type="text"
-                                        id="cardName"
-                                        name="cardName"
-                                        placeholder="Name on card"
-                                    >
+                                <p
+                                    id="card-errors"
+                                    class="hidden mt-2 text-[11px] text-[#b85c5c]"
+                                ></p>
 
-                                </div>
-
-
-                                <div class="form-group">
-
-                                    <label for="expiry">
-                                        Expiry Date
-                                    </label>
-
-                                    <input
-                                        type="text"
-                                        id="expiry"
-                                        name="expiry"
-                                        placeholder="MM / YY"
-                                        maxlength="7"
-                                    >
-
-                                </div>
-
-
-                                <div class="form-group">
-
-                                    <label for="cvv">
-                                        CVV
-                                    </label>
-
-                                    <input
-                                        type="password"
-                                        id="cvv"
-                                        name="cvv"
-                                        placeholder="•••"
-                                        maxlength="4"
-                                        inputmode="numeric"
-                                    >
-
-                                </div>
+                                <p
+                                    id="cardPaymentNotice"
+                                    class="hidden mt-2 text-[11px] text-[#9b7a3b]"
+                                >
+                                    Card payments aren't configured on this server yet — you can still place a test order using Cash on Delivery.
+                                </p>
 
                             </div>
 
@@ -1412,12 +1387,16 @@
                     <i class="fa-brands fa-instagram"></i>
                 </a>
 
-                <a href="#" aria-label="Facebook">
+                <a href="https://www.facebook.com/ashikurrahmanmpr" target="_blank" rel="noopener" aria-label="Facebook">
                     <i class="fa-brands fa-facebook-f"></i>
                 </a>
 
-                <a href="#" aria-label="Pinterest">
+                <a href="https://www.pinterest.com/ashikur200195/" target="_blank" rel="noopener" aria-label="Pinterest">
                     <i class="fa-brands fa-pinterest-p"></i>
+                </a>
+
+                <a href="https://www.linkedin.com/in/ashikur-rahman-admin" target="_blank" rel="noopener" aria-label="LinkedIn">
+                    <i class="fa-brands fa-linkedin-in"></i>
                 </a>
 
             </div>
@@ -1435,11 +1414,11 @@
                 All Products
             </a>
 
-            <a href="shop.html">
+            <a href="shop.html?sort=newest">
                 New Arrivals
             </a>
 
-            <a href="shop.html">
+            <a href="shop.html?sort=rating">
                 Best Sellers
             </a>
 
@@ -1456,19 +1435,17 @@
                 HELP
             </h3>
 
-            <a href="#">
-                Shipping
+            <a href="shipping.html">Shipping
             </a>
 
-            <a href="#">
-                Returns
+            <a href="returns.html">Returns
             </a>
 
-            <a href="#">
+            <a href="faq.html">
                 FAQ
             </a>
 
-            <a href="#">
+            <a href="contact.html">
                 Contact Us
             </a>
 
@@ -1481,20 +1458,19 @@
                 COMPANY
             </h3>
 
-            <a href="index.html#about">
+            <a href="about.html">
                 About LUXORA
             </a>
 
-            <a href="#">
+            <a href="privacy-policy.html">
                 Privacy
             </a>
 
-            <a href="#">
+            <a href="terms.html">
                 Terms
             </a>
 
-            <a href="#">
-                Careers
+            <a href="careers.html">Careers
             </a>
 
         </div>
@@ -1596,7 +1572,10 @@
      JAVASCRIPT
 ===================================================== -->
 
+<script src="https://js.stripe.com/v3/"></script>
+<script src="js/main.js"></script>
 <script src="js/api-config.js"></script>
+<script src="js/customer-auth.js"></script>
 <script src="js/checkout.js"></script>
 
 </body>

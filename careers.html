@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Careers | LUXORA</title>
+
+    <meta name="description"
+        content="Join the LUXORA team — current openings and what it's like to work with us.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ink: '#111111',
+                        dark: '#181818',
+                        gold: { DEFAULT: '#c9a227', dark: '#a98518' },
+                        cream: '#f8f7f4',
+                        muted: '#777777',
+                        line: '#e7e4de',
+                        soft: '#f3f2ef',
+                    },
+                    fontFamily: {
+                        heading: ['"Playfair Display"', 'serif'],
+                        body: ['"DM Sans"', 'sans-serif'],
+                    },
+                    maxWidth: { boxed: '1240px' },
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .nav-icon { min-width: 22px; min-height: 22px; display: inline-flex; align-items: center; justify-content: center; }
+            #navbar.active { @apply flex flex-col items-start gap-4 absolute top-full left-0 right-0 bg-white px-5 py-6 border-b border-line shadow-lg z-40; }
+        }
+    </style>
+</head>
+
+<body class="font-body text-[#333] antialiased">
+
+<!-- ================= HEADER ================= -->
+<header class="header sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-line">
+    <div class="max-w-boxed mx-auto px-5 flex items-center justify-between h-20">
+
+        <a href="index.html" class="logo font-heading text-2xl font-semibold text-ink">
+            LUXORA<span class="text-gold">.</span>
+        </a>
+
+        <nav class="navbar hidden md:flex items-center gap-8 text-sm font-medium tracking-wide" id="navbar">
+            <a href="index.html" class="text-[#333] hover:text-gold transition">Home</a>
+            <a href="shop.html" class="text-[#333] hover:text-gold transition">Shop</a>
+            <a href="about.html" class="text-[#333] hover:text-gold transition">About</a>
+            <a href="faq.html" class="text-[#333] hover:text-gold transition">FAQ</a>
+            <a href="contact.html" class="text-[#333] hover:text-gold transition">Contact</a>
+        </nav>
+
+        <div class="nav-actions flex items-center gap-5">
+            <a href="shop.html" class="nav-icon text-lg hover:text-gold transition" aria-label="Search">
+                <i class="fas fa-search"></i>
+            </a>
+            <a href="cart.html" class="nav-icon text-lg hover:text-gold transition" aria-label="Shopping Bag">
+                <i class="fas fa-shopping-bag"></i>
+            </a>
+            <a href="login.html" class="nav-icon user-icon text-lg hover:text-gold transition" aria-label="Log in">
+                <i class="fa-regular fa-user"></i>
+            </a>
+            <button class="menu-toggle md:hidden w-9 h-9 flex items-center justify-center text-xl" type="button" id="menuToggle" aria-label="Open menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</header>
+
+
+<!-- ================= HERO ================= -->
+<section class="relative overflow-hidden flex items-center min-h-[360px] bg-[linear-gradient(90deg,rgba(15,15,15,0.86),rgba(15,15,15,0.58),rgba(15,15,15,0.35)),url('images/hero/home-hero.jpg')] bg-cover bg-center">
+    <div class="max-w-boxed mx-auto px-5 w-full">
+        <div class="max-w-[700px] text-white">
+            <div class="flex items-center gap-2.5 mb-8 text-[10px] tracking-[2px] uppercase">
+                <a href="index.html" class="text-white/65 hover:text-white transition">Home</a>
+                <span class="text-white/65">/</span>
+                <span class="text-white/95">Careers</span>
+            </div>
+            <span class="block mb-4 text-gold text-[10px] font-bold tracking-[4px] uppercase">JOIN THE TEAM</span>
+            <h1 class="font-heading text-[clamp(45px,6vw,70px)] font-semibold leading-[1.0] tracking-[-1px]">Careers at LUXORA</h1>
+            <p class="max-w-[520px] mt-6 text-white/80 text-sm leading-[1.8]">We're a small team building a modern take on luxury retail. If you care about craft, design, and doing things properly, we'd love to hear from you.</p>
+        </div>
+    </div>
+</section>
+
+
+<!-- ================= WHY LUXORA ================= -->
+<section class="bg-white py-20">
+    <div class="max-w-boxed mx-auto px-5">
+        <div class="max-w-[700px] mx-auto mb-16 text-center">
+            <span class="block mb-4 text-gold-dark text-[10px] font-bold tracking-[3px] uppercase">WHY LUXORA</span>
+            <h2 class="text-ink font-heading text-[clamp(36px,5vw,52px)] font-semibold">What it's like here</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="text-center">
+                <div class="w-14 h-14 grid place-items-center mx-auto mb-5 border border-gold/50 text-gold-dark text-xl">
+                    <i class="fa-solid fa-gem"></i>
+                </div>
+                <h3 class="mb-2 text-ink font-heading text-xl font-semibold">Craft-first culture</h3>
+                <p class="text-muted text-sm leading-relaxed">We care about getting the details right — in our products and in how we work.</p>
+            </div>
+            <div class="text-center">
+                <div class="w-14 h-14 grid place-items-center mx-auto mb-5 border border-gold/50 text-gold-dark text-xl">
+                    <i class="fa-solid fa-house-laptop"></i>
+                </div>
+                <h3 class="mb-2 text-ink font-heading text-xl font-semibold">Flexible &amp; remote-friendly</h3>
+                <p class="text-muted text-sm leading-relaxed">We hire for output, not hours at a desk. Work where you do your best thinking.</p>
+            </div>
+            <div class="text-center">
+                <div class="w-14 h-14 grid place-items-center mx-auto mb-5 border border-gold/50 text-gold-dark text-xl">
+                    <i class="fa-solid fa-seedling"></i>
+                </div>
+                <h3 class="mb-2 text-ink font-heading text-xl font-semibold">Room to grow</h3>
+                <p class="text-muted text-sm leading-relaxed">As a small, growing team, everyone's work has real, visible impact.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ================= OPEN ROLES ================= -->
+<section class="bg-soft py-20">
+    <div class="max-w-boxed mx-auto px-5">
+        <div class="max-w-[700px] mx-auto mb-14 text-center">
+            <span class="block mb-4 text-gold-dark text-[10px] font-bold tracking-[3px] uppercase">OPEN ROLES</span>
+            <h2 class="text-ink font-heading text-[clamp(36px,5vw,52px)] font-semibold">Current Openings</h2>
+        </div>
+
+        <div class="max-w-[760px] mx-auto flex flex-col gap-4">
+
+            <div class="bg-white border border-line p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h3 class="text-ink font-heading text-lg font-semibold">No open positions right now</h3>
+                    <p class="text-muted text-sm mt-1">We're not actively hiring at the moment, but we're always happy to hear from people who love what we do.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="max-w-[760px] mx-auto mt-10 text-center">
+            <p class="text-muted text-sm mb-4">Think you'd be a great fit for a future role? Introduce yourself.</p>
+            <a href="contact.html" class="inline-flex items-center justify-center h-12 px-7 bg-ink text-white text-xs font-bold uppercase hover:bg-gold-dark transition">Get In Touch</a>
+        </div>
+    </div>
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer bg-dark pt-16">
+    <div class="max-w-boxed mx-auto px-5 footer-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-12">
+        <div class="footer-brand">
+            <a href="index.html" class="logo font-heading text-2xl font-semibold text-white">LUXORA<span class="text-gold">.</span></a>
+            <p class="text-white/50 text-sm mt-4 mb-6 leading-relaxed">Timeless design. Exceptional quality. A modern expression of luxury.</p>
+        </div>
+        <div class="footer-column flex flex-col gap-3">
+            <h3 class="text-white font-heading text-lg mb-2">Shop</h3>
+            <a href="shop.html?sort=newest" class="text-white/50 text-sm hover:text-gold transition">New Arrivals</a>
+            <a href="shop.html?sort=rating" class="text-white/50 text-sm hover:text-gold transition">Best Sellers</a>
+            <a href="shop.html" class="text-white/50 text-sm hover:text-gold transition">Collections</a>
+            <a href="shop.html?badge=sale" class="text-white/50 text-sm hover:text-gold transition">Sale</a>
+        </div>
+        <div class="footer-column flex flex-col gap-3">
+            <h3 class="text-white font-heading text-lg mb-2">Company</h3>
+            <a href="about.html" class="text-white/50 text-sm hover:text-gold transition">About</a>
+            <a href="contact.html" class="text-white/50 text-sm hover:text-gold transition">Contact</a>
+            <a href="careers.html" class="text-white/50 text-sm hover:text-gold transition">Careers</a>
+            <a href="privacy-policy.html" class="text-white/50 text-sm hover:text-gold transition">Privacy Policy</a>
+            <a href="terms.html" class="text-white/50 text-sm hover:text-gold transition">Terms</a>
+        </div>
+        <div class="footer-column flex flex-col gap-3">
+            <h3 class="text-white font-heading text-lg mb-2">Support</h3>
+            <a href="shipping.html" class="text-white/50 text-sm hover:text-gold transition">Shipping</a>
+            <a href="returns.html" class="text-white/50 text-sm hover:text-gold transition">Returns</a>
+            <a href="faq.html" class="text-white/50 text-sm hover:text-gold transition">FAQ</a>
+            <a href="contact.html" class="text-white/50 text-sm hover:text-gold transition">Help Center</a>
+        </div>
+    </div>
+    <div class="footer-bottom border-t border-white/10 py-6">
+        <div class="max-w-boxed mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p class="text-white/40 text-xs">© 2026 LUXORA. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="js/api-config.js"></script>
+<script src="js/customer-auth.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>

@@ -67,11 +67,12 @@
             .navbar { @apply hidden md:flex items-center gap-8 text-sm font-medium tracking-wide; }
             .navbar a { @apply relative pb-1 text-[#333] hover:text-gold transition; }
             .navbar a.active { @apply text-ink border-b-2 border-gold; }
+            #navbar.active { @apply flex flex-col items-start gap-4 absolute top-full left-0 right-0 bg-white px-5 py-6 border-b border-line shadow-lg z-40; }
             .nav-actions { @apply flex items-center gap-5; }
-            .nav-icon { @apply relative text-lg hover:text-gold transition; }
+            .nav-icon { @apply relative inline-flex items-center justify-center min-w-[22px] min-h-[22px] text-lg hover:text-gold transition; }
             .nav-icon.active { @apply text-gold; }
             .cart-count { @apply absolute -top-2 -right-2 bg-gold text-white text-[10px] leading-none rounded-full w-4 h-4 flex items-center justify-center; }
-            .menu-toggle { @apply md:hidden text-xl; }
+            .menu-toggle { @apply md:hidden w-9 h-9 flex items-center justify-center text-xl; }
             .site-footer, .footer { @apply bg-dark pt-16; }
             .footer-grid { @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-12; }
             .footer-brand .logo { @apply text-white; }
@@ -121,7 +122,7 @@
             .cart-item-price strong { @apply text-[13px] font-semibold text-ink; }
 
             .cart-quantity { @apply w-[95px] sm:w-[105px] xl:w-[115px] h-9 sm:h-[38px] xl:h-[42px] grid grid-cols-[28px_1fr_28px] sm:grid-cols-[34px_1fr_34px] items-center border border-[#ddd8ce] mt-1 sm:mt-0; }
-            .cart-quantity button { @apply grid place-items-center border-0 bg-transparent cursor-pointer text-[#555149] transition-colors hover:bg-[#f5f2eb] hover:text-gold-dark; }
+            .cart-quantity button { @apply grid place-items-center h-full w-full border-0 bg-transparent cursor-pointer text-[#555149] transition-colors hover:bg-[#f5f2eb] hover:text-gold-dark; }
             .quantity-input { @apply w-full h-full border-0 outline-0 bg-transparent text-center text-xs font-semibold text-ink; }
 
             .cart-item-total { @apply absolute right-0 top-6 sm:static text-right; }
@@ -200,7 +201,7 @@
         </a>
 
 
-        <nav class="navbar" id="mainNavbar">
+        <nav class="navbar" id="navbar">
 
             <a href="index.html">
                 Home
@@ -210,20 +211,20 @@
                 Shop
             </a>
 
-            <a href="shop.html?category=watches">
-                Watches
+            <a href="shop.html?category=men">
+                Men
             </a>
 
-            <a href="shop.html?category=bags">
-                Bags
+            <a href="shop.html?category=women">
+                Women
             </a>
 
-            <a href="shop.html?category=shoes">
-                Shoes
+            <a href="shop.html?category=accessories">
+                Accessories
             </a>
 
-            <a href="shop.html?category=fragrance">
-                Fragrance
+            <a href="shop.html?category=lifestyle">
+                Lifestyle
             </a>
 
         </nav>
@@ -231,13 +232,13 @@
 
         <div class="nav-actions">
 
-            <button
+            <a
+                href="login.html"
                 class="nav-icon user-icon"
-                type="button"
-                aria-label="Account"
+                aria-label="Log in"
             >
                 <i class="fa-regular fa-user"></i>
-            </button>
+            </a>
 
 
             <a
@@ -265,6 +266,7 @@
             <button
                 class="menu-toggle"
                 type="button"
+                id="menuToggle"
                 aria-label="Open Menu"
                 aria-expanded="false"
             >
@@ -1082,16 +1084,16 @@
                 All Products
             </a>
 
-            <a href="shop.html?category=watches">
-                Watches
+            <a href="shop.html?category=men">
+                Men
             </a>
 
-            <a href="shop.html?category=bags">
-                Bags
+            <a href="shop.html?category=women">
+                Women
             </a>
 
-            <a href="shop.html?category=shoes">
-                Shoes
+            <a href="shop.html?category=accessories">
+                Accessories
             </a>
 
         </div>
@@ -1103,19 +1105,17 @@
                 HELP
             </h3>
 
-            <a href="#">
+            <a href="contact.html">
                 Contact Us
             </a>
 
-            <a href="#">
-                Shipping
+            <a href="shipping.html">Shipping
             </a>
 
-            <a href="#">
-                Returns
+            <a href="returns.html">Returns
             </a>
 
-            <a href="#">
+            <a href="faq.html">
                 FAQ
             </a>
 
@@ -1132,12 +1132,16 @@
                 Instagram
             </a>
 
-            <a href="#">
+            <a href="https://www.facebook.com/ashikurrahmanmpr" target="_blank" rel="noopener">
                 Facebook
             </a>
 
-            <a href="#">
+            <a href="https://www.pinterest.com/ashikur200195/" target="_blank" rel="noopener">
                 Pinterest
+            </a>
+
+            <a href="https://www.linkedin.com/in/ashikur-rahman-admin" target="_blank" rel="noopener">
+                LinkedIn
             </a>
 
         </div>
@@ -1155,11 +1159,11 @@
 
             <div>
 
-                <a href="#">
+                <a href="privacy-policy.html">
                     Privacy
                 </a>
 
-                <a href="#">
+                <a href="terms.html">
                     Terms
                 </a>
 
@@ -1179,6 +1183,7 @@
 
 <script src="js/main.js"></script>
 <script src="js/api-config.js"></script>
+<script src="js/customer-auth.js"></script>
 <script src="js/cart.js"></script>
 
 </body>

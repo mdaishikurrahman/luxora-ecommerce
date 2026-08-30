@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | LUXORA</title>
+    <meta name="description" content="Create a LUXORA account to check out faster and track your orders.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ink: '#111111',
+                        dark: '#181818',
+                        gold: { DEFAULT: '#c9a227', dark: '#a98518' },
+                        cream: '#f8f7f4',
+                        muted: '#777777',
+                        line: '#e7e4de',
+                        soft: '#f3f2ef',
+                    },
+                    fontFamily: {
+                        heading: ['"Playfair Display"', 'serif'],
+                        body: ['"DM Sans"', 'sans-serif'],
+                    },
+                    maxWidth: { boxed: '1240px' },
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .form-message { @apply hidden mt-4 px-4 py-3 border border-transparent text-[11px] leading-relaxed; }
+            .form-message.error { @apply block border-[#e0c5c5] bg-[#fbf1f1] text-[#8a4e4e]; }
+        }
+    </style>
+</head>
+
+<body class="font-body text-[#333] antialiased bg-soft min-h-screen flex flex-col">
+
+<header class="header bg-white border-b border-line">
+    <div class="max-w-boxed mx-auto px-5 flex items-center justify-between h-20">
+        <a href="index.html" class="logo font-heading text-2xl font-semibold text-ink">
+            LUXORA<span class="text-gold">.</span>
+        </a>
+        <a href="shop.html" class="text-xs font-semibold text-muted hover:text-gold-dark transition">
+            Continue Shopping <i class="fa-solid fa-arrow-right ml-1"></i>
+        </a>
+    </div>
+</header>
+
+<main class="flex-1 flex items-center justify-center px-5 py-16">
+    <div class="w-full max-w-[420px]">
+
+        <div class="text-center mb-8">
+            <span class="block mb-3 text-gold-dark text-[10px] font-bold tracking-[3px] uppercase">JOIN LUXORA</span>
+            <h1 class="text-ink font-heading text-4xl font-semibold">Create Account</h1>
+            <p class="mt-2 text-muted text-sm">Already have an account? <a href="login.html" class="text-gold-dark font-semibold hover:underline">Log in</a></p>
+        </div>
+
+        <form id="registerForm" class="bg-white p-8 border border-line">
+
+            <div class="flex flex-col mb-5">
+                <label for="name" class="mb-2 text-[#555] text-[10px] font-bold tracking-wide uppercase">Full Name</label>
+                <input type="text" id="name" required autocomplete="name"
+                    class="h-12 px-4 border border-line outline-none text-sm focus:border-gold-dark transition" placeholder="Your full name">
+            </div>
+
+            <div class="flex flex-col mb-5">
+                <label for="email" class="mb-2 text-[#555] text-[10px] font-bold tracking-wide uppercase">Email Address</label>
+                <input type="email" id="email" required autocomplete="email"
+                    class="h-12 px-4 border border-line outline-none text-sm focus:border-gold-dark transition" placeholder="you@example.com">
+            </div>
+
+            <div class="flex flex-col mb-2">
+                <label for="password" class="mb-2 text-[#555] text-[10px] font-bold tracking-wide uppercase">Password</label>
+                <input type="password" id="password" required autocomplete="new-password" minlength="6"
+                    class="h-12 px-4 border border-line outline-none text-sm focus:border-gold-dark transition" placeholder="At least 6 characters">
+            </div>
+            <p class="mb-5 text-[10px] text-muted">Minimum 6 characters.</p>
+
+            <p id="registerError" class="form-message error"></p>
+
+            <button type="submit" id="registerBtn" class="w-full h-12 mt-2 bg-ink text-white text-xs font-bold tracking-wide uppercase hover:bg-gold-dark transition">
+                Create Account
+            </button>
+
+            <p class="mt-4 text-center text-[10px] text-muted leading-relaxed">
+                By creating an account, you agree to LUXORA's <a href="terms.html" class="text-gold-dark underline">Terms &amp; Conditions</a> and <a href="privacy-policy.html" class="text-gold-dark underline">Privacy Policy</a>.
+            </p>
+
+        </form>
+
+    </div>
+</main>
+
+<script src="js/api-config.js"></script>
+<script src="js/customer-auth.js"></script>
+<script>
+    if (CustomerAuth.isLoggedIn()) {
+        window.location.href = "account.html";
+    }
+
+    document.getElementById("registerForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const btn = document.getElementById("registerBtn");
+        const errorEl = document.getElementById("registerError");
+        errorEl.classList.remove("error");
+        errorEl.classList.add("hidden");
+
+        const password = document.getElementById("password").value;
+        if (password.length < 6) {
+            errorEl.textContent = "Password must be at least 6 characters.";
+            errorEl.classList.remove("hidden");
+            errorEl.classList.add("error");
+            return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = "Creating account...";
+
+        try {
+            const data = await luxoraApiFetch("/auth/register", {
+                method: "POST",
+                body: JSON.stringify({
+                    name: document.getElementById("name").value,
+                    email: document.getElementById("email").value,
+                    password: password,
+                }),
+            });
+
+            CustomerAuth.setSession(data.token, data.user);
+            window.location.href = "account.html";
+
+        } catch (err) {
+            errorEl.textContent = err.message;
+            errorEl.classList.remove("hidden");
+            errorEl.classList.add("error");
+        } finally {
+            btn.disabled = false;
+            btn.textContent = "Create Account";
+        }
+    });
+</script>
+
+</body>
+</html>

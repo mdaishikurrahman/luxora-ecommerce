@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Privacy Policy | LUXORA</title>
+
+    <meta name="description"
+        content="How LUXORA collects, uses, and protects your personal information.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ink: '#111111',
+                        dark: '#181818',
+                        gold: { DEFAULT: '#c9a227', dark: '#a98518' },
+                        cream: '#f8f7f4',
+                        muted: '#777777',
+                        line: '#e7e4de',
+                        soft: '#f3f2ef',
+                    },
+                    fontFamily: {
+                        heading: ['"Playfair Display"', 'serif'],
+                        body: ['"DM Sans"', 'sans-serif'],
+                    },
+                    maxWidth: { boxed: '1240px' },
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .nav-icon { min-width: 22px; min-height: 22px; display: inline-flex; align-items: center; justify-content: center; }
+            #navbar.active { @apply flex flex-col items-start gap-4 absolute top-full left-0 right-0 bg-white px-5 py-6 border-b border-line shadow-lg z-40; }
+            .policy-content h2 { @apply mt-10 mb-4 text-ink font-heading text-2xl font-semibold first:mt-0; }
+            .policy-content p { @apply mb-4 text-[#555] text-sm leading-[1.9]; }
+            .policy-content ul { @apply mb-4 pl-5 text-[#555] text-sm leading-[1.9] list-disc; }
+            .policy-content li { @apply mb-2; }
+            .policy-content a { @apply text-gold-dark underline; }
+        }
+    </style>
+</head>
+
+<body class="font-body text-[#333] antialiased">
+
+<!-- ================= HEADER ================= -->
+<header class="header sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-line">
+    <div class="max-w-boxed mx-auto px-5 flex items-center justify-between h-20">
+
+        <a href="index.html" class="logo font-heading text-2xl font-semibold text-ink">
+            LUXORA<span class="text-gold">.</span>
+        </a>
+
+        <nav class="navbar hidden md:flex items-center gap-8 text-sm font-medium tracking-wide" id="navbar">
+            <a href="index.html" class="text-[#333] hover:text-gold transition">Home</a>
+            <a href="shop.html" class="text-[#333] hover:text-gold transition">Shop</a>
+            <a href="about.html" class="text-[#333] hover:text-gold transition">About</a>
+            <a href="faq.html" class="text-[#333] hover:text-gold transition">FAQ</a>
+            <a href="contact.html" class="text-[#333] hover:text-gold transition">Contact</a>
+        </nav>
+
+        <div class="nav-actions flex items-center gap-5">
+            <a href="shop.html" class="nav-icon text-lg hover:text-gold transition" aria-label="Search">
+                <i class="fas fa-search"></i>
+            </a>
+            <a href="cart.html" class="nav-icon text-lg hover:text-gold transition" aria-label="Shopping Bag">
+                <i class="fas fa-shopping-bag"></i>
+            </a>
+            <a href="login.html" class="nav-icon user-icon text-lg hover:text-gold transition" aria-label="Log in">
+                <i class="fa-regular fa-user"></i>
+            </a>
+            <button class="menu-toggle md:hidden w-9 h-9 flex items-center justify-center text-xl" type="button" id="menuToggle" aria-label="Open menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</header>
+
+
+<!-- ================= HERO ================= -->
+<section class="relative overflow-hidden flex items-center min-h-[300px] bg-soft">
+    <div class="max-w-boxed mx-auto px-5 w-full">
+        <div class="flex items-center gap-2.5 mb-6 text-[10px] tracking-[2px] uppercase">
+            <a href="index.html" class="text-muted hover:text-gold-dark transition">Home</a>
+            <span class="text-muted">/</span>
+            <span class="text-ink">Privacy Policy</span>
+        </div>
+        <span class="block mb-3 text-gold-dark text-[10px] font-bold tracking-[4px] uppercase">LEGAL</span>
+        <h1 class="text-ink font-heading text-[clamp(38px,5vw,58px)] font-semibold">Privacy Policy</h1>
+        <p class="mt-3 text-muted text-sm">Last updated: January 2026</p>
+    </div>
+</section>
+
+
+<!-- ================= CONTENT ================= -->
+<section class="bg-white py-16">
+    <div class="max-w-boxed mx-auto px-5">
+        <div class="max-w-[760px] mx-auto policy-content">
+
+            <p>LUXORA ("we", "us", "our") respects your privacy. This Privacy Policy explains what information we collect, how we use it, and the choices you have — whether you're browsing our store, creating an account, or placing an order.</p>
+
+            <h2>1. Information We Collect</h2>
+            <p>We collect information you provide directly to us, such as when you create an account, place an order, or contact us:</p>
+            <ul>
+                <li>Contact details — name, email address, phone number, shipping and billing address</li>
+                <li>Account information — email and password (stored securely, never in plain text)</li>
+                <li>Order details — items purchased, order history, payment status</li>
+                <li>Communications — messages you send us through the contact form</li>
+            </ul>
+            <p>We do not collect or store your full card number — card payments are processed directly by Stripe, our payment provider, and your card details never pass through our servers.</p>
+
+            <h2>2. How We Use Your Information</h2>
+            <p>We use the information we collect to:</p>
+            <ul>
+                <li>Process and fulfill your orders, including shipping and customer support</li>
+                <li>Create and maintain your account, including order history</li>
+                <li>Respond to your questions and requests submitted via the contact form</li>
+                <li>Send order confirmations and, if you opt in, occasional updates about new products or offers</li>
+                <li>Improve our website, products, and services</li>
+            </ul>
+
+            <h2>3. How We Share Your Information</h2>
+            <p>We do not sell your personal information. We share it only with the service providers necessary to run our store:</p>
+            <ul>
+                <li><strong>Stripe</strong> — to securely process card payments</li>
+                <li><strong>Email delivery services</strong> — to send order confirmations and respond to contact form messages</li>
+                <li><strong>Shipping carriers</strong> — to deliver your order to the address you provide</li>
+            </ul>
+            <p>We may also disclose information where required by law.</p>
+
+            <h2>4. Cookies &amp; Local Storage</h2>
+            <p>Our site uses your browser's local storage to remember your shopping cart between visits and to keep you signed in. This data stays on your device and is used only to operate the site — not for third-party advertising or tracking.</p>
+
+            <h2>5. Data Security</h2>
+            <p>We use industry-standard measures to protect your information, including encrypted password storage and secure, PCI-compliant payment processing through Stripe. No method of transmission over the internet is 100% secure, but we work to protect your information to the best of our ability.</p>
+
+            <h2>6. Your Rights</h2>
+            <p>You can access, update, or request deletion of your account information at any time by visiting <a href="account.html">My Account</a> or by contacting us through our <a href="contact.html">Contact page</a>. If you'd like your account and order data removed entirely, let us know and we'll process your request.</p>
+
+            <h2>7. Children's Privacy</h2>
+            <p>LUXORA is not directed at children under 13, and we do not knowingly collect personal information from children under 13.</p>
+
+            <h2>8. Changes to This Policy</h2>
+            <p>We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated "Last updated" date.</p>
+
+            <h2>9. Contact Us</h2>
+            <p>If you have any questions about this Privacy Policy, please reach out through our <a href="contact.html">Contact page</a>.</p>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer bg-dark pt-16">
+    <div class="max-w-boxed mx-auto px-5 footer-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-12">
+        <div class="footer-brand">
+            <a href="index.html" class="logo font-heading text-2xl font-semibold text-white">LUXORA<span class="text-gold">.</span></a>
+            <p class="text-white/50 text-sm mt-4 mb-6 leading-relaxed">Timeless design. Exceptional quality. A modern expression of luxury.</p>
+        </div>
+        <div class="footer-column flex flex-col gap-3">
+            <h3 class="text-white font-heading text-lg mb-2">Shop</h3>
+            <a href="shop.html?sort=newest" class="text-white/50 text-sm hover:text-gold transition">New Arrivals</a>
+            <a href="shop.html?sort=rating" class="text-white/50 text-sm hover:text-gold transition">Best Sellers</a>
+            <a href="shop.html" class="text-white/50 text-sm hover:text-gold transition">Collections</a>
+            <a href="shop.html?badge=sale" class="text-white/50 text-sm hover:text-gold transition">Sale</a>
+        </div>
+        <div class="footer-column flex flex-col gap-3">
+            <h3 class="text-white font-heading text-lg mb-2">Company</h3>
+            <a href="about.html" class="text-white/50 text-sm hover:text-gold transition">About</a>
+            <a href="contact.html" class="text-white/50 text-sm hover:text-gold transition">Contact</a>
+            <a href="privacy-policy.html" class="text-white/50 text-sm hover:text-gold transition">Privacy Policy</a>
+            <a href="terms.html" class="text-white/50 text-sm hover:text-gold transition">Terms</a>
+        </div>
+        <div class="footer-column flex flex-col gap-3">
+            <h3 class="text-white font-heading text-lg mb-2">Support</h3>
+            <a href="shipping.html" class="text-white/50 text-sm hover:text-gold transition">Shipping</a>
+            <a href="returns.html" class="text-white/50 text-sm hover:text-gold transition">Returns</a>
+            <a href="faq.html" class="text-white/50 text-sm hover:text-gold transition">FAQ</a>
+            <a href="contact.html" class="text-white/50 text-sm hover:text-gold transition">Help Center</a>
+        </div>
+    </div>
+    <div class="footer-bottom border-t border-white/10 py-6">
+        <div class="max-w-boxed mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p class="text-white/40 text-xs">© 2026 LUXORA. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="js/api-config.js"></script>
+<script src="js/customer-auth.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>

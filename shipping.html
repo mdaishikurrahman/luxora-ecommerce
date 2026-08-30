@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Shipping | LUXORA</title>
+
+    <meta name="description"
+        content="LUXORA shipping methods, delivery times, and costs.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ink: '#111111',
+                        dark: '#181818',
+                        gold: { DEFAULT: '#c9a227', dark: '#a98518' },
+                        cream: '#f8f7f4',
+                        muted: '#777777',
+                        line: '#e7e4de',
+                        soft: '#f3f2ef',
+                    },
+                    fontFamily: {
+                        heading: ['"Playfair Display"', 'serif'],
+                        body: ['"DM Sans"', 'sans-serif'],
+                    },
+                    maxWidth: { boxed: '1240px' },
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .nav-icon { min-width: 22px; min-height: 22px; display: inline-flex; align-items: center; justify-content: center; }
+            #navbar.active { @apply flex flex-col items-start gap-4 absolute top-full left-0 right-0 bg-white px-5 py-6 border-b border-line shadow-lg z-40; }
+            .policy-content h2 { @apply mt-10 mb-4 text-ink font-heading text-2xl font-semibold first:mt-0; }
+            .policy-content p { @apply mb-4 text-[#555] text-sm leading-[1.9]; }
+            .policy-content ul { @apply mb-4 pl-5 text-[#555] text-sm leading-[1.9] list-disc; }
+            .policy-content li { @apply mb-2; }
+            .policy-content a { @apply text-gold-dark underline; }
+            .policy-table { @apply w-full mb-6 border-collapse; }
+            .policy-table th { @apply text-left text-[10px] font-bold tracking-wide uppercase text-muted pb-3 border-b border-line; }
+            .policy-table td { @apply py-3 text-sm text-[#555] border-b border-line; }
+        }
+    </style>
+</head>
+
+<body class="font-body text-[#333] antialiased">
+
+<!-- ================= HEADER ================= -->
+<header class="header sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-line">
+    <div class="max-w-boxed mx-auto px-5 flex items-center justify-between h-20">
+
+        <a href="index.html" class="logo font-heading text-2xl font-semibold text-ink">
+            LUXORA<span class="text-gold">.</span>
+        </a>
+
+        <nav class="navbar hidden md:flex items-center gap-8 text-sm font-medium tracking-wide" id="navbar">
+            <a href="index.html" class="text-[#333] hover:text-gold transition">Home</a>
+            <a href="shop.html" class="text-[#333] hover:text-gold transition">Shop</a>
+            <a href="about.html" class="text-[#333] hover:text-gold transition">About</a>
+            <a href="faq.html" class="text-[#333] hover:text-gold transition">FAQ</a>
+            <a href="contact.html" class="text-[#333] hover:text-gold transition">Contact</a>
+        </nav>
+
+        <div class="nav-actions flex items-center gap-5">
+            <a href="shop.html" class="nav-icon text-lg hover:text-gold transition" aria-label="Search">
+                <i class="fas fa-search"></i>
+            </a>
+            <a href="cart.html" class="nav-icon text-lg hover:text-gold transition" aria-label="Shopping Bag">
+                <i class="fas fa-shopping-bag"></i>
+            </a>
+            <a href="login.html" class="nav-icon user-icon text-lg hover:text-gold transition" aria-label="Log in">
+                <i class="fa-regular fa-user"></i>
+            </a>
+            <button class="menu-toggle md:hidden w-9 h-9 flex items-center justify-center text-xl" type="button" id="menuToggle" aria-label="Open menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</header>
+
+
+<!-- ================= HERO ================= -->
+<section class="relative overflow-hidden flex items-center min-h-[300px] bg-soft">
+    <div class="max-w-boxed mx-auto px-5 w-full">
+        <div class="flex items-center gap-2.5 mb-6 text-[10px] tracking-[2px] uppercase">
+            <a href="index.html" class="text-muted hover:text-gold-dark transition">Home</a>
+            <span class="text-muted">/</span>
+            <span class="text-ink">Shipping</span>
+        </div>
+        <span class="block mb-3 text-gold-dark text-[10px] font-bold tracking-[4px] uppercase">CUSTOMER CARE</span>
+        <h1 class="text-ink font-heading text-[clamp(38px,5vw,58px)] font-semibold">Shipping Information</h1>
+    </div>
+</section>
+
+
+<!-- ================= CONTENT ================= -->
+<section class="bg-white py-16">
+    <div class="max-w-boxed mx-auto px-5">
+        <div class="max-w-[760px] mx-auto policy-content">
+
+            <p>We want your LUXORA order to reach you as smoothly as possible. Here's everything you need to know about how we ship.</p>
+
+            <h2>Delivery Methods &amp; Times</h2>
+            <table class="policy-table">
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Delivery Time</th>
+                        <th>Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Standard Delivery</td>
+                        <td>5–7 business days</td>
+                        <td>$15</td>
+                    </tr>
+                    <tr>
+                        <td>Express Delivery</td>
+                        <td>2–3 business days</td>
+                        <td>$30</td>
+                    </tr>
+                    <tr>
+                        <td>Free Luxury Delivery</td>
+                        <td>5–7 business days</td>
+                        <td>Free on orders over $150</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>Delivery times are estimates and begin from the day your order ships, not the day it's placed. Orders are typically processed and shipped within 1–2 business days.</p>
+
+            <h2>Order Tracking</h2>
+            <p>Once your order ships, you'll receive a confirmation email with a tracking link. If you have a LUXORA account, you can also check the status of any order any time from <a href="account.html">My Account</a>.</p>
+
+            <h2>International Shipping</h2>
+            <p>We ship to most countries worldwide. International orders may be subject to customs duties, import taxes, or fees charged by your country — these are the responsibility of the customer and are not included in our shipping costs or product prices.</p>
+
+            <h2>Shipping Address</h2>
+            <p>Please double-check your shipping address at checkout — we're unable to redirect a package once it has shipped. If you notice an error immediately after placing your order, contact us right away through our <a href="contact.html">Contact page</a> and we'll do our best to help before it ships.</p>
+
+            <h2>Delayed or Missing Orders</h2>
+            <p>If your order hasn't arrived within the estimated delivery window, please check your tracking link first. If it still hasn't arrived or tracking shows an issue, reach out through our <a href="contact.html">Contact page</a> with your order number and we'll look into it right away.</p>
+
+            <h2>Questions?</h2>
+            <p>See our <a href="faq.html">FAQ page</a> for more common questions, or <a href="contact.html">contact us</a> directly.</p>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer bg-dark pt-16">
+    <div class="max-w-boxed mx-auto px-5 footer-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-12">
+        <div class="footer-brand">
+            <a href="index.html" class="logo font-heading text-2xl font-semibold text-white">LUXORA<span class="text-gold">.</span></a>
+            <p class="text-white/50 text-sm mt-4 mb-6 leading-relaxed">Timeless design. Exceptional quality. A modern expression of luxury.</p>
+        </div>
+        <div class="footer-column flex flex-col gap-3">
+            <h3 class="text-white font-heading text-lg mb-2">Shop</h3>
+            <a href="shop.html?sort=newest" class="text-white/50 text-sm hover:text-gold transition">New Arrivals</a>
+            <a href="shop.html?sort=rating" class="text-white/50 text-sm hover:text-gold transition">Best Sellers</a>
+            <a href="shop.html" class="text-white/50 text-sm hover:text-gold transition">Collections</a>
+            <a href="shop.html?badge=sale" class="text-white/50 text-sm hover:text-gold transition">Sale</a>
+        </div>
+        <div class="footer-column flex flex-col gap-3">
+            <h3 class="text-white font-heading text-lg mb-2">Company</h3>
+            <a href="about.html" class="text-white/50 text-sm hover:text-gold transition">About</a>
+            <a href="contact.html" class="text-white/50 text-sm hover:text-gold transition">Contact</a>
+            <a href="careers.html" class="text-white/50 text-sm hover:text-gold transition">Careers</a>
+            <a href="privacy-policy.html" class="text-white/50 text-sm hover:text-gold transition">Privacy Policy</a>
+            <a href="terms.html" class="text-white/50 text-sm hover:text-gold transition">Terms</a>
+        </div>
+        <div class="footer-column flex flex-col gap-3">
+            <h3 class="text-white font-heading text-lg mb-2">Support</h3>
+            <a href="shipping.html" class="text-white/50 text-sm hover:text-gold transition">Shipping</a>
+            <a href="returns.html" class="text-white/50 text-sm hover:text-gold transition">Returns</a>
+            <a href="faq.html" class="text-white/50 text-sm hover:text-gold transition">FAQ</a>
+            <a href="contact.html" class="text-white/50 text-sm hover:text-gold transition">Help Center</a>
+        </div>
+    </div>
+    <div class="footer-bottom border-t border-white/10 py-6">
+        <div class="max-w-boxed mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p class="text-white/40 text-xs">© 2026 LUXORA. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="js/api-config.js"></script>
+<script src="js/customer-auth.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>

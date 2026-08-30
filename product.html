@@ -66,10 +66,11 @@
             .navbar { @apply hidden md:flex items-center gap-8 text-sm font-medium tracking-wide; }
             .navbar a { @apply relative pb-1 text-[#333] hover:text-gold transition; }
             .navbar a.active { @apply text-ink border-b-2 border-gold; }
+            #navbar.active { @apply flex flex-col items-start gap-4 absolute top-full left-0 right-0 bg-white px-5 py-6 border-b border-line shadow-lg z-40; }
             .nav-actions { @apply flex items-center gap-5; }
-            .nav-icon { @apply relative text-lg hover:text-gold transition; }
+            .nav-icon { @apply relative inline-flex items-center justify-center min-w-[22px] min-h-[22px] text-lg hover:text-gold transition; }
             .count { @apply absolute -top-2 -right-2 bg-gold text-white text-[10px] leading-none rounded-full w-4 h-4 flex items-center justify-center; }
-            .menu-toggle { @apply md:hidden text-xl; }
+            .menu-toggle { @apply md:hidden w-9 h-9 flex items-center justify-center text-xl; }
             .footer { @apply bg-dark pt-16; }
             .footer-grid { @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-12; }
             .footer-brand .logo { @apply text-white; }
@@ -235,19 +236,19 @@
                     Shop
                 </a>
 
-                <a href="shop.html#collections">
+                <a href="shop.html#shopProductGrid">
                     Collections
                 </a>
 
-                <a href="shop.html#new">
+                <a href="shop.html?sort=newest">
                     New Arrivals
                 </a>
 
-                <a href="shop.html#sale">
+                <a href="shop.html?badge=sale">
                     Sale
                 </a>
 
-                <a href="#contact">
+                <a href="contact.html">
                     Contact
                 </a>
 
@@ -265,13 +266,14 @@
                 </button>
 
 
-                <button
-                    class="nav-icon"
-                    aria-label="Account">
+                <a
+                    href="login.html"
+                    class="nav-icon user-icon"
+                    aria-label="Log in">
 
                     <i class="fa-regular fa-user"></i>
 
-                </button>
+                </a>
 
 
                 <a href="cart.html"
@@ -562,7 +564,7 @@
                             Size
                         </strong>
 
-                        <a href="#size-guide">
+                        <a href="contact.html">
                             Size Guide
                         </a>
 
@@ -609,7 +611,7 @@
                     <div class="quantity-control">
 
                         <button
-                            id="decreaseQty"
+                            id="quantityMinus"
                             aria-label="Decrease quantity">
 
                             <i class="fa-solid fa-minus"></i>
@@ -626,7 +628,7 @@
 
 
                         <button
-                            id="increaseQty"
+                            id="quantityPlus"
                             aria-label="Increase quantity">
 
                             <i class="fa-solid fa-plus"></i>
@@ -1197,7 +1199,7 @@
 
                 <div class="social-links">
 
-                    <a href="#">
+                    <a href="https://www.facebook.com/ashikurrahmanmpr" target="_blank" rel="noopener" aria-label="Facebook">
                         <i class="fa-brands fa-facebook-f"></i>
                     </a>
 
@@ -1205,12 +1207,16 @@
                         <i class="fa-brands fa-instagram"></i>
                     </a>
 
-                    <a href="#">
+                    <a href="https://www.pinterest.com/ashikur200195/" target="_blank" rel="noopener" aria-label="Pinterest">
                         <i class="fa-brands fa-pinterest-p"></i>
                     </a>
 
                     <a href="#">
                         <i class="fa-brands fa-x-twitter"></i>
+                    </a>
+
+                    <a href="https://www.linkedin.com/in/ashikur-rahman-admin" target="_blank" rel="noopener" aria-label="LinkedIn">
+                        <i class="fa-brands fa-linkedin-in"></i>
                     </a>
 
                 </div>
@@ -1224,23 +1230,23 @@
                     SHOP
                 </h3>
 
-                <a href="shop.html">
+                <a href="shop.html?sort=newest">
                     New Arrivals
                 </a>
 
-                <a href="shop.html">
+                <a href="shop.html?category=men">
                     Men
                 </a>
 
-                <a href="shop.html">
+                <a href="shop.html?category=women">
                     Women
                 </a>
 
-                <a href="shop.html">
+                <a href="shop.html?category=accessories">
                     Accessories
                 </a>
 
-                <a href="shop.html">
+                <a href="shop.html?badge=sale">
                     Sale
                 </a>
 
@@ -1253,19 +1259,17 @@
                     HELP
                 </h3>
 
-                <a href="#">
+                <a href="contact.html">
                     Contact Us
                 </a>
 
-                <a href="#">
-                    Shipping
+                <a href="shipping.html">Shipping
                 </a>
 
-                <a href="#">
-                    Returns
+                <a href="returns.html">Returns
                 </a>
 
-                <a href="#">
+                <a href="faq.html">
                     FAQ
                 </a>
 
@@ -1282,11 +1286,11 @@
                     COMPANY
                 </h3>
 
-                <a href="#">
+                <a href="about.html">
                     About LUXORA
                 </a>
 
-                <a href="#">
+                <a href="about.html">
                     Our Story
                 </a>
 
@@ -1294,11 +1298,10 @@
                     Journal
                 </a>
 
-                <a href="#">
-                    Careers
+                <a href="careers.html">Careers
                 </a>
 
-                <a href="#">
+                <a href="privacy-policy.html">
                     Privacy Policy
                 </a>
 
@@ -1361,6 +1364,7 @@
     <script src="js/main.js"></script>
 
     <script src="js/api-config.js"></script>
+    <script src="js/customer-auth.js"></script>
     <script src="js/product.js"></script>
 
 

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In | LUXORA</title>
+    <meta name="description" content="Log in to your LUXORA account to track orders and manage your details.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ink: '#111111',
+                        dark: '#181818',
+                        gold: { DEFAULT: '#c9a227', dark: '#a98518' },
+                        cream: '#f8f7f4',
+                        muted: '#777777',
+                        line: '#e7e4de',
+                        soft: '#f3f2ef',
+                    },
+                    fontFamily: {
+                        heading: ['"Playfair Display"', 'serif'],
+                        body: ['"DM Sans"', 'sans-serif'],
+                    },
+                    maxWidth: { boxed: '1240px' },
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .form-message { @apply hidden mt-4 px-4 py-3 border border-transparent text-[11px] leading-relaxed; }
+            .form-message.error { @apply block border-[#e0c5c5] bg-[#fbf1f1] text-[#8a4e4e]; }
+        }
+    </style>
+</head>
+
+<body class="font-body text-[#333] antialiased bg-soft min-h-screen flex flex-col">
+
+<header class="header bg-white border-b border-line">
+    <div class="max-w-boxed mx-auto px-5 flex items-center justify-between h-20">
+        <a href="index.html" class="logo font-heading text-2xl font-semibold text-ink">
+            LUXORA<span class="text-gold">.</span>
+        </a>
+        <a href="shop.html" class="text-xs font-semibold text-muted hover:text-gold-dark transition">
+            Continue Shopping <i class="fa-solid fa-arrow-right ml-1"></i>
+        </a>
+    </div>
+</header>
+
+<main class="flex-1 flex items-center justify-center px-5 py-16">
+    <div class="w-full max-w-[420px]">
+
+        <div class="text-center mb-8">
+            <span class="block mb-3 text-gold-dark text-[10px] font-bold tracking-[3px] uppercase">WELCOME BACK</span>
+            <h1 class="text-ink font-heading text-4xl font-semibold">Log In</h1>
+            <p class="mt-2 text-muted text-sm">New to LUXORA? <a href="register.html" class="text-gold-dark font-semibold hover:underline">Create an account</a></p>
+        </div>
+
+        <form id="loginForm" class="bg-white p-8 border border-line">
+
+            <div class="flex flex-col mb-5">
+                <label for="email" class="mb-2 text-[#555] text-[10px] font-bold tracking-wide uppercase">Email Address</label>
+                <input type="email" id="email" required autocomplete="email"
+                    class="h-12 px-4 border border-line outline-none text-sm focus:border-gold-dark transition" placeholder="you@example.com">
+            </div>
+
+            <div class="flex flex-col mb-6">
+                <label for="password" class="mb-2 text-[#555] text-[10px] font-bold tracking-wide uppercase">Password</label>
+                <input type="password" id="password" required autocomplete="current-password"
+                    class="h-12 px-4 border border-line outline-none text-sm focus:border-gold-dark transition" placeholder="••••••••">
+            </div>
+
+            <p id="loginError" class="form-message error"></p>
+
+            <button type="submit" id="loginBtn" class="w-full h-12 mt-2 bg-ink text-white text-xs font-bold tracking-wide uppercase hover:bg-gold-dark transition">
+                Log In
+            </button>
+
+        </form>
+
+    </div>
+</main>
+
+<script src="js/api-config.js"></script>
+<script src="js/customer-auth.js"></script>
+<script>
+    if (CustomerAuth.isLoggedIn()) {
+        window.location.href = "account.html";
+    }
+
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const btn = document.getElementById("loginBtn");
+        const errorEl = document.getElementById("loginError");
+        errorEl.classList.remove("error");
+        errorEl.classList.add("hidden");
+
+        btn.disabled = true;
+        btn.textContent = "Logging in...";
+
+        try {
+            const data = await luxoraApiFetch("/auth/login", {
+                method: "POST",
+                body: JSON.stringify({
+                    email: document.getElementById("email").value,
+                    password: document.getElementById("password").value,
+                }),
+            });
+
+            CustomerAuth.setSession(data.token, data.user);
+
+            const redirectTo = new URLSearchParams(window.location.search).get("redirect");
+            window.location.href = redirectTo || "account.html";
+
+        } catch (err) {
+            errorEl.textContent = err.message;
+            errorEl.classList.remove("hidden");
+            errorEl.classList.add("error");
+        } finally {
+            btn.disabled = false;
+            btn.textContent = "Log In";
+        }
+    });
+</script>
+
+</body>
+</html>

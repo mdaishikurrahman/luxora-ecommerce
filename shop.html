@@ -37,7 +37,8 @@
 </script>
 <style type="text/tailwindcss">
     @layer utilities {
-        #navbar.active { @apply flex; }
+        .nav-icon { min-width: 22px; min-height: 22px; display: inline-flex; align-items: center; justify-content: center; }
+        #navbar.active { @apply flex flex-col items-start gap-4 absolute top-full left-0 right-0 bg-white px-5 py-6 border-b border-line shadow-lg z-40; }
         #searchOverlay { @apply fixed inset-0 z-[100] bg-black/95 flex items-center justify-center opacity-0 invisible transition-all duration-300; }
         #searchOverlay.active { @apply opacity-100 visible; }
         .wishlist-btn.active { @apply bg-ink text-white scale-105; }
@@ -48,8 +49,7 @@
         body.no-scroll { @apply overflow-hidden; }
         #toast { @apply fixed bottom-6 right-6 z-[200] bg-ink text-white px-5 py-4 rounded flex items-center gap-3 opacity-0 translate-y-4 pointer-events-none transition-all duration-300 min-w-[250px]; }
         #toast.show { @apply opacity-100 translate-y-0; }
-        .shop-product-card.hidden { display: none; }
-        .filter-overlay { display: none; @apply fixed inset-0 z-[3999] bg-black/50; }
+        .filter-overlay { @apply hidden fixed inset-0 z-[3999] bg-black/50; }
         .filter-overlay.active { @apply block; }
     }
 </style>
@@ -63,19 +63,19 @@
         <nav class="navbar hidden md:flex items-center gap-8 text-sm font-medium tracking-wide" id="navbar">
             <a href="index.html" class="text-[#333] hover:text-gold transition">Home</a>
             <a class="active text-ink border-b-2 border-gold pb-1" href="shop.html">Shop</a>
-            <a href="#collections" class="text-[#333] hover:text-gold transition">Collections</a>
-            <a href="#new" class="text-[#333] hover:text-gold transition">New Arrivals</a>
-            <a href="#sale" class="text-[#333] hover:text-gold transition">Sale</a>
+            <a href="#shopProductGrid" class="text-[#333] hover:text-gold transition">Collections</a>
+            <a href="shop.html?sort=newest" class="text-[#333] hover:text-gold transition">New Arrivals</a>
+            <a href="shop.html?badge=sale" class="text-[#333] hover:text-gold transition">Sale</a>
             <a href="contact.html" class="text-[#333] hover:text-gold transition">Contact</a>
         </nav>
         <div class="nav-actions flex items-center gap-5">
             <button aria-label="Search" class="nav-icon search-btn text-lg hover:text-gold transition"><i class="fa-solid fa-magnifying-glass"></i></button>
-            <button aria-label="Account" class="nav-icon user-icon text-lg hover:text-gold transition"><i class="fa-regular fa-user"></i></button>
+            <a href="login.html" aria-label="Log in" class="nav-icon user-icon text-lg hover:text-gold transition"><i class="fa-regular fa-user"></i></a>
             <a aria-label="Shopping cart" class="nav-icon cart-icon relative text-lg hover:text-gold transition" href="cart.html">
                 <i class="fa-solid fa-bag-shopping"></i>
                 <span class="count cart-count absolute -top-2 -right-2 bg-gold text-white text-[10px] leading-none rounded-full w-4 h-4 flex items-center justify-center">0</span>
             </a>
-            <button aria-label="Menu" class="menu-toggle md:hidden text-xl" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
+            <button aria-label="Menu" class="menu-toggle md:hidden w-9 h-9 flex items-center justify-center text-xl" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
         </div>
     </div>
 </header>
@@ -119,7 +119,7 @@
 
         <!-- SHOP TOP -->
         <div class="shop-top flex items-center justify-between mb-9 pb-6 border-b border-[#e5e2da]">
-            <p class="result-count text-muted text-xs">Showing <strong class="text-ink font-bold">12</strong> products</p>
+            <p class="result-count text-muted text-xs">Showing <strong class="text-ink font-bold">24</strong> products</p>
             <div class="shop-tools flex items-center gap-5">
                 <button class="filter-toggle hidden items-center gap-2 h-[42px] px-5 border border-line bg-white text-ink text-[11px] font-bold" id="filterToggle">
                     <i class="fa-solid fa-sliders"></i> Filters
@@ -151,23 +151,23 @@
                     <h3 class="mb-5 text-ink text-xs font-bold tracking-[1px] uppercase">Category</h3>
                     <label class="check-item flex items-center gap-2.5 mb-3.5 text-[#666] text-xs cursor-pointer">
                         <input checked class="category-filter w-[15px] h-[15px] accent-gold-dark cursor-pointer" type="checkbox" value="all">
-                        <span class="flex-1">All Products</span><small class="text-[#aaa] text-[10px]">12</small>
+                        <span class="flex-1">All Products</span><small class="text-[#aaa] text-[10px]">24</small>
                     </label>
                     <label class="check-item flex items-center gap-2.5 mb-3.5 text-[#666] text-xs cursor-pointer">
                         <input class="category-filter w-[15px] h-[15px] accent-gold-dark cursor-pointer" type="checkbox" value="men">
-                        <span class="flex-1">Men</span><small class="text-[#aaa] text-[10px]">3</small>
+                        <span class="flex-1">Men</span><small class="text-[#aaa] text-[10px]">7</small>
                     </label>
                     <label class="check-item flex items-center gap-2.5 mb-3.5 text-[#666] text-xs cursor-pointer">
                         <input class="category-filter w-[15px] h-[15px] accent-gold-dark cursor-pointer" type="checkbox" value="women">
-                        <span class="flex-1">Women</span><small class="text-[#aaa] text-[10px]">3</small>
+                        <span class="flex-1">Women</span><small class="text-[#aaa] text-[10px]">8</small>
                     </label>
                     <label class="check-item flex items-center gap-2.5 mb-3.5 text-[#666] text-xs cursor-pointer">
                         <input class="category-filter w-[15px] h-[15px] accent-gold-dark cursor-pointer" type="checkbox" value="accessories">
-                        <span class="flex-1">Accessories</span><small class="text-[#aaa] text-[10px]">3</small>
+                        <span class="flex-1">Accessories</span><small class="text-[#aaa] text-[10px]">5</small>
                     </label>
                     <label class="check-item flex items-center gap-2.5 text-[#666] text-xs cursor-pointer">
                         <input class="category-filter w-[15px] h-[15px] accent-gold-dark cursor-pointer" type="checkbox" value="lifestyle">
-                        <span class="flex-1">Lifestyle</span><small class="text-[#aaa] text-[10px]">3</small>
+                        <span class="flex-1">Lifestyle</span><small class="text-[#aaa] text-[10px]">4</small>
                     </label>
                 </div>
 
@@ -461,18 +461,253 @@
                             </div>
                         </div>
                     </article>
+
+                    <!-- Classic Linen Shirt -->
+                    <article class="shop-product-card group relative" data-category="men" data-date="24" data-price="109" data-rating="5">
+                        <div class="shop-product-image relative h-[390px] flex items-center justify-center overflow-hidden bg-[linear-gradient(145deg,#f3f0e9,#ddd8cd)]">
+                            <img alt="Classic Linen Shirt" class="product-photo w-full h-full object-cover" loading="lazy" src="images/featured/Classic Linen Shirt.jpg"/>
+                            <button class="wishlist-btn absolute top-3 right-3 z-[4] w-9 h-9 grid place-items-center rounded-full bg-white/90 text-[#222] transition-all duration-300 hover:bg-ink hover:text-white hover:scale-105" aria-label="Add to wishlist">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <button class="quick-view absolute left-3 right-3 bottom-3 z-[3] h-[42px] bg-ink/90 text-white text-[10px] font-bold tracking-[1px] uppercase opacity-0 translate-y-2.5 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-gold-dark">Quick View</button>
+                        </div>
+                        <div class="product-info pt-4">
+                            <span class="product-category block mb-2 text-[#aaa] text-[8px] font-bold tracking-[1.3px]">MEN / CLOTHING</span>
+                            <h3 class="mb-2 text-ink font-heading text-[19px] font-semibold leading-[1.3]">Classic Linen Shirt</h3>
+                            <div class="rating mb-3 text-gold-dark text-[10px] tracking-[1px]">★★★★★<span class="ml-1 text-[#999] text-[9px] tracking-normal">(27)</span></div>
+                            <div class="product-bottom flex items-center justify-between gap-2.5">
+                                <strong class="text-ink text-[15px] font-bold">$109</strong>
+                                <button class="add-cart relative text-ink text-[9px] font-bold tracking-[0.8px] uppercase hover:text-gold-dark transition after:content-[''] after:block after:w-0 after:h-px after:mt-1 after:bg-gold-dark after:transition-all hover:after:w-full" data-image="images/featured/Classic Linen Shirt.jpg" data-price="109" data-product="Classic Linen Shirt">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Minimalist Watch -->
+                    <article class="shop-product-card group relative" data-category="women" data-date="23" data-price="175" data-rating="5">
+                        <div class="shop-product-image relative h-[390px] flex items-center justify-center overflow-hidden bg-[linear-gradient(145deg,#f3f0e9,#ddd8cd)]">
+                            <img alt="Minimalist Watch" class="product-photo w-full h-full object-cover" loading="lazy" src="images/featured/Minimalist Watch.jpg"/>
+                            <button class="wishlist-btn absolute top-3 right-3 z-[4] w-9 h-9 grid place-items-center rounded-full bg-white/90 text-[#222] transition-all duration-300 hover:bg-ink hover:text-white hover:scale-105" aria-label="Add to wishlist">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <button class="quick-view absolute left-3 right-3 bottom-3 z-[3] h-[42px] bg-ink/90 text-white text-[10px] font-bold tracking-[1px] uppercase opacity-0 translate-y-2.5 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-gold-dark">Quick View</button>
+                        </div>
+                        <div class="product-info pt-4">
+                            <span class="product-category block mb-2 text-[#aaa] text-[8px] font-bold tracking-[1.3px]">ACCESSORIES / WATCHES</span>
+                            <h3 class="mb-2 text-ink font-heading text-[19px] font-semibold leading-[1.3]">Minimalist Watch</h3>
+                            <div class="rating mb-3 text-gold-dark text-[10px] tracking-[1px]">★★★★★<span class="ml-1 text-[#999] text-[9px] tracking-normal">(22)</span></div>
+                            <div class="product-bottom flex items-center justify-between gap-2.5">
+                                <strong class="text-ink text-[15px] font-bold">$175</strong>
+                                <button class="add-cart relative text-ink text-[9px] font-bold tracking-[0.8px] uppercase hover:text-gold-dark transition after:content-[''] after:block after:w-0 after:h-px after:mt-1 after:bg-gold-dark after:transition-all hover:after:w-full" data-image="images/featured/Minimalist Watch.jpg" data-price="175" data-product="Minimalist Watch">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Premium Leather Bag -->
+                    <article class="shop-product-card group relative" data-category="women" data-date="22" data-price="215" data-rating="5">
+                        <div class="shop-product-image relative h-[390px] flex items-center justify-center overflow-hidden bg-[linear-gradient(145deg,#f3f0e9,#ddd8cd)]">
+                            <img alt="Premium Leather Bag" class="product-photo w-full h-full object-cover" loading="lazy" src="images/featured/Premium Leather Bag.jpg"/>
+                            <button class="wishlist-btn absolute top-3 right-3 z-[4] w-9 h-9 grid place-items-center rounded-full bg-white/90 text-[#222] transition-all duration-300 hover:bg-ink hover:text-white hover:scale-105" aria-label="Add to wishlist">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <button class="quick-view absolute left-3 right-3 bottom-3 z-[3] h-[42px] bg-ink/90 text-white text-[10px] font-bold tracking-[1px] uppercase opacity-0 translate-y-2.5 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-gold-dark">Quick View</button>
+                        </div>
+                        <div class="product-info pt-4">
+                            <span class="product-category block mb-2 text-[#aaa] text-[8px] font-bold tracking-[1.3px]">WOMEN / BAGS</span>
+                            <h3 class="mb-2 text-ink font-heading text-[19px] font-semibold leading-[1.3]">Premium Leather Bag</h3>
+                            <div class="rating mb-3 text-gold-dark text-[10px] tracking-[1px]">★★★★★<span class="ml-1 text-[#999] text-[9px] tracking-normal">(34)</span></div>
+                            <div class="product-bottom flex items-center justify-between gap-2.5">
+                                <strong class="text-ink text-[15px] font-bold">$215</strong>
+                                <button class="add-cart relative text-ink text-[9px] font-bold tracking-[0.8px] uppercase hover:text-gold-dark transition after:content-[''] after:block after:w-0 after:h-px after:mt-1 after:bg-gold-dark after:transition-all hover:after:w-full" data-image="images/featured/Premium Leather Bag.jpg" data-price="215" data-product="Premium Leather Bag">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Signature Sneakers -->
+                    <article class="shop-product-card group relative" data-category="lifestyle" data-date="21" data-price="139" data-rating="4">
+                        <div class="shop-product-image relative h-[390px] flex items-center justify-center overflow-hidden bg-[linear-gradient(145deg,#f3f0e9,#ddd8cd)]">
+                            <img alt="Signature Sneakers" class="product-photo w-full h-full object-cover" loading="lazy" src="images/featured/Signature Sneakers.jpg"/>
+                            <button class="wishlist-btn absolute top-3 right-3 z-[4] w-9 h-9 grid place-items-center rounded-full bg-white/90 text-[#222] transition-all duration-300 hover:bg-ink hover:text-white hover:scale-105" aria-label="Add to wishlist">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <button class="quick-view absolute left-3 right-3 bottom-3 z-[3] h-[42px] bg-ink/90 text-white text-[10px] font-bold tracking-[1px] uppercase opacity-0 translate-y-2.5 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-gold-dark">Quick View</button>
+                        </div>
+                        <div class="product-info pt-4">
+                            <span class="product-category block mb-2 text-[#aaa] text-[8px] font-bold tracking-[1.3px]">MEN / FOOTWEAR</span>
+                            <h3 class="mb-2 text-ink font-heading text-[19px] font-semibold leading-[1.3]">Signature Sneakers</h3>
+                            <div class="rating mb-3 text-gold-dark text-[10px] tracking-[1px]">★★★★☆<span class="ml-1 text-[#999] text-[9px] tracking-normal">(41)</span></div>
+                            <div class="product-bottom flex items-center justify-between gap-2.5">
+                                <strong class="text-ink text-[15px] font-bold">$139</strong>
+                                <button class="add-cart relative text-ink text-[9px] font-bold tracking-[0.8px] uppercase hover:text-gold-dark transition after:content-[''] after:block after:w-0 after:h-px after:mt-1 after:bg-gold-dark after:transition-all hover:after:w-full" data-image="images/featured/Signature Sneakers.jpg" data-price="139" data-product="Signature Sneakers">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Classic Aviator Sunglasses -->
+                    <article class="shop-product-card group relative" data-category="accessories" data-date="20" data-price="95" data-rating="4">
+                        <div class="shop-product-image relative h-[390px] flex items-center justify-center overflow-hidden bg-[linear-gradient(145deg,#f3f0e9,#ddd8cd)]">
+                            <img alt="Classic Aviator Sunglasses" class="product-photo w-full h-full object-cover" loading="lazy" src="images/new-arrivals/Classic Sunglasses.png"/>
+                            <button class="wishlist-btn absolute top-3 right-3 z-[4] w-9 h-9 grid place-items-center rounded-full bg-white/90 text-[#222] transition-all duration-300 hover:bg-ink hover:text-white hover:scale-105" aria-label="Add to wishlist">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <button class="quick-view absolute left-3 right-3 bottom-3 z-[3] h-[42px] bg-ink/90 text-white text-[10px] font-bold tracking-[1px] uppercase opacity-0 translate-y-2.5 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-gold-dark">Quick View</button>
+                        </div>
+                        <div class="product-info pt-4">
+                            <span class="product-category block mb-2 text-[#aaa] text-[8px] font-bold tracking-[1.3px]">ACCESSORIES / EYEWEAR</span>
+                            <h3 class="mb-2 text-ink font-heading text-[19px] font-semibold leading-[1.3]">Classic Aviator Sunglasses</h3>
+                            <div class="rating mb-3 text-gold-dark text-[10px] tracking-[1px]">★★★★☆<span class="ml-1 text-[#999] text-[9px] tracking-normal">(16)</span></div>
+                            <div class="product-bottom flex items-center justify-between gap-2.5">
+                                <strong class="text-ink text-[15px] font-bold">$95</strong>
+                                <button class="add-cart relative text-ink text-[9px] font-bold tracking-[0.8px] uppercase hover:text-gold-dark transition after:content-[''] after:block after:w-0 after:h-px after:mt-1 after:bg-gold-dark after:transition-all hover:after:w-full" data-image="images/new-arrivals/Classic Sunglasses.png" data-price="95" data-product="Classic Aviator Sunglasses">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Luxury Leather Loafers -->
+                    <article class="shop-product-card group relative" data-category="men" data-date="19" data-price="189" data-rating="5">
+                        <div class="shop-product-image relative h-[390px] flex items-center justify-center overflow-hidden bg-[linear-gradient(145deg,#f3f0e9,#ddd8cd)]">
+                            <img alt="Luxury Leather Loafers" class="product-photo w-full h-full object-cover" loading="lazy" src="images/new-arrivals/Luxury Leather Loafers.png"/>
+                            <button class="wishlist-btn absolute top-3 right-3 z-[4] w-9 h-9 grid place-items-center rounded-full bg-white/90 text-[#222] transition-all duration-300 hover:bg-ink hover:text-white hover:scale-105" aria-label="Add to wishlist">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <button class="quick-view absolute left-3 right-3 bottom-3 z-[3] h-[42px] bg-ink/90 text-white text-[10px] font-bold tracking-[1px] uppercase opacity-0 translate-y-2.5 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-gold-dark">Quick View</button>
+                        </div>
+                        <div class="product-info pt-4">
+                            <span class="product-category block mb-2 text-[#aaa] text-[8px] font-bold tracking-[1.3px]">MEN / FOOTWEAR</span>
+                            <h3 class="mb-2 text-ink font-heading text-[19px] font-semibold leading-[1.3]">Luxury Leather Loafers</h3>
+                            <div class="rating mb-3 text-gold-dark text-[10px] tracking-[1px]">★★★★★<span class="ml-1 text-[#999] text-[9px] tracking-normal">(25)</span></div>
+                            <div class="product-bottom flex items-center justify-between gap-2.5">
+                                <strong class="text-ink text-[15px] font-bold">$189</strong>
+                                <button class="add-cart relative text-ink text-[9px] font-bold tracking-[0.8px] uppercase hover:text-gold-dark transition after:content-[''] after:block after:w-0 after:h-px after:mt-1 after:bg-gold-dark after:transition-all hover:after:w-full" data-image="images/new-arrivals/Luxury Leather Loafers.png" data-price="189" data-product="Luxury Leather Loafers">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Premium Overshirt -->
+                    <article class="shop-product-card group relative" data-category="men" data-date="18" data-price="149" data-rating="4">
+                        <div class="shop-product-image relative h-[390px] flex items-center justify-center overflow-hidden bg-[linear-gradient(145deg,#f3f0e9,#ddd8cd)]">
+                            <img alt="Premium Overshirt" class="product-photo w-full h-full object-cover" loading="lazy" src="images/new-arrivals/Premium Overshirt.png"/>
+                            <button class="wishlist-btn absolute top-3 right-3 z-[4] w-9 h-9 grid place-items-center rounded-full bg-white/90 text-[#222] transition-all duration-300 hover:bg-ink hover:text-white hover:scale-105" aria-label="Add to wishlist">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <button class="quick-view absolute left-3 right-3 bottom-3 z-[3] h-[42px] bg-ink/90 text-white text-[10px] font-bold tracking-[1px] uppercase opacity-0 translate-y-2.5 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-gold-dark">Quick View</button>
+                        </div>
+                        <div class="product-info pt-4">
+                            <span class="product-category block mb-2 text-[#aaa] text-[8px] font-bold tracking-[1.3px]">MEN / CLOTHING</span>
+                            <h3 class="mb-2 text-ink font-heading text-[19px] font-semibold leading-[1.3]">Premium Overshirt</h3>
+                            <div class="rating mb-3 text-gold-dark text-[10px] tracking-[1px]">★★★★☆<span class="ml-1 text-[#999] text-[9px] tracking-normal">(12)</span></div>
+                            <div class="product-bottom flex items-center justify-between gap-2.5">
+                                <strong class="text-ink text-[15px] font-bold">$149</strong>
+                                <button class="add-cart relative text-ink text-[9px] font-bold tracking-[0.8px] uppercase hover:text-gold-dark transition after:content-[''] after:block after:w-0 after:h-px after:mt-1 after:bg-gold-dark after:transition-all hover:after:w-full" data-image="images/new-arrivals/Premium Overshirt.png" data-price="149" data-product="Premium Overshirt">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Silk Evening Dress -->
+                    <article class="shop-product-card group relative" data-category="women" data-date="17" data-price="259" data-rating="5">
+                        <div class="shop-product-image relative h-[390px] flex items-center justify-center overflow-hidden bg-[linear-gradient(145deg,#f3f0e9,#ddd8cd)]">
+                            <img alt="Silk Evening Dress" class="product-photo w-full h-full object-cover" loading="lazy" src="images/new-arrivals/Silk Evening Dress.png"/>
+                    <span class="product-badge sale absolute top-3.5 left-3.5 z-[3] px-2.5 py-1.5 bg-gold-dark text-white text-[8px] font-bold tracking-[1px]">-13%</span>
+                            <button class="wishlist-btn absolute top-3 right-3 z-[4] w-9 h-9 grid place-items-center rounded-full bg-white/90 text-[#222] transition-all duration-300 hover:bg-ink hover:text-white hover:scale-105" aria-label="Add to wishlist">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <button class="quick-view absolute left-3 right-3 bottom-3 z-[3] h-[42px] bg-ink/90 text-white text-[10px] font-bold tracking-[1px] uppercase opacity-0 translate-y-2.5 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-gold-dark">Quick View</button>
+                        </div>
+                        <div class="product-info pt-4">
+                            <span class="product-category block mb-2 text-[#aaa] text-[8px] font-bold tracking-[1.3px]">WOMEN / CLOTHING</span>
+                            <h3 class="mb-2 text-ink font-heading text-[19px] font-semibold leading-[1.3]">Silk Evening Dress</h3>
+                            <div class="rating mb-3 text-gold-dark text-[10px] tracking-[1px]">★★★★★<span class="ml-1 text-[#999] text-[9px] tracking-normal">(30)</span></div>
+                            <div class="product-bottom flex items-center justify-between gap-2.5">
+                                <strong class="text-ink text-[15px] font-bold">$259</strong>
+                                <button class="add-cart relative text-ink text-[9px] font-bold tracking-[0.8px] uppercase hover:text-gold-dark transition after:content-[''] after:block after:w-0 after:h-px after:mt-1 after:bg-gold-dark after:transition-all hover:after:w-full" data-image="images/new-arrivals/Silk Evening Dress.png" data-price="259" data-product="Silk Evening Dress">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Rose Gold Wristwatch -->
+                    <article class="shop-product-card group relative" data-category="women" data-date="16" data-price="229" data-rating="5">
+                        <div class="shop-product-image relative h-[390px] flex items-center justify-center overflow-hidden bg-[linear-gradient(145deg,#f3f0e9,#ddd8cd)]">
+                            <img alt="Rose Gold Wristwatch" class="product-photo w-full h-full object-cover" loading="lazy" src="images/products/11-rose-gold-wristwatch.png"/>
+                            <button class="wishlist-btn absolute top-3 right-3 z-[4] w-9 h-9 grid place-items-center rounded-full bg-white/90 text-[#222] transition-all duration-300 hover:bg-ink hover:text-white hover:scale-105" aria-label="Add to wishlist">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <button class="quick-view absolute left-3 right-3 bottom-3 z-[3] h-[42px] bg-ink/90 text-white text-[10px] font-bold tracking-[1px] uppercase opacity-0 translate-y-2.5 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-gold-dark">Quick View</button>
+                        </div>
+                        <div class="product-info pt-4">
+                            <span class="product-category block mb-2 text-[#aaa] text-[8px] font-bold tracking-[1.3px]">ACCESSORIES / WATCHES</span>
+                            <h3 class="mb-2 text-ink font-heading text-[19px] font-semibold leading-[1.3]">Rose Gold Wristwatch</h3>
+                            <div class="rating mb-3 text-gold-dark text-[10px] tracking-[1px]">★★★★★<span class="ml-1 text-[#999] text-[9px] tracking-normal">(19)</span></div>
+                            <div class="product-bottom flex items-center justify-between gap-2.5">
+                                <strong class="text-ink text-[15px] font-bold">$229</strong>
+                                <button class="add-cart relative text-ink text-[9px] font-bold tracking-[0.8px] uppercase hover:text-gold-dark transition after:content-[''] after:block after:w-0 after:h-px after:mt-1 after:bg-gold-dark after:transition-all hover:after:w-full" data-image="images/products/11-rose-gold-wristwatch.png" data-price="229" data-product="Rose Gold Wristwatch">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Structured Tote Bag -->
+                    <article class="shop-product-card group relative" data-category="women" data-date="15" data-price="165" data-rating="4">
+                        <div class="shop-product-image relative h-[390px] flex items-center justify-center overflow-hidden bg-[linear-gradient(145deg,#f3f0e9,#ddd8cd)]">
+                            <img alt="Structured Tote Bag" class="product-photo w-full h-full object-cover" loading="lazy" src="images/products/13-structured-tote-bag.png"/>
+                            <button class="wishlist-btn absolute top-3 right-3 z-[4] w-9 h-9 grid place-items-center rounded-full bg-white/90 text-[#222] transition-all duration-300 hover:bg-ink hover:text-white hover:scale-105" aria-label="Add to wishlist">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <button class="quick-view absolute left-3 right-3 bottom-3 z-[3] h-[42px] bg-ink/90 text-white text-[10px] font-bold tracking-[1px] uppercase opacity-0 translate-y-2.5 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-gold-dark">Quick View</button>
+                        </div>
+                        <div class="product-info pt-4">
+                            <span class="product-category block mb-2 text-[#aaa] text-[8px] font-bold tracking-[1.3px]">WOMEN / BAGS</span>
+                            <h3 class="mb-2 text-ink font-heading text-[19px] font-semibold leading-[1.3]">Structured Tote Bag</h3>
+                            <div class="rating mb-3 text-gold-dark text-[10px] tracking-[1px]">★★★★☆<span class="ml-1 text-[#999] text-[9px] tracking-normal">(23)</span></div>
+                            <div class="product-bottom flex items-center justify-between gap-2.5">
+                                <strong class="text-ink text-[15px] font-bold">$165</strong>
+                                <button class="add-cart relative text-ink text-[9px] font-bold tracking-[0.8px] uppercase hover:text-gold-dark transition after:content-[''] after:block after:w-0 after:h-px after:mt-1 after:bg-gold-dark after:transition-all hover:after:w-full" data-image="images/products/13-structured-tote-bag.png" data-price="165" data-product="Structured Tote Bag">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Aviator Sunglasses -->
+                    <article class="shop-product-card group relative" data-category="accessories" data-date="14" data-price="69" data-rating="4">
+                        <div class="shop-product-image relative h-[390px] flex items-center justify-center overflow-hidden bg-[linear-gradient(145deg,#f3f0e9,#ddd8cd)]">
+                            <img alt="Aviator Sunglasses" class="product-photo w-full h-full object-cover" loading="lazy" src="images/products/12-aviator-sunglasses.png"/>
+                            <button class="wishlist-btn absolute top-3 right-3 z-[4] w-9 h-9 grid place-items-center rounded-full bg-white/90 text-[#222] transition-all duration-300 hover:bg-ink hover:text-white hover:scale-105" aria-label="Add to wishlist">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <button class="quick-view absolute left-3 right-3 bottom-3 z-[3] h-[42px] bg-ink/90 text-white text-[10px] font-bold tracking-[1px] uppercase opacity-0 translate-y-2.5 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-gold-dark">Quick View</button>
+                        </div>
+                        <div class="product-info pt-4">
+                            <span class="product-category block mb-2 text-[#aaa] text-[8px] font-bold tracking-[1.3px]">ACCESSORIES / EYEWEAR</span>
+                            <h3 class="mb-2 text-ink font-heading text-[19px] font-semibold leading-[1.3]">Aviator Sunglasses</h3>
+                            <div class="rating mb-3 text-gold-dark text-[10px] tracking-[1px]">★★★★☆<span class="ml-1 text-[#999] text-[9px] tracking-normal">(20)</span></div>
+                            <div class="product-bottom flex items-center justify-between gap-2.5">
+                                <strong class="text-ink text-[15px] font-bold">$69</strong>
+                                <button class="add-cart relative text-ink text-[9px] font-bold tracking-[0.8px] uppercase hover:text-gold-dark transition after:content-[''] after:block after:w-0 after:h-px after:mt-1 after:bg-gold-dark after:transition-all hover:after:w-full" data-image="images/products/12-aviator-sunglasses.png" data-price="69" data-product="Aviator Sunglasses">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Leather Card Holder -->
+                    <article class="shop-product-card group relative" data-category="men" data-date="13" data-price="79" data-rating="5">
+                        <div class="shop-product-image relative h-[390px] flex items-center justify-center overflow-hidden bg-[linear-gradient(145deg,#f3f0e9,#ddd8cd)]">
+                            <img alt="Leather Card Holder" class="product-photo w-full h-full object-cover" loading="lazy" src="images/categories/accessories.jpg"/>
+                            <button class="wishlist-btn absolute top-3 right-3 z-[4] w-9 h-9 grid place-items-center rounded-full bg-white/90 text-[#222] transition-all duration-300 hover:bg-ink hover:text-white hover:scale-105" aria-label="Add to wishlist">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <button class="quick-view absolute left-3 right-3 bottom-3 z-[3] h-[42px] bg-ink/90 text-white text-[10px] font-bold tracking-[1px] uppercase opacity-0 translate-y-2.5 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-gold-dark">Quick View</button>
+                        </div>
+                        <div class="product-info pt-4">
+                            <span class="product-category block mb-2 text-[#aaa] text-[8px] font-bold tracking-[1.3px]">ACCESSORIES / LEATHER</span>
+                            <h3 class="mb-2 text-ink font-heading text-[19px] font-semibold leading-[1.3]">Leather Card Holder</h3>
+                            <div class="rating mb-3 text-gold-dark text-[10px] tracking-[1px]">★★★★★<span class="ml-1 text-[#999] text-[9px] tracking-normal">(17)</span></div>
+                            <div class="product-bottom flex items-center justify-between gap-2.5">
+                                <strong class="text-ink text-[15px] font-bold">$79</strong>
+                                <button class="add-cart relative text-ink text-[9px] font-bold tracking-[0.8px] uppercase hover:text-gold-dark transition after:content-[''] after:block after:w-0 after:h-px after:mt-1 after:bg-gold-dark after:transition-all hover:after:w-full" data-image="images/categories/accessories.jpg" data-price="79" data-product="Leather Card Holder">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
                 </div>
 
                 <!-- PAGINATION -->
-                <div class="pagination flex items-center justify-center gap-1.5 mt-16">
+                <div class="pagination flex items-center justify-center gap-1.5 mt-16" id="paginationContainer">
                     <button class="page active w-[42px] h-[42px] border border-line bg-white text-[#555] text-[10px] font-bold transition-colors">01</button>
                     <button class="page w-[42px] h-[42px] border border-line bg-white text-[#555] text-[10px] font-bold transition-colors">02</button>
-                    <button class="page w-[42px] h-[42px] border border-line bg-white text-[#555] text-[10px] font-bold transition-colors">03</button>
-                    <span class="px-1 text-[#aaa] text-xs">...</span>
-                    <button class="page w-[42px] h-[42px] border border-line bg-white text-[#555] text-[10px] font-bold transition-colors">06</button>
-                    <button class="next-page flex items-center gap-2.5 h-[42px] px-4 border border-line bg-white text-[#555] text-[10px] font-bold hover:bg-gold-dark hover:border-gold-dark hover:text-white transition-colors">
-                        Next <i class="fa-solid fa-arrow-right"></i>
-                    </button>
                 </div>
 
             </div>
@@ -490,7 +725,7 @@
                 Get early access to new collections, private offers and inspiration delivered to your inbox.
             </p>
         </div>
-        <form class="newsletter-form flex items-stretch gap-2.5">
+        <form class="newsletter-form flex items-stretch gap-2.5" novalidate>
             <div class="email-input relative flex-1">
                 <i class="fa-regular fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-[#999] text-[13px]"></i>
                 <input placeholder="Your email address" required type="email" class="w-full h-[52px] pl-[45px] pr-4 border border-white/15 outline-none bg-white/[0.08] text-white text-xs placeholder-white/45 focus:border-gold-dark transition">
@@ -510,35 +745,36 @@
                 Modern luxury, thoughtfully curated for those who appreciate quality, design and timeless style.
             </p>
             <div class="social-links flex gap-3">
-                <a href="#" class="w-9 h-9 rounded-full border border-white/20 text-white flex items-center justify-center hover:bg-gold hover:border-gold transition"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://www.facebook.com/ashikurrahmanmpr" target="_blank" rel="noopener" aria-label="Facebook" class="w-9 h-9 rounded-full border border-white/20 text-white flex items-center justify-center hover:bg-gold hover:border-gold transition"><i class="fa-brands fa-facebook-f"></i></a>
                 <a href="#" class="w-9 h-9 rounded-full border border-white/20 text-white flex items-center justify-center hover:bg-gold hover:border-gold transition"><i class="fa-brands fa-instagram"></i></a>
-                <a href="#" class="w-9 h-9 rounded-full border border-white/20 text-white flex items-center justify-center hover:bg-gold hover:border-gold transition"><i class="fa-brands fa-pinterest-p"></i></a>
+                <a href="https://www.pinterest.com/ashikur200195/" target="_blank" rel="noopener" aria-label="Pinterest" class="w-9 h-9 rounded-full border border-white/20 text-white flex items-center justify-center hover:bg-gold hover:border-gold transition"><i class="fa-brands fa-pinterest-p"></i></a>
                 <a href="#" class="w-9 h-9 rounded-full border border-white/20 text-white flex items-center justify-center hover:bg-gold hover:border-gold transition"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="https://www.linkedin.com/in/ashikur-rahman-admin" target="_blank" rel="noopener" aria-label="LinkedIn" class="w-9 h-9 rounded-full border border-white/20 text-white flex items-center justify-center hover:bg-gold hover:border-gold transition"><i class="fa-brands fa-linkedin-in"></i></a>
             </div>
         </div>
         <div class="footer-column flex flex-col gap-3">
             <h3 class="text-white font-heading text-lg mb-2">Shop</h3>
-            <a href="#" class="text-white/50 text-sm hover:text-gold transition">New Arrivals</a>
-            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Men</a>
-            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Women</a>
-            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Accessories</a>
-            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Sale</a>
+            <a href="shop.html?sort=newest" class="text-white/50 text-sm hover:text-gold transition">New Arrivals</a>
+            <a href="shop.html?category=men" class="text-white/50 text-sm hover:text-gold transition">Men</a>
+            <a href="shop.html?category=women" class="text-white/50 text-sm hover:text-gold transition">Women</a>
+            <a href="shop.html?category=accessories" class="text-white/50 text-sm hover:text-gold transition">Accessories</a>
+            <a href="shop.html?badge=sale" class="text-white/50 text-sm hover:text-gold transition">Sale</a>
         </div>
         <div class="footer-column flex flex-col gap-3">
             <h3 class="text-white font-heading text-lg mb-2">Help</h3>
-            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Contact Us</a>
-            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Shipping</a>
-            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Returns</a>
-            <a href="#" class="text-white/50 text-sm hover:text-gold transition">FAQ</a>
+            <a href="contact.html" class="text-white/50 text-sm hover:text-gold transition">Contact Us</a>
+            <a href="shipping.html" class="text-white/50 text-sm hover:text-gold transition">Shipping</a>
+            <a href="returns.html" class="text-white/50 text-sm hover:text-gold transition">Returns</a>
+            <a href="faq.html" class="text-white/50 text-sm hover:text-gold transition">FAQ</a>
             <a href="#" class="text-white/50 text-sm hover:text-gold transition">Size Guide</a>
         </div>
         <div class="footer-column flex flex-col gap-3">
             <h3 class="text-white font-heading text-lg mb-2">Company</h3>
-            <a href="#" class="text-white/50 text-sm hover:text-gold transition">About LUXORA</a>
-            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Our Story</a>
+            <a href="about.html" class="text-white/50 text-sm hover:text-gold transition">About LUXORA</a>
+            <a href="about.html" class="text-white/50 text-sm hover:text-gold transition">Our Story</a>
             <a href="#" class="text-white/50 text-sm hover:text-gold transition">Journal</a>
-            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Careers</a>
-            <a href="#" class="text-white/50 text-sm hover:text-gold transition">Privacy Policy</a>
+            <a href="careers.html" class="text-white/50 text-sm hover:text-gold transition">Careers</a>
+            <a href="privacy-policy.html" class="text-white/50 text-sm hover:text-gold transition">Privacy Policy</a>
         </div>
     </div>
     <div class="footer-bottom border-t border-white/10 py-6">
@@ -561,6 +797,8 @@
 </div>
 
 <script src="js/main.js"></script>
+<script src="js/api-config.js"></script>
+<script src="js/customer-auth.js"></script>
 <script src="js/shop.js"></script>
 </body>
 </html>
