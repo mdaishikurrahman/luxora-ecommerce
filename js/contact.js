@@ -15,8 +15,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!contactForm) return;
 
-    const nameInput = contactForm.querySelector(
-        'input[name="name"], #name'
+    const firstNameInput = contactForm.querySelector(
+        'input[name="firstName"], #firstName'
+    );
+
+    const lastNameInput = contactForm.querySelector(
+        'input[name="lastName"], #lastName'
     );
 
     const emailInput = contactForm.querySelector(
@@ -106,13 +110,25 @@ document.addEventListener("DOMContentLoaded", () => {
        LIVE VALIDATION
     ===================================================== */
 
-    if (nameInput) {
-        nameInput.addEventListener("input", () => {
+    if (firstNameInput) {
+        firstNameInput.addEventListener("input", () => {
 
-            if (nameInput.value.trim() === "") {
-                clearValidation(nameInput);
+            if (firstNameInput.value.trim() === "") {
+                clearValidation(firstNameInput);
             } else {
-                validateField(nameInput);
+                validateField(firstNameInput);
+            }
+
+        });
+    }
+
+    if (lastNameInput) {
+        lastNameInput.addEventListener("input", () => {
+
+            if (lastNameInput.value.trim() === "") {
+                clearValidation(lastNameInput);
+            } else {
+                validateField(lastNameInput);
             }
 
         });
@@ -134,6 +150,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (phoneInput) {
         phoneInput.addEventListener("input", () => {
+
+            /* Phone is optional — only validate format when something is typed */
 
             if (phoneInput.value.trim() === "") {
                 clearValidation(phoneInput);
@@ -181,17 +199,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
         event.preventDefault();
 
-        const validName = validateField(nameInput);
+        const validFirstName = validateField(firstNameInput);
+
+        const validLastName = validateField(lastNameInput);
 
         const validEmail = validateField(
             emailInput,
             "email"
         );
 
-        const validPhone = validateField(
-            phoneInput,
-            "phone"
-        );
+        /* Phone is optional — only invalid if something was typed and it's malformed */
+
+        const validPhone =
+            !phoneInput ||
+            phoneInput.value.trim() === "" ||
+            validateField(phoneInput, "phone");
 
         let validSubject = true;
 
@@ -213,7 +235,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         if (
-            !validName ||
+            !validFirstName ||
+            !validLastName ||
             !validEmail ||
             !validPhone ||
             !validSubject ||
@@ -255,19 +278,57 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         /* =================================================
-           DEMO SUBMISSION
+           SUBMIT TO API (falls back to demo behavior if the
+           backend isn't running, so the form still gives
+           feedback during preview)
         ================================================= */
 
-        setTimeout(() => {
+        (async () => {
 
-            showFormMessage(
-                "Thank you! Your message has been sent successfully. We will get back to you soon.",
-                "success"
-            );
+            try {
 
+                if (typeof luxoraApiFetch !== "function") {
+                    throw new Error("API not available");
+                }
+
+                const payload = {
+                    name: `${firstNameInput?.value.trim() || ""} ${lastNameInput?.value.trim() || ""}`.trim(),
+                    email: emailInput?.value.trim(),
+                    phone: phoneInput?.value.trim() || "",
+                    subject: subjectInput?.value || "",
+                    message: messageInput?.value.trim(),
+                };
+
+                const result = await luxoraApiFetch("/contact", {
+                    method: "POST",
+                    body: JSON.stringify(payload),
+                });
+
+                showFormMessage(
+                    result.emailSent
+                        ? "Thank you! Your message has been sent successfully. We will get back to you soon."
+                        : "Thank you! Your message has been received. (Email delivery is not configured yet, but we have your message.)",
+                    "success"
+                );
+
+            } catch (err) {
+
+                showFormMessage(
+                    "Sorry, something went wrong sending your message. Please try again or email us directly.",
+                    "error"
+                );
+
+                console.warn("Contact form submission failed:", err.message);
+
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalButtonHTML;
+                }
+
+                return;
+            }
 
             contactForm.reset();
-
 
             /* Remove validation */
 
@@ -289,7 +350,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             }
 
-        }, 1200);
+        })();
 
     });
 

@@ -589,6 +589,16 @@ document.addEventListener("DOMContentLoaded", async () => {
        MAIN FILTER FUNCTION
     ===================================================== */
 
+    /* =====================================================
+       PAGINATION STATE
+    ===================================================== */
+
+    const PRODUCTS_PER_PAGE = 12;
+    let currentPage = 1;
+    let currentMatchingProducts = [];
+    let hasRenderedOnce = false;
+
+
     function applyFilters() {
 
         const selectedCategories =
@@ -612,6 +622,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
         let visibleCount = 0;
+
+        const matching = [];
 
 
         products.forEach(product => {
@@ -650,26 +662,151 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             if (shouldShow) {
 
-                product.classList.remove(
-                    "hidden"
-                );
+                matching.push(product);
 
                 visibleCount++;
-
-            } else {
-
-                product.classList.add(
-                    "hidden"
-                );
 
             }
 
         });
 
 
+        currentMatchingProducts = matching;
+        currentPage = 1;
+
+        renderPage();
+
+    }
+
+
+
+    /* =====================================================
+       PAGINATION RENDERING
+       Slices currentMatchingProducts into pages of 12,
+       shows only the current page, and rebuilds the
+       pagination buttons to match the real result count.
+    ===================================================== */
+
+    function renderPage() {
+
+        const totalPages =
+            Math.max(
+                1,
+                Math.ceil(
+                    currentMatchingProducts.length / PRODUCTS_PER_PAGE
+                )
+            );
+
+        if (currentPage > totalPages) currentPage = totalPages;
+
+        const start =
+            (currentPage - 1) * PRODUCTS_PER_PAGE;
+
+        const pageItems =
+            currentMatchingProducts.slice(
+                start,
+                start + PRODUCTS_PER_PAGE
+            );
+
+
+        products.forEach(product => {
+
+            if (pageItems.includes(product)) {
+                product.classList.remove("hidden");
+            } else {
+                product.classList.add("hidden");
+            }
+
+        });
+
+
         updateResultCount(
-            visibleCount
+            currentMatchingProducts.length
         );
+
+
+        renderPaginationButtons(totalPages);
+
+
+        if (hasRenderedOnce && currentMatchingProducts.length > 0) {
+
+            document.querySelector(".shop-products")?.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        }
+
+        hasRenderedOnce = true;
+
+    }
+
+
+    function renderPaginationButtons(totalPages) {
+
+        const container =
+            document.getElementById("paginationContainer");
+
+        if (!container) return;
+
+
+        let html = "";
+
+        for (let i = 1; i <= totalPages; i++) {
+
+            const label =
+                String(i).padStart(2, "0");
+
+            html += `<button type="button" class="page ${i === currentPage ? "active" : ""} w-[42px] h-[42px] border border-line bg-white text-[#555] text-[10px] font-bold transition-colors" data-page="${i}">${label}</button>`;
+
+        }
+
+        if (totalPages > 1) {
+
+            html += `<button type="button" class="next-page flex items-center gap-2.5 h-[42px] px-4 border border-line bg-white text-[#555] text-[10px] font-bold hover:bg-gold-dark hover:border-gold-dark hover:text-white transition-colors">
+                Next <i class="fa-solid fa-arrow-right"></i>
+            </button>`;
+
+        }
+
+        container.innerHTML = html;
+
+
+        container.querySelectorAll(".page").forEach(button => {
+
+            button.addEventListener("click", () => {
+
+                currentPage = Number(button.dataset.page);
+
+                renderPage();
+
+            });
+
+        });
+
+
+        const nextBtn =
+            container.querySelector(".next-page");
+
+        if (nextBtn) {
+
+            nextBtn.addEventListener("click", () => {
+
+                if (currentPage < totalPages) {
+
+                    currentPage++;
+
+                    renderPage();
+
+                } else {
+
+                    showToast("You are on the last page");
+
+                }
+
+            });
+
+        }
 
     }
 
@@ -1273,105 +1410,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
 
-    /* =====================================================
-       PAGINATION UI
-    ===================================================== */
-
-    const pageButtons =
-        document.querySelectorAll(
-            ".pagination .page"
-        );
-
-
-    pageButtons.forEach(button => {
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                pageButtons.forEach(
-                    item =>
-                        item.classList.remove(
-                            "active"
-                        )
-                );
-
-
-                button.classList.add(
-                    "active"
-                );
-
-
-                window.scrollTo({
-                    top:
-                        document.querySelector(
-                            ".shop-section"
-                        )?.offsetTop - 70 || 0,
-
-                    behavior: "smooth"
-
-                });
-
-
-                showToast(
-                    `Page ${button.textContent.trim()} selected`
-                );
-
-            }
-        );
-
-    });
-
-
-    const nextPage =
-        document.querySelector(
-            ".next-page"
-        );
-
-
-    if (nextPage) {
-
-        nextPage.addEventListener(
-            "click",
-            () => {
-
-                const active =
-                    document.querySelector(
-                        ".pagination .page.active"
-                    );
-
-
-                const current =
-                    active
-                        ? Number(
-                            active.textContent.trim()
-                        )
-                        : 1;
-
-
-                const next =
-                    document.querySelector(
-                        `.pagination .page:nth-of-type(${current + 1})`
-                    );
-
-
-                if (next) {
-
-                    next.click();
-
-                } else {
-
-                    showToast(
-                        "You are on the last page"
-                    );
-
-                }
-
-            }
-        );
-
-    }
-
 
 
     /* =====================================================
@@ -1441,8 +1479,57 @@ document.addEventListener("DOMContentLoaded", async () => {
        INITIAL FILTER STATE
     ===================================================== */
 
-    updateResultCount(
-        products.length
-    );
+    applyFilters();
+
+
+    /* =====================================================
+       URL QUERY PARAMS (links like shop.html?category=men,
+       ?sort=newest, ?badge=sale coming from other pages'
+       navbars — e.g. "Men", "New Arrivals", "Sale")
+    ===================================================== */
+
+    (function applyUrlParams() {
+
+        const params = new URLSearchParams(window.location.search);
+
+        const category = params.get("category");
+        const sort = params.get("sort");
+        const badge = params.get("badge");
+
+        if (category) {
+
+            const allCheckbox =
+                document.querySelector('.category-filter[value="all"]');
+
+            const targetCheckbox =
+                document.querySelector(`.category-filter[value="${category}"]`);
+
+            if (allCheckbox) allCheckbox.checked = false;
+            if (targetCheckbox) targetCheckbox.checked = true;
+
+            applyFilters();
+
+        }
+
+        if (sort && sortProducts) {
+
+            sortProducts.value = sort;
+            sortProducts.dispatchEvent(new Event("change"));
+
+        }
+
+        if (badge) {
+
+            currentMatchingProducts = products.filter(product =>
+                !!product.querySelector(`.product-badge.${badge.toLowerCase()}`)
+            );
+
+            currentPage = 1;
+
+            renderPage();
+
+        }
+
+    })();
 
 });

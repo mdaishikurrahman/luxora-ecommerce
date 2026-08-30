@@ -6,6 +6,99 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     /* =====================================================
+       STRIPE SETUP (card payments)
+    ===================================================== */
+
+    let stripe = null;
+    let cardElement = null;
+    let cardPaymentsAvailable = false;
+
+    const cardErrorsEl = document.getElementById("card-errors");
+    const cardNoticeEl = document.getElementById("cardPaymentNotice");
+    const cardElementMount = document.getElementById("card-element");
+
+    async function initStripe() {
+
+        if (typeof Stripe !== "function" || typeof luxoraApiFetch !== "function") {
+            if (cardElementMount) cardElementMount.style.display = "none";
+            if (cardNoticeEl) cardNoticeEl.classList.remove("hidden");
+            return;
+        }
+
+        try {
+
+            const status = await luxoraApiFetch("/payments/status");
+            cardPaymentsAvailable = !!status.available;
+
+            if (!cardPaymentsAvailable) {
+                if (cardElementMount) cardElementMount.style.display = "none";
+                if (cardNoticeEl) cardNoticeEl.classList.remove("hidden");
+                return;
+            }
+
+            stripe = Stripe(LUXORA_STRIPE_PUBLISHABLE_KEY);
+            const elements = stripe.elements();
+
+            cardElement = elements.create("card", {
+                style: {
+                    base: {
+                        fontFamily: '"DM Sans", sans-serif',
+                        fontSize: "13px",
+                        color: "#222",
+                        "::placeholder": { color: "#aaa59b" },
+                    },
+                    invalid: { color: "#b85c5c" },
+                },
+            });
+
+            if (cardElementMount) {
+                cardElement.mount("#card-element");
+
+                cardElement.on("change", (event) => {
+                    if (!cardErrorsEl) return;
+                    if (event.error) {
+                        cardErrorsEl.textContent = event.error.message;
+                        cardErrorsEl.classList.remove("hidden");
+                    } else {
+                        cardErrorsEl.textContent = "";
+                        cardErrorsEl.classList.add("hidden");
+                    }
+                });
+            }
+
+        } catch (err) {
+            console.warn("Stripe unavailable, falling back to non-card payment methods:", err.message);
+            if (cardElementMount) cardElementMount.style.display = "none";
+            if (cardNoticeEl) cardNoticeEl.classList.remove("hidden");
+        }
+
+    }
+
+    initStripe();
+
+
+    /* =====================================================
+       PRE-FILL FOR LOGGED-IN CUSTOMERS
+    ===================================================== */
+
+    if (typeof CustomerAuth !== "undefined" && CustomerAuth.isLoggedIn()) {
+
+        const user = CustomerAuth.getUser();
+        const [firstGuess, ...restGuess] = (user.name || "").split(" ");
+
+        const emailField = document.getElementById("email");
+        const firstNameField = document.getElementById("firstName");
+        const lastNameField = document.getElementById("lastName");
+
+        if (emailField && !emailField.value) emailField.value = user.email || "";
+        if (firstNameField && !firstNameField.value) firstNameField.value = firstGuess || "";
+        if (lastNameField && !lastNameField.value) lastNameField.value = restGuess.join(" ") || "";
+
+    }
+
+
+
+    /* =====================================================
        ELEMENTS
     ===================================================== */
 
@@ -974,6 +1067,51 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
 
+            let stripePaymentIntentId = "";
+
+            /* -------------------------------------------
+               For card payments, confirm the payment with
+               Stripe BEFORE placing the order. The order is
+               only created once Stripe confirms the charge.
+            ------------------------------------------- */
+
+            if (paymentMethod === "card") {
+
+                if (!cardPaymentsAvailable || !stripe || !cardElement) {
+                    throw new Error(
+                        "Card payments are not available right now. Please choose Cash on Delivery instead."
+                    );
+                }
+
+                const { clientSecret } = await luxoraApiFetch("/payments/create-intent", {
+                    method: "POST",
+                    body: JSON.stringify({ amount: total }),
+                });
+
+                const cardNameInput = document.getElementById("cardName");
+
+                const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+                    payment_method: {
+                        card: cardElement,
+                        billing_details: {
+                            name: cardNameInput?.value.trim() || `${customerData.firstName} ${customerData.lastName}`.trim(),
+                            email: customerData.email || undefined,
+                        },
+                    },
+                });
+
+                if (error) {
+                    throw new Error(error.message || "Card payment failed.");
+                }
+
+                if (!paymentIntent || paymentIntent.status !== "succeeded") {
+                    throw new Error("Payment could not be confirmed. Please try again.");
+                }
+
+                stripePaymentIntentId = paymentIntent.id;
+
+            }
+
             const payload = {
                 customer: {
                     firstName: customerData.firstName || "",
@@ -997,19 +1135,42 @@ document.addEventListener("DOMContentLoaded", () => {
                     qty: getProductQuantity(item)
                 })),
                 delivery: { method: deliveryMethod },
-                payment: { method: paymentMethod },
+                payment: {
+                    method: paymentMethod,
+                    stripePaymentIntentId: stripePaymentIntentId || undefined,
+                },
                 couponCode: appliedCoupon || "",
                 notes: customerData.orderNotes || ""
             };
 
+            const authToken = localStorage.getItem("luxoraCustomerToken");
+
             const { order } = await luxoraApiFetch("/orders", {
                 method: "POST",
+                headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
                 body: JSON.stringify(payload)
             });
 
             finishOrder(order.orderNumber);
 
         } catch (err) {
+
+            if (paymentMethod === "card") {
+
+                /* Card payments must not silently fall back to a fake local
+                   order — a real card error needs to stop checkout here. */
+
+                showToast(err.message || "Payment failed. Please try again.");
+
+                if (cardErrorsEl) {
+                    cardErrorsEl.textContent = err.message || "Payment failed. Please try again.";
+                    cardErrorsEl.classList.remove("hidden");
+                }
+
+                resetButton();
+
+                return;
+            }
 
             console.warn("LUXORA API unavailable, placing a local-only order:", err.message);
 
