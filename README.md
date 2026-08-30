@@ -1,85 +1,60 @@
-# LUXORA — Premium Fashion & Lifestyle E-commerce Website
+# LUXORA — Premium E-commerce Site
 
-LUXORA is a front-end e-commerce storefront concept for a premium fashion and lifestyle brand — built with static HTML, Tailwind CSS, and vanilla JavaScript.
+A full-stack e-commerce demo: a Tailwind CSS storefront (`/frontend`)
+backed by a Node.js/Express + MongoDB API and admin panel (`/backend`).
 
-**Live pages:** Home · Shop · Product Details · Cart · Checkout · About · Contact
-
-## ✨ Features
-
-- Fully responsive, modern UI (Tailwind CSS + Google Fonts + Font Awesome)
-- Product listing with filters, search, and price range (`shop.html`)
-- Product detail page (`product.html`)
-- Shopping cart with coupon code support (`cart.html`)
-- Checkout flow with shipping & payment form (`checkout.html`)
-- About & Contact pages with working contact form UI
-- Optional backend integration layer (`js/api-config.js`) — the storefront works fully offline/local, and can optionally connect to a REST API backend
-
-## 📁 Project Structure
+## Structure
 
 ```
-Premium E-commerce website/
-├── index.html          # Homepage
-├── shop.html           # Product listing
-├── product.html        # Product details
-├── cart.html           # Shopping cart
-├── checkout.html       # Checkout
-├── about.html          # About page
-├── contact.html        # Contact page
-├── images/              # Product, category & banner images
-└── js/
-    ├── main.js          # Homepage logic
-    ├── shop.js          # Shop/listing logic
-    ├── product.js        # Product page logic
-    ├── cart.js           # Cart logic
-    ├── checkout.js        # Checkout logic
-    ├── contact.js        # Contact form logic
-    ├── about.js          # About page logic
-    └── api-config.js      # Shared API helper (backend integration)
+luxora/
+├── frontend/     Static storefront — HTML + Tailwind CSS + vanilla JS
+│                 (index, shop, product, cart, checkout, about, contact)
+└── backend/      Express API + MongoDB models + admin dashboard
+                  (products, orders, users, coupons)
 ```
 
-## 🚀 Getting Started
+## Quick start
 
-No build step required — this is a static site.
+### 1. Backend (API + admin panel)
 
-1. Clone the repo:
-   ```bash
-   git clone <your-repo-url>
-   cd "Premium E-commerce website"
-   ```
-2. Open `index.html` directly in your browser, or serve it locally:
-   ```bash
-   npx serve .
-   # or
-   python3 -m http.server 5500
-   ```
-3. Visit `http://localhost:5500` (or the port shown).
-
-## 🔌 Connecting a Backend (optional)
-
-The storefront can optionally talk to a REST API for live product/cart/checkout data. By default it looks for the API at `http://localhost:4000/api`.
-
-To point it at your own backend, add this **before** the other scripts load (e.g. in an inline `<script>` tag in the `<head>`):
-
-```html
-<script>
-  window.LUXORA_API_URL = "https://api.yoursite.com/api";
-</script>
+```bash
+cd backend
+npm install
+cp .env.example .env      # fill in MONGO_URI, JWT_SECRET, etc.
+npm run seed               # creates demo products, coupons, admin login
+npm start                  # http://localhost:4000
 ```
 
-If no backend is available, the site falls back to local/offline behavior automatically.
+Admin panel: **http://localhost:4000/admin/login.html**
+(login with the `ADMIN_EMAIL` / `ADMIN_PASSWORD` you set in `.env`)
 
-## 🛠️ Tech Stack
+Full details: [`backend/README.md`](backend/README.md)
 
-- HTML5
-- Tailwind CSS (via CDN — for production, set up a proper Tailwind build with `npm install -D tailwindcss` and a `tailwind.config.js`)
-- Vanilla JavaScript
-- Font Awesome & Google Fonts (Playfair Display, DM Sans)
+### 2. Frontend (storefront)
 
-## 📌 Notes
+The frontend is plain static files — no build step. Serve the
+`frontend/` folder with any static server, e.g.:
 
-- This project currently uses the Tailwind **Play CDN**, which is intended for development/prototyping. For a production deployment, compile Tailwind via a build step to reduce load time and enable purging unused styles.
-- Some images in `images/` are large; consider compressing them (e.g. with `squoosh` or `imagemin`) before deploying to production.
+```bash
+cd frontend
+npx serve .
+# or open index.html with VS Code's Live Server extension
+```
 
-## 📄 License
+By default the frontend calls the API at `http://localhost:4000/api`
+(see `frontend/js/api-config.js`). Update `CORS_ORIGINS` in the
+backend's `.env` to match whatever URL you serve the frontend from.
 
-This project is available for personal/portfolio use. Update this section with your preferred license before publishing publicly.
+If the backend isn't running, the storefront still works using its
+built-in static product list and `localStorage` cart — the API
+connection is a progressive enhancement, not a hard requirement.
+
+## Tech
+
+- **Frontend**: HTML, Tailwind CSS (CDN), vanilla JavaScript
+- **Backend**: Node.js, Express, MongoDB (Mongoose), JWT auth
+- **Admin panel**: static HTML/JS calling the same API
+
+## License
+
+Personal/portfolio project — add a license here if you plan to open-source it.
